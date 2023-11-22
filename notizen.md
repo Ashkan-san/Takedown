@@ -21,3 +21,6 @@
 - Step Into: zur ersten Zeile in einer Methode
 - Step Out: zur ersten Zeile außerhalb einer Methode
 - Links sieht man alle laufenden Threads?
+
+## Icon
+- in res Rechtsklick -> new Image Asset und dort kann man dann seine Icons erstellen

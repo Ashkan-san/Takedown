@@ -29,7 +29,6 @@ fun TurnierScreen(
             MyBottomBar(navigator = navigator)
         },
     ) { innerPadding ->
-        //TurnierScreen(innerPadding, fetch())
         Column(
             Modifier
                 .fillMaxWidth()
