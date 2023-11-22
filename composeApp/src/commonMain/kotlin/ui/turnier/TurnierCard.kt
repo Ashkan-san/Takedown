@@ -133,7 +133,7 @@ fun ParsedDate(dateString: String) {
 
     val (startDay, endDay, month, year) = matchResult.destructured
 
-    println("start = $startDay, end = $endDay, month = $month, year = $year")
+    //println("start = $startDay, end = $endDay, month = $month, year = $year")
 
     val abbreviatedMonth = getAbbreviatedMonth(month)
     val abbreviatedYear = year.takeLast(2)

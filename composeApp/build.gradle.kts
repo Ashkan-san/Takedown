@@ -1,10 +1,8 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.compose.ExperimentalComposeLibrary
 
-val ksoupVersion = "0.0.2"
-val dateTimeVersion = "0.4.1"
 val precomposeVersion = "1.5.7"
-
+val htmlUnitVersion = "3.7.0"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -55,12 +53,11 @@ kotlin {
             implementation(compose.materialIconsExtended)
 
             // HIER DEPENDENCIES HINZUFÜGEN
-            // KSOUP
-            implementation("com.fleeksoft.ksoup:ksoup:$ksoupVersion")
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
-
             // PRECOMPOSE NAVIGATION
             implementation("moe.tlaster:precompose:$precomposeVersion")
+
+            // HTMLUNIT
+            implementation("org.htmlunit:htmlunit3-android:3.7.0")
         }
     }
 }
@@ -95,6 +92,9 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+        create("customDebugType") {
+            isDebuggable = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -105,9 +105,7 @@ android {
     }
 }
 dependencies {
-    implementation("androidx.core:core-ktx:+")
-    implementation("androidx.core:core-ktx:+")
-
+    implementation("androidx.core:core-ktx:1.12.0")
     // ODER DOCH HIER?
 }
 

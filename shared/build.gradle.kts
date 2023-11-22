@@ -1,3 +1,7 @@
+val ksoupVersion = "0.0.2"
+val precomposeVersion = "1.5.7"
+val htmlUnitVersion = "3.7.0"
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -33,6 +37,6 @@ android {
     }
 }
 dependencies {
-    implementation("androidx.core:core-ktx:+")
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.core:core-ktx:+")
 }

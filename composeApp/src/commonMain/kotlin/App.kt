@@ -1,34 +1,34 @@
 import androidx.compose.runtime.Composable
+import data.Turnier
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.rememberNavigator
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import ui.HomeScreen
 import ui.RulesScreen
 import ui.navigation.BottomNavItem
 import ui.theme.AppTheme
+import ui.turnier.TurnierScreen
 
 @Composable
-fun App() {
+fun App(turniere: MutableList<Turnier>) {
     PreComposeApp {
         val navigator = rememberNavigator()
 
         AppTheme(useDarkTheme = false) {
-            Navigation(navigator = navigator)
+            Navigation(navigator = navigator, turniere = turniere)
         }
     }
 }
 
 @Composable
-fun Navigation(navigator: Navigator) {
+fun Navigation(navigator: Navigator, turniere: MutableList<Turnier>) {
     NavHost(
         navigator = navigator,
         initialRoute = BottomNavItem.Home.route
     ) {
-        // HOME
+        // HOME/TURNIERE
         scene(route = BottomNavItem.Home.route) {
-            HomeScreen(navigator = navigator)
+            TurnierScreen(navigator = navigator, turniere = turniere)
         }
         // RULES
         scene(route = BottomNavItem.Rules.route) {
