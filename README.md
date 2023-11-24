@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Ashkan-san/Takedown">
-    <img src="images/logo.png" alt="Logo" width="200" height="200">
+    <img src="composeApp/src/androidMain/ic_launcher-playstore.png" alt="Logo" width="200" height="200">
   </a>
 
 <h3 align="center">Takedown - Wrestling Companion</h3>
