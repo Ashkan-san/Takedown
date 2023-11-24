@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.Turnier
+import data.TurnierDatum
 
 @Composable
 fun TurnierCard(turnier: Turnier) {
@@ -38,12 +39,12 @@ fun TurnierCard(turnier: Turnier) {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // 1.
             Box(modifier = Modifier.weight(1F)) {
-                ParsedDate(dateString = turnier.datum)
+                ParsedDate(turnierDatum = turnier.datum)
             }
 
             // 2.
@@ -122,41 +123,26 @@ fun WrestlingStyleBox() {
 }
 
 @Composable
-fun ParsedDate(dateString: String) {
-    // 2 Zahlen
-    // Optionale Minus mit 2 Zahlen
-    // 2 Zahlen
-    // 4 Zahlen
-    // Beispiel: 04.-05.11.2023
-    val regex = """(\d{2})(?:\.-(\d{2}))?\.(\d{2})\.(\d{4})""".toRegex()
-    val matchResult = regex.find(dateString)!!
-
-    val (startDay, endDay, month, year) = matchResult.destructured
-
-    //println("start = $startDay, end = $endDay, month = $month, year = $year")
-
-    val abbreviatedMonth = getAbbreviatedMonth(month)
-    val abbreviatedYear = year.takeLast(2)
-
+fun ParsedDate(turnierDatum: TurnierDatum) {
     Column(
         //modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "$startDay",
+            text = turnierDatum.startTag,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
-        if (endDay.isNotEmpty()) {
+        if (turnierDatum.endTag.isNotEmpty()) {
             Text(
-                text = "-$endDay",
+                text = "-${turnierDatum.endTag}",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
         }
         Text(
-            text = "$abbreviatedMonth",
+            text = "${getAbbreviatedMonth(turnierDatum.monat)}",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
@@ -166,7 +152,6 @@ fun ParsedDate(dateString: String) {
             fontWeight = FontWeight.Bold
         )*/
     }
-
 }
 
 fun getAbbreviatedMonth(month: String): String? {

@@ -1,8 +1,8 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.compose.ExperimentalComposeLibrary
 
 val precomposeVersion = "1.5.7"
 val htmlUnitVersion = "3.7.0"
+val kmmViewModelVersion = "1.0.0-ALPHA-15"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -19,8 +19,6 @@ kotlin {
         }
     }
     
-    jvm("desktop")
-    
     listOf(
         iosX64(),
         iosArm64(),
@@ -33,15 +31,15 @@ kotlin {
     }
     
     sourceSets {
-        val desktopMain by getting
+        // für KMM ViewModel
+        all {
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+        }
         
         androidMain.dependencies {
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-        }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
         }
         commonMain.dependencies {
             implementation(projects.shared)
@@ -57,13 +55,17 @@ kotlin {
             implementation("moe.tlaster:precompose:$precomposeVersion")
 
             // HTMLUNIT
-            implementation("org.htmlunit:htmlunit3-android:3.7.0")
+            implementation("org.htmlunit:htmlunit3-android:$htmlUnitVersion")
+
+            // VIEWMODEL
+            //implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+            implementation("com.rickclephas.kmm:kmm-viewmodel-core:$kmmViewModelVersion")
         }
     }
 }
 
 android {
-    namespace = "org.example.project"
+    namespace = "de.takedown.app"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -71,7 +73,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "org.example.project"
+        applicationId = "de.takedown.app"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -107,16 +109,4 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     // ODER DOCH HIER?
-}
-
-compose.desktop {
-    application {
-        mainClass = "MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.project"
-            packageVersion = "1.0.0"
-        }
-    }
 }

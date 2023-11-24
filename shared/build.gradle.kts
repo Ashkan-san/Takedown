@@ -1,4 +1,3 @@
-val ksoupVersion = "0.0.2"
 val precomposeVersion = "1.5.7"
 val htmlUnitVersion = "3.7.0"
 
@@ -30,7 +29,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.project.shared"
+    namespace = "de.takedown.app.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -38,5 +37,4 @@ android {
 }
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.core:core-ktx:+")
 }
