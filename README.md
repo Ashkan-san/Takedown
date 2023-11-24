@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Ashkan-san/Takedown">
-    <img src="composeApp/src/androidMain/ic_launcher-playstore.png" alt="Logo" width="200" height="200">
+    <img src="composeApp/src/androidMain/res/mipmap-xxxhdpi/ic_launcher_round.png" alt="Logo" width="200" height="200">
   </a>
 
 <h3 align="center">Takedown - Wrestling Companion</h3>
@@ -42,7 +42,6 @@ WIP
 [AndroidStudio-Website]: https://developer.android.com/studio?gclid=CjwKCAiAx_GqBhBQEiwAlDNAZlhodtzsGXort6FwWAXJQgR97X5BzLHkYW0Gpu9tgZgNJ-QfY4tQIxoC2ZcQAvD_BwE&gclsrc=aw.ds
 
 <!-- MEINE BILDER -->
-[Healthgrind-Logo]: images/logo.png
 
 [Jetpack-Image]: https://img.shields.io/badge/Jetpack%20Compose-4285F4.svg?style=for-the-badge&logo=Jetpack-Compose&logoColor=white
 [Kotlin-Image]: https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white
