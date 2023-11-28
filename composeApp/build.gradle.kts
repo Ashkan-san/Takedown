@@ -51,6 +51,7 @@ kotlin {
             implementation(compose.materialIconsExtended)
 
             // HIER DEPENDENCIES HINZUFÜGEN
+
             // PRECOMPOSE NAVIGATION
             implementation("moe.tlaster:precompose:$precomposeVersion")
 
@@ -92,7 +93,14 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            // RELEASE BUILD ZUM TESTEN
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         create("customDebugType") {
             isDebuggable = true

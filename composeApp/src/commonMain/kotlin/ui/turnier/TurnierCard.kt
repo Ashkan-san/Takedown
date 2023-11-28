@@ -1,12 +1,12 @@
 package ui.turnier
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -27,18 +27,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.Turnier
 import data.TurnierDatum
+import moe.tlaster.precompose.navigation.Navigator
+import ui.navigation.Screen
+import viewmodel.TurnierViewModel
 
 @Composable
-fun TurnierCard(turnier: Turnier) {
+fun TurnierCard(navigator: Navigator, viewModel: TurnierViewModel, turnier: Turnier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp)
-            .padding(5.dp),
+            //.height(150.dp)
+            .padding(5.dp)
+            .clickable {
+                viewModel.populateTurnierDetails(turnier)
+                navigator.navigate(Screen.TurnierDetails.route)
+            },
         //backgroundColor = MaterialTheme.colors.primary
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(10.dp),
+            modifier = Modifier.fillMaxWidth().padding(5.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -50,58 +57,61 @@ fun TurnierCard(turnier: Turnier) {
             // 2.
             Box(modifier = Modifier.weight(3F)) {
                 Column(
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier.padding(horizontal = 5.dp),
                     //horizontalAlignment = Alignment.Start,
                     //verticalArrangement = Arrangement.Top
                 ) {
                     Text(
                         text = turnier.titel,
-                        //fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Row(
-                        //modifier = Modifier.fillMaxWidth(),
-                        //verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.LocationOn,
-                            contentDescription = "Place Icon"
-                        )
-                        Text(
-                            text = turnier.ort,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                    PlaceText(turnier.ort)
                 }
             }
 
             // 3.
             Box(
                 modifier = Modifier.weight(1F)
-                //contentAlignment = Alignment.CenterEnd
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     WrestlingStyleBox()
-                    Row(
-                        //verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Place Icon"
-                        )
-                        Text(text = "160", maxLines = 1)
-                    }
+                    AttendeesText(text = "1000")
                 }
             }
 
         }
 
+    }
+}
+
+@Composable
+fun AttendeesText(text: String) {
+    Row {
+        Icon(
+            imageVector = Icons.Default.Person,
+            contentDescription = "Person Icon"
+        )
+        Text(text = text, maxLines = 1)
+    }
+}
+
+@Composable
+fun PlaceText(text: String) {
+    Row {
+        Icon(
+            imageVector = Icons.Default.LocationOn,
+            contentDescription = "Place Icon"
+        )
+        Text(
+            text = text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
@@ -129,29 +139,21 @@ fun ParsedDate(turnierDatum: TurnierDatum) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = turnierDatum.startTag,
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
-        )
+        DateText(turnierDatum.startTag)
         if (turnierDatum.endTag.isNotEmpty()) {
-            Text(
-                text = "-${turnierDatum.endTag}",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
+            DateText("-${turnierDatum.endTag}")
         }
-        Text(
-            text = "${getAbbreviatedMonth(turnierDatum.monat)}",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
-        )
-        /*Text(
-            text = "$abbreviatedYear",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
-        )*/
+        DateText("${getAbbreviatedMonth(turnierDatum.monat)}")
     }
+}
+
+@Composable
+fun DateText(text: String) {
+    Text(
+        text = text,
+        fontSize = 30.sp,
+        fontWeight = FontWeight.Bold
+    )
 }
 
 fun getAbbreviatedMonth(month: String): String? {

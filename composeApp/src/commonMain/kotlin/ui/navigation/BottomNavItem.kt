@@ -16,5 +16,4 @@ sealed class BottomNavItem(var title: String, var icon: ImageVector, var route: 
     object Moves : BottomNavItem("Moves", Icons.Default.SportsKabaddi, "/moves")
     object Scoreboard : BottomNavItem("Score", Icons.Default.Scoreboard, "/score")
     object Account : BottomNavItem("Account", Icons.Default.AccountCircle, "/account")
-
 }

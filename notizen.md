@@ -6,6 +6,7 @@
 - Logik bezüglich Data Access, Networking usw. sollten in das Shared Module und dann mittels expect actual, später
 - ViewModel!!!
 - Filtern, sortieren
+- Pull Refresh ersetzen durchs offizielle irgendwann
 
 ## Shortcuts
 ### Windows Shortcuts
@@ -62,6 +63,11 @@
 - launch() startet neue Coroutine
 - withContext() zum Ändern des Thread Pools
 - GlobalScope (vermeiden) > CoroutineScope (für einzelne Komponenten) > 
+
+## Effect
+- LaunchedEffect: für coroutine und background tasks
+- DisposableEffect: für Resource Kram, wie z.B. bei den Sensoren damals
+- SideEffect: 
 
 ## Gradle
 - compile altes Keyword, api ist das selbe. immer implementation benutzen!

@@ -20,3 +20,11 @@ dependencyResolutionManagement {
 
 include(":shared")
 include(":composeApp")
+
+// PULL TO REFRESH
+/*
+includeBuild("<androidx-compose-material3-pullrefresh-path>/library") {
+    dependencySubstitution {
+        substitute(module("me.omico.compose:compose-material3-pullrefresh")).using(project(":"))
+    }
+}*/

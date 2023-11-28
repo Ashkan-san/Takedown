@@ -1,45 +1,37 @@
 package ui.turnier
 
+import PullRefreshIndicator
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import data.Turnier
+import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.navigation.Navigator
-import org.jetbrains.compose.resources.painterResource
+import pullRefresh
+import rememberPullRefreshState
 import ui.scaffold.MyBottomBar
 import ui.scaffold.MyTopBar
 import viewmodel.TurnierViewModel
-import androidx.compose.runtime.*
-import androidx.compose.ui.unit.dp
 
 @Composable
-fun TurnierScreen(
+fun TurniereListScreen(
     navigator: Navigator,
     viewModel: TurnierViewModel
 ) {
-    //val turniere2 by remember { mutableStateOf(viewModel.turniere) }
     val turniere = remember { viewModel.turniere }
     val isLoading = viewModel.isLoading
-
+    val refreshState = rememberPullRefreshState(refreshing = isLoading.value, onRefresh = viewModel::populateViewModel)
 
     Scaffold(
         topBar = {
@@ -54,22 +46,49 @@ fun TurnierScreen(
             }
         }*/
     ) { innerPadding ->
-        Column(
+        Box(modifier = Modifier.pullRefresh(refreshState)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                when {
+                    isLoading.value -> LoadingUi()
+                    else -> turniere.forEach { turnier ->
+                        TurnierCard(navigator = navigator, viewModel = viewModel, turnier = turnier)
+                    }
+                }
+            }
+
+            PullRefreshIndicator(
+                refreshing = isLoading.value,
+                state = refreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+
+        }
+
+
+        /*LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState()),
+                .padding(innerPadding),
+            //.verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
             when {
-                isLoading.value -> LoadingUi()
-                else -> turniere.forEach { turnier ->
+                isLoading.value -> item { LoadingUi() }
+                else -> items(turniere) { turnier ->
                     println(turnier)
                     TurnierCard(turnier = turnier)
                 }
             }
-        }
+        }*/
     }
 }
 
