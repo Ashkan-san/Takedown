@@ -2,6 +2,7 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import com.rickclephas.kmm.viewmodel.KMMViewModel
 import com.rickclephas.kmm.viewmodel.coroutineScope
 import data.Turnier
@@ -11,7 +12,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TurnierViewModel() : KMMViewModel() {
+class TurnierViewModel : KMMViewModel() {
     // Liste der Turniere
     val turniere = mutableStateListOf<Turnier>()
     val isLoading = mutableStateOf(false)
@@ -35,7 +36,8 @@ class TurnierViewModel() : KMMViewModel() {
 
         viewModelScope.coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                aktuellesTurnier.value!!.turnierDetails = fetchTurnierDetails(turnier)
+                aktuellesTurnier.value!!.turnierDetails.addAll(fetchTurnierDetails(turnier))
+                aktuellesTurnier.value!!.turnierDetails = aktuellesTurnier.value!!.turnierDetails.distinct().toMutableStateList()
             }
         }
     }

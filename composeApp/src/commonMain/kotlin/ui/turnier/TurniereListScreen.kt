@@ -21,6 +21,7 @@ import moe.tlaster.precompose.navigation.Navigator
 import pullRefresh
 import rememberPullRefreshState
 import ui.scaffold.MyBottomBar
+import ui.scaffold.MyScaffold
 import ui.scaffold.MyTopBar
 import viewmodel.TurnierViewModel
 
@@ -33,18 +34,8 @@ fun TurniereListScreen(
     val isLoading = viewModel.isLoading
     val refreshState = rememberPullRefreshState(refreshing = isLoading.value, onRefresh = viewModel::populateViewModel)
 
-    Scaffold(
-        topBar = {
-            MyTopBar()
-        },
-        bottomBar = {
-            MyBottomBar(navigator = navigator)
-        },
-        /*floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.addTurnier() }) {
-                Icon(Icons.Filled.Add, "")
-            }
-        }*/
+    MyScaffold(
+        navigator = navigator
     ) { innerPadding ->
         Box(modifier = Modifier.pullRefresh(refreshState)) {
             Column(
@@ -68,10 +59,7 @@ fun TurniereListScreen(
                 state = refreshState,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
-
         }
-
-
         /*LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -99,9 +87,4 @@ fun LoadingUi() {
         color = MaterialTheme.colorScheme.secondary,
         trackColor = MaterialTheme.colorScheme.surfaceVariant,
     )
-}
-
-// TODO später eigenes Scaffold
-@Composable
-fun MyScaffold() {
 }

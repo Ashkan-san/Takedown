@@ -3,6 +3,7 @@ package viewmodel
 import data.Turnier
 import android.content.ContentValues
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import data.TurnierDatum
 import data.TurnierDetails
 import kotlinx.coroutines.Deferred
@@ -212,7 +213,7 @@ private fun fetchTable(nextPage: HtmlPage): MutableList<Turnier> {
             veranstalter = veranstalter,
             verein = verein,
             detailsLink = detailsLink,
-            turnierDetails = mutableListOf()
+            turnierDetails = mutableStateListOf()
         )
 
         temporaryList.add((turnier))
@@ -228,7 +229,7 @@ fun parseDate(dateString: String): TurnierDatum {
     // 4 Zahlen
     // Beispiel: 04.-05.11.2023
     val regex = """(\d{2})(?:\.-(\d{2}))?\.(\d{2})\.(\d{4})""".toRegex()
-    val matchResult = regex.find(dateString) ?: return TurnierDatum()
+    val matchResult = regex.find(dateString) ?: return TurnierDatum("", "", "", "")
     val (startTag, endTag, monat, jahr) = matchResult.destructured
 
     return TurnierDatum(startTag, endTag, monat, jahr)
@@ -254,8 +255,8 @@ actual suspend fun fetchTurnierDetails(turnier: Turnier): MutableList<TurnierDet
         val stilart = cells[1].asNormalizedText()
         val gewichtsKlassen = determineWeightclass(cells[2].asNormalizedText())
         val geschlecht = determineGender(cells[3].asNormalizedText(), cells[4].asNormalizedText())
-        val jahrgaenge = cells[4].asNormalizedText()
-        val modus = cells[5].asNormalizedText()
+        val jahrgaenge = cells[5].asNormalizedText()
+        val modus = cells[6].asNormalizedText()
 
         val turnierDetails = TurnierDetails(
             altersKlasse = altersKlasse,
