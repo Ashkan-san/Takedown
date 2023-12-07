@@ -67,7 +67,7 @@ fun TurnierCard(navigator: Navigator, viewModel: TurnierViewModel, turnier: Turn
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
                     )
-                    PlaceText(turnier.ort)
+                    PlaceText(turnier.stadt)
                 }
             }
 

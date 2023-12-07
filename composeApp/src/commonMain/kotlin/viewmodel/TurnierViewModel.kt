@@ -2,11 +2,12 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.toMutableStateList
 import com.rickclephas.kmm.viewmodel.KMMViewModel
 import com.rickclephas.kmm.viewmodel.coroutineScope
 import data.Turnier
-import data.TurnierDetails
+import fetchAllTurniere
+import fetchAlterGewichtKlassen
+import fetchDetails
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -25,25 +26,36 @@ class TurnierViewModel : KMMViewModel() {
     fun populateViewModel() {
         viewModelScope.coroutineScope.launch {
             isLoading.value = true
-            withContext(Dispatchers.IO) { turniere.addAll(fetchAllTurniere()) }
+            withContext(Dispatchers.IO) {
+                turniere.addAll(fetchAllTurniere())
+            }
             isLoading.value = false
         }
     }
 
-    // Aktuelles Turnier setzen und Details hinzufügen
     fun populateTurnierDetails(turnier: Turnier) {
+        // Gewähltes Turnier setzen
+        /*if (aktuellesTurnier.value == turnier) {
+            return
+        }*/
         aktuellesTurnier.value = turnier
 
         viewModelScope.coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                aktuellesTurnier.value!!.turnierDetails.addAll(fetchTurnierDetails(turnier))
-                aktuellesTurnier.value!!.turnierDetails = aktuellesTurnier.value!!.turnierDetails.distinct().toMutableStateList()
+                // Turnier Details hinzufügen
+                aktuellesTurnier.value = fetchDetails(turnier)
+
+                // Turnier A/G-Klassen
+                // Nur updaten, wenn neues dabei
+                val fetchedAGKlassen = fetchAlterGewichtKlassen(turnier)
+                val filteredAGKlassen = fetchedAGKlassen.filter { ag ->
+                    aktuellesTurnier.value!!.alterGewichtsKlassen.none { it == ag }
+                }
+
+                aktuellesTurnier.value!!.alterGewichtsKlassen.addAll(filteredAGKlassen)
             }
         }
     }
 
 }
 
-expect suspend fun fetchAllTurniere(): MutableList<Turnier>
-
-expect suspend fun fetchTurnierDetails(turnier: Turnier): MutableList<TurnierDetails>

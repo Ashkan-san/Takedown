@@ -11,7 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -20,9 +19,7 @@ import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.navigation.Navigator
 import pullRefresh
 import rememberPullRefreshState
-import ui.scaffold.MyBottomBar
 import ui.scaffold.MyScaffold
-import ui.scaffold.MyTopBar
 import viewmodel.TurnierViewModel
 
 @Composable
