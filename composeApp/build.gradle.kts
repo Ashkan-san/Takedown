@@ -18,7 +18,7 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -29,13 +29,13 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         // für KMM ViewModel
         all {
             languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
         }
-        
+
         androidMain.dependencies {
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.tooling.preview)
@@ -114,6 +114,7 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
+
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     // ODER DOCH HIER?
