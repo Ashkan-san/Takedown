@@ -70,4 +70,21 @@
 - SideEffect: 
 
 ## Gradle
+- Gradle ist Build Toolkit zum automatischen Bauen von Anwendungen zu APK
+- Unabhängig von Android Studio, muss deshalb separat updated werden
+- Build types: z.B. Debug, Release
+- Product flavors: verschiedene App Varianten für z.B. free oder paid
+- Build variants: Kombi aus den oberen beiden
+- Dependency: damit man Libraries nicht selber runterladen muss
+- Signing: nötig für App store
+- DSL für Kotlin, Groovy für Java
+
+
 - compile altes Keyword, api ist das selbe. immer implementation benutzen!
+- Compose Maven Groups:
+- Animation
+- Compiler (@Composable transformieren?)
+- Foundation (Building Blocks)
+- Material, Material3
+- Runtime (Model, State Management)
+- Ui

@@ -13,7 +13,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Male
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -37,11 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.Turnier
 import data.TurnierAlterGewichtKlasse
-import getTurnierBild
+import data.TurnierDatum
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import viewmodel.TurnierViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
 @Composable
 fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {
     val aktuellesTurnier = remember { viewModel.aktuellesTurnier }
@@ -65,7 +69,12 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {
                         )
                     }
                 },
-                title = { Text("Turnier Details") }
+                title = {
+                    Text(
+                        text = "Turnier Details",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             )
         }
     ) { innerPadding ->
@@ -76,7 +85,7 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = getTurnierBild(),
+                painter = painterResource("jordan.jpg"),
                 contentDescription = "Turnier Bild",
                 //modifier = Modifier.size
             )
@@ -104,124 +113,7 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {
     }
 }
 
-// TODO in kleine Methoden splitten
-@Composable
-fun TurnierDetailInfos(aktuellesTurnier: Turnier) {
-    // TURNIER INFOS
 
-    // ALTERS-/GEWICHTSKLASSEN
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxWidth().padding(5.dp)
-    ) {
-        Text(
-            text = "Alters-/Gewichtsklassen",
-            fontSize = 20.sp
-        )
-    }
-    KlassenCard("Freistil", aktuellesTurnier)
-    KlassenCard("Gr.-röm.", aktuellesTurnier)
 
-    // MAPS
-}
 
-@Composable
-fun KlassenCard(stil: String, aktuellesTurnier: Turnier) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp)
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stil,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        aktuellesTurnier.alterGewichtsKlassen.filter { it.stilart == stil }.forEachIndexed { index, details ->
-            DetailsCard(details)
-            if (index < aktuellesTurnier.alterGewichtsKlassen.lastIndex) Divider()
-        }
-    }
-}
-
-@Composable
-fun DetailsCard(details: TurnierAlterGewichtKlasse) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            // GESCHLECHT
-            Box(modifier = Modifier.weight(1F)) {
-                details.geschlecht.forEach { geschlecht ->
-                    when (geschlecht) {
-                        "Männlich" -> Icon(imageVector = Icons.Default.Male, contentDescription = "Männlich Icon", modifier = Modifier.size(50.dp))
-                        "Weiblich" -> Icon(imageVector = Icons.Default.Female, contentDescription = "Weiblich Icon", modifier = Modifier.size(50.dp))
-                    }
-                }
-            }
-
-            // ALTERSKLASSE, JAHRGÄNGE
-            Box(modifier = Modifier.weight(4F)) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = details.altersKlasse,
-                        //fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2
-                    )
-                    Text(
-                        text = details.jahrgaenge,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1
-                    )
-                }
-            }
-
-            // STIL
-            Box(modifier = Modifier.weight(4F)) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    // GEWICHTSKLASSEN
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val gewichtsKlassenText = details.gewichtsKlassen.joinToString(", ") { gewicht ->
-                            gewicht
-                        }
-                        Text(
-                            text = gewichtsKlassenText,
-                            //textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            }
-
-        }
-    }
-}
-
-@Composable
-fun TurnierDetailErgebnisse() {
-
-}
 

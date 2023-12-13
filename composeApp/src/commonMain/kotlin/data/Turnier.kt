@@ -1,5 +1,7 @@
 package data
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
 // UI State für Turnier, ist immutable

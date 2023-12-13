@@ -10,7 +10,4 @@ expect suspend fun fetchAlterGewichtKlassen(turnier: Turnier): MutableList<Turni
 expect suspend fun fetchDetails(turnier: Turnier): Turnier
 
 @Composable
-expect fun getTakedownLogo(): Painter
-
-@Composable
-expect fun getTurnierBild(): Painter
+expect fun Maps(address: String)

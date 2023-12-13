@@ -166,10 +166,10 @@ fun parseDate(dateString: String): TurnierDatum {
     // 4 Zahlen
     // Beispiel: 04.-05.11.2023
     val regex = """(\d{2})(?:\.-(\d{2}))?\.(\d{2})\.(\d{4})""".toRegex()
-    val matchResult = regex.find(dateString) ?: return TurnierDatum("", "", "", "")
+    val matchResult = regex.find(dateString) ?: return TurnierDatum("", "", "", "", dateString)
     val (startTag, endTag, monat, jahr) = matchResult.destructured
 
-    return TurnierDatum(startTag, endTag, monat, jahr)
+    return TurnierDatum(startTag, endTag, monat, jahr, dateString)
 }
 
 fun determineGender(male: String, female: String): MutableList<String> {

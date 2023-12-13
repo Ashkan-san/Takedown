@@ -1,9 +1,23 @@
+import android.content.Context
+import android.location.Geocoder
+import android.location.Geocoder.GeocodeListener
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 import data.Turnier
 import data.TurnierAlterGewichtKlasse
-import de.takedown.app.R
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -109,6 +123,8 @@ actual suspend fun fetchAlterGewichtKlassen(turnier: Turnier): MutableList<Turni
         turnierAGList.add((turnierAlterGewichtKlasse))
     }
 
+    browser.close()
+
     return turnierAGList
 }
 
@@ -125,15 +141,51 @@ actual suspend fun fetchDetails(turnier: Turnier): Turnier {
     val landSpan = detailsPage.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtCountry']")
     val land = landSpan.textContent
 
+    browser.close()
+
     return turnier.copy(adresse = adresse, land = land)
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-actual fun getTurnierBild(): Painter {
-    return painterResource(R.drawable.jordan)
+actual fun Maps(address: String) {
+    val locationState = remember { mutableStateOf<LatLng?>(null) }
+    val context = LocalContext.current
+
+    getLatLngFromAddress(context, address) { latlong ->
+        locationState.value = latlong
+    }
+    //locationState.value = getLatLngFromAddress(context, address)
+
+    //println(locationState.value)
+
+    if (locationState.value != null) {
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(locationState.value!!, 10f)
+        }
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState
+        ) {
+            Marker(
+                state = MarkerState(position = locationState.value!!),
+                title = "Turnieradresse",
+                //snippet = "Marker in Singapore"
+            )
+        }
+    }
+
 }
 
-@Composable
-actual fun getTakedownLogo(): Painter {
-    return painterResource(R.drawable.ic_launcher_foreground)
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+fun getLatLngFromAddress(context: Context, address: String, callback: (LatLng) -> Unit) {
+    val coder = Geocoder(context)
+
+    val geocodeListener = GeocodeListener { addresses ->
+        val location = addresses[0]
+        val latlong = LatLng(location.latitude, location.longitude)
+        callback(latlong)
+    }
+
+    coder.getFromLocationName(address, 5, geocodeListener)
 }

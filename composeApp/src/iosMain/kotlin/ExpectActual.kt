@@ -16,11 +16,6 @@ actual suspend fun fetchDetails(turnier: Turnier): Turnier {
 }
 
 @Composable
-actual fun getTakedownLogo(): Painter {
-    TODO("Not yet implemented")
-}
-
-@Composable
-actual fun getTurnierBild(): Painter {
+actual fun Maps(address: String) {
     TODO("Not yet implemented")
 }
