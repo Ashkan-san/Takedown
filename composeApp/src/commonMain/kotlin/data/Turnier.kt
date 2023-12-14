@@ -1,7 +1,5 @@
 package data
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
 // UI State für Turnier, ist immutable
@@ -18,5 +16,7 @@ data class Turnier(
     val veranstalter: String,
     val verein: String,
 
-    var alterGewichtsKlassen: SnapshotStateList<TurnierAlterGewichtKlasse>
+    var alterGewichtsKlassen: SnapshotStateList<TurnierAlterGewichtKlasse>,
+
+    var platzierungen: SnapshotStateList<TurnierPlatzierung>
 )

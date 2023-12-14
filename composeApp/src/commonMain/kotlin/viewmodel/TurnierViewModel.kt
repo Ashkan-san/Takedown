@@ -89,6 +89,9 @@ class TurnierViewModel : KMMViewModel() {
                 }
 
                 aktuellesTurnier.value!!.alterGewichtsKlassen.addAll(filteredAGKlassen)
+
+                // Turnier Ergebnisse
+                //aktuellesTurnier.value.platzierungen.addAll()
             }
 
             updateTurnier(aktuellesTurnier.value!!)
