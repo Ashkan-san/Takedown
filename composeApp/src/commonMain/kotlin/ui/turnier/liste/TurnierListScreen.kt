@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.navigation.Navigator
 import pullRefresh
 import rememberPullRefreshState
+import ui.navigation.Screen
 import ui.util.scaffold.HomeScaffold
 import viewmodel.TurnierViewModel
 
@@ -59,7 +60,13 @@ fun TurnierListe(
             verticalArrangement = Arrangement.Top
         ) {
             turniere.forEach { turnier ->
-                TurnierCard(navigator = navigator, viewModel = viewModel, turnier = turnier)
+                TurnierCard(
+                    turnier = turnier,
+                    onClickCard = {
+                        viewModel.populateTurnierDetails(turnier)
+                        navigator.navigate(Screen.TurnierDetails.route)
+                    }
+                )
             }
         }
 

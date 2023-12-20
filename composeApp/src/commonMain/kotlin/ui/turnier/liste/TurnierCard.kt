@@ -27,20 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.Turnier
 import data.TurnierDatum
-import moe.tlaster.precompose.navigation.Navigator
-import ui.navigation.Screen
-import viewmodel.TurnierViewModel
 
 @Composable
-fun TurnierCard(navigator: Navigator, viewModel: TurnierViewModel, turnier: Turnier) {
+fun TurnierCard(turnier: Turnier, onClickCard: (Turnier) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             //.height(150.dp)
             .padding(5.dp)
             .clickable {
-                viewModel.populateTurnierDetails(turnier)
-                navigator.navigate(Screen.TurnierDetails.route)
+                onClickCard(turnier)
             },
         //backgroundColor = MaterialTheme.colors.primary
     ) {

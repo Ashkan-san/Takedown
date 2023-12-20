@@ -15,36 +15,36 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import data.Turnier
 import data.TurnierPlatzierung
-import moe.tlaster.precompose.navigation.Navigator
-import ui.navigation.Screen
 import ui.util.SectionText
-import viewmodel.TurnierViewModel
 
 @Composable
 fun TurnierErgebnisse(
-    navigator: Navigator,
     aktuellesTurnier: Turnier,
-    viewModel: TurnierViewModel
-    //groupWrestlers: (Boolean) -> Unit,
+    onCardClick: (List<TurnierPlatzierung>) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(10.dp).verticalScroll(rememberScrollState())
     ) {
-        // FILTERN NACH ALTERSKLASSE, DANN NUR PLATZIERUNG 1
         SectionText("\uD83E\uDD47 Sieger \uD83E\uDD47")
 
-        GewichtSiegerCards(navigator, aktuellesTurnier.platzierungen, viewModel)
+        GewichtSiegerCards(
+            aktuellesTurnier.platzierungen,
+            onCardClick = onCardClick
+        )
     }
 }
 
 @Composable
-fun GewichtSiegerCards(navigator: Navigator, platzierungen: List<TurnierPlatzierung>, viewModel: TurnierViewModel) {
+fun GewichtSiegerCards(
+    platzierungen: List<TurnierPlatzierung>,
+    onCardClick: (List<TurnierPlatzierung>) -> Unit
+) {
     // NACH ALTER GRUPPIEREN
-    val altersGruppen = platzierungen.groupBy { it.altersKlasse }
+    val altersGruppen = groupByAge(platzierungen)
 
     altersGruppen.forEach { (alter, platzierungen) ->
         // NACH GEWICHT GRUPPIEREN
-        val gewichtsGruppen = platzierungen.groupBy { it.gewichtsKlasse }
+        val gewichtsGruppen = groupByWeight(platzierungen)
         // JEDER SIEGER
         val sieger = gewichtsGruppen.mapValues { (_, value) -> value.first() }
 
@@ -62,8 +62,7 @@ fun GewichtSiegerCards(navigator: Navigator, platzierungen: List<TurnierPlatzier
                             .fillMaxWidth()
                             .padding(5.dp)
                             .clickable {
-                                viewModel.updatePlatzierungen(gewichtsGruppen[gewicht]!!)
-                                navigator.navigate(Screen.TurnierRanking.route)
+                                gewichtsGruppen[gewicht]?.let { p -> onCardClick(p) }
                             }
                     ) {
                         Text(
@@ -79,7 +78,10 @@ fun GewichtSiegerCards(navigator: Navigator, platzierungen: List<TurnierPlatzier
     }
 }
 
-@Composable
-fun SiegerCard() {
+fun groupByAge(platzierungen: List<TurnierPlatzierung>): Map<String, List<TurnierPlatzierung>> {
+    return platzierungen.groupBy { it.altersKlasse }
+}
 
+fun groupByWeight(platzierungen: List<TurnierPlatzierung>): Map<String, List<TurnierPlatzierung>> {
+    return platzierungen.groupBy { it.gewichtsKlasse }
 }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import data.Turnier
 import data.TurnierAlterGewichtKlasse
 import ui.util.SectionText
-import viewmodel.TurnierViewModel
 
 @Composable
 fun TurnierInfos(aktuellesTurnier: Turnier) {
@@ -143,10 +141,7 @@ fun AltersGewichtsklasseCard(details: TurnierAlterGewichtKlasse) {
             // GESCHLECHT
             Box(modifier = Modifier.weight(1F)) {
                 details.geschlecht.forEach { geschlecht ->
-                    when (geschlecht) {
-                        "Männlich" -> Icon(imageVector = Icons.Default.Male, contentDescription = "Männlich Icon", modifier = Modifier.size(50.dp))
-                        "Weiblich" -> Icon(imageVector = Icons.Default.Female, contentDescription = "Weiblich Icon", modifier = Modifier.size(50.dp))
-                    }
+                    GeschlechtIcon(geschlecht)
                 }
             }
 
@@ -194,5 +189,13 @@ fun AltersGewichtsklasseCard(details: TurnierAlterGewichtKlasse) {
             }
 
         }
+    }
+}
+
+@Composable
+fun GeschlechtIcon(gender: String) {
+    when (gender) {
+        "Männlich" -> Icon(imageVector = Icons.Default.Male, contentDescription = "Männlich Icon", modifier = Modifier.size(50.dp))
+        "Weiblich" -> Icon(imageVector = Icons.Default.Female, contentDescription = "Weiblich Icon", modifier = Modifier.size(50.dp))
     }
 }
