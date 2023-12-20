@@ -9,7 +9,7 @@ fun App(viewModel: TurnierViewModel) {
     PreComposeApp {
         val navigator = rememberNavigator()
 
-        AppTheme(useDarkTheme = false) {
+        AppTheme(false) {
             NavigationGraph(navigator = navigator, viewModel = viewModel)
         }
     }

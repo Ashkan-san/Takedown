@@ -117,3 +117,7 @@ android {
         }
     }
 }
+dependencies {
+    implementation(libs.androidx.leanback)
+}
+ 

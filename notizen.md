@@ -109,3 +109,8 @@ werden können.
 
 - In meinem Fall nutzen wir sie für Seperate of Concerns. Kleine UI-Cards sollten keine viewmodel oder navigation bekommen, stattdessen kriegen diese
   einen Callback, welcher das gewollte erhält. z.B. viewModel.update() oder navigator.navigate()
+
+## UI
+
+- Spacer nutzen bei Listen wie Rows und Columns
+- Padding für Elemente selbst

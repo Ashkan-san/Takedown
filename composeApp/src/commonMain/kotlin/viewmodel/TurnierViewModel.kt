@@ -2,7 +2,6 @@ package viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import com.rickclephas.kmm.viewmodel.KMMViewModel
 import com.rickclephas.kmm.viewmodel.coroutineScope
 import data.Turnier
@@ -36,6 +35,23 @@ class TurnierViewModel : KMMViewModel() {
                     "23417",
                     "33. Turnier der männlichsten Männer des Männerclubs",
                     TurnierDatum("23", "26", "01", "2023", "23.-26.01.2023"),
+                    "Männerland",
+                    "Männerweg 2301, 22399 Männerstadt",
+                    "Männerstadt",
+                    "Mann",
+                    "Männerverein",
+                    mutableStateListOf(),
+                    mutableStateListOf(
+                        TurnierPlatzierung("80", "U17", "1", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
+                        TurnierPlatzierung("80", "U17", "2", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
+                        TurnierPlatzierung("80", "U17", "3", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
+                        TurnierPlatzierung("80", "U17", "4", "Ashkan Haghighi Fashi", "TSV Wandsetal")
+                    )
+                ),
+                Turnier(
+                    "23417",
+                    "Turnier des Männerclubs",
+                    TurnierDatum("23", "", "01", "2023", "23.-26.01.2023"),
                     "Männerland",
                     "Männerweg 2301, 22399 Männerstadt",
                     "Männerstadt",

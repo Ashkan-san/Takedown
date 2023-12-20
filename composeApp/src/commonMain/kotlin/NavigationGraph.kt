@@ -13,10 +13,10 @@ import viewmodel.TurnierViewModel
 fun NavigationGraph(navigator: Navigator, viewModel: TurnierViewModel) {
     NavHost(
         navigator = navigator,
-        initialRoute = BottomNavItem.Home.route
+        initialRoute = BottomNavItem.Turniere.route
     ) {
         // HOME/TURNIERE
-        scene(route = BottomNavItem.Home.route) {
+        scene(route = BottomNavItem.Turniere.route) {
             TurniereListScreen(navigator = navigator, viewModel = viewModel)
         }
 
