@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import md_theme_dark_background
 import md_theme_dark_error
 import md_theme_dark_errorContainer
@@ -134,6 +135,8 @@ fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
+    println("DARK THEME? " + useDarkTheme)
+
     val colors = if (!useDarkTheme) {
         LightColors
     } else {

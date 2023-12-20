@@ -1,17 +1,61 @@
-package ui.scaffold
+package ui.util.scaffold
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import ui.navigation.BottomNavItem
 
 @Composable
-fun MyBottomBar(navigator: Navigator) {
+fun HomeScaffold(
+    navigator: Navigator,
+    content: @Composable (PaddingValues) -> Unit,
+) {
+    Scaffold(
+        topBar = {
+            HomeTopBar()
+        },
+        bottomBar = {
+            HomeBottomBar(navigator = navigator)
+        }
+    ) { innerPadding ->
+        content(innerPadding)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@Composable
+fun HomeTopBar() {
+    CenterAlignedTopAppBar(
+        //backgroundColor = MaterialTheme.colors.primary,
+        navigationIcon = {},
+        title = {
+            Icon(
+                painter = painterResource("logo.png"),
+                contentDescription = "Top Bar Icon",
+                modifier = Modifier.size(80.dp),
+                tint = Color.Unspecified
+            )
+        }
+    )
+}
+
+@Composable
+fun HomeBottomBar(navigator: Navigator) {
     val items = listOf(
         BottomNavItem.Home,
         BottomNavItem.Rules,

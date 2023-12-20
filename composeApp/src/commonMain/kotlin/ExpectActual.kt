@@ -1,7 +1,11 @@
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.painter.Painter
 import data.Turnier
 import data.TurnierAlterGewichtKlasse
+import viewmodel.TurnierViewModel
 
 expect suspend fun fetchAllTurniere(): MutableList<Turnier>
 

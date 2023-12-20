@@ -52,7 +52,9 @@
 
 ## Compose
 - MUSS mutableStateListOf() benutzen für Recomposition
-- MutableList = Kotlin (nutzen bei immutable lists), MutableStateList = Compose (nutzen wenn UI automatisch updaten soll bei Änderungen)
+- List: kann keine Elemente hinzufügen, entfernen usw.
+- MutableList: kann Elemente hinzufügen, bearbeiten usw.
+- MutableStateList aus Compose, nimmt Änderungen für UI wahr (nutzen wenn UI automatisch updaten soll bei Änderungen)
 - Recomposition: @Composable, remember, by, key
 - remember benutzen, wenn Composable nach Recomposition den selben State behalten soll!
 

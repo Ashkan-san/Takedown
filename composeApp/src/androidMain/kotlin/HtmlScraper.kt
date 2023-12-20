@@ -131,7 +131,6 @@ private fun fetchTable(page: HtmlPage): MutableList<Turnier> {
     rows.forEach { row ->
         val cells: List<HtmlTableCell> = row.cells
 
-        println(cells)
         val datum = cells[0].asNormalizedText()
         val titel = cells[1].asNormalizedText()
         val ort = cells[2].asNormalizedText()
@@ -182,30 +181,27 @@ suspend fun fetchErgebnisse(ergebnisseLink: String): MutableList<TurnierPlatzier
 
 fun readTextFromString(input: String): MutableList<TurnierPlatzierung> {
     val resultList = mutableListOf<TurnierPlatzierung>()
-    val lines = input.dropLast(2).split("\n")
-    val skipFirst = 4
-    val linesToProcess = lines.drop(skipFirst)
+    var weight = ""
+    var age = ""
+    val lines = input.dropLast(2).split("\n").drop(4).filter { it.isNotBlank() }
 
-    for (line in linesToProcess) {
-        if (line.isNotBlank()) {
-            val parts = line.split("\t").filter { it.isNotBlank() && !it.contains(Regex("\\(.*\\)")) }
+    for (line in lines) {
+        val parts = line.split("\t").filter { it.isNotBlank() && !it.contains(Regex("\\(.*\\)")) }
 
-            if (parts.size == 2) {
-                val weight = parts[0].replace("kg", "")
-                val age = parts[1]
-                resultList.add(TurnierPlatzierung(weight, age))
-            }
-            if (parts.size == 3) {
-                val rank = parts[0].replace(".", "")
-                val name = parts[1]
-                val club = parts[2]
+        var rank = ""
+        var name = ""
+        var club = ""
 
-                resultList.last().apply {
-                    platzierung = rank
-                    ringerName = name
-                    verein = club
-                }
-            }
+        if (parts.size == 2) {
+            weight = parts[0].replace("kg", "")
+            age = parts[1]
+        }
+        if (parts.size == 3) {
+            rank = parts[0].replace(".", "")
+            name = parts[1]
+            club = parts[2].dropLast(1)
+
+            resultList.add(TurnierPlatzierung(gewichtsKlasse = weight, altersKlasse = age, platzierung = rank, ringerName = name, verein = club))
         }
     }
 

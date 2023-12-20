@@ -1,4 +1,4 @@
-package ui.turnier
+package ui.turnier.liste
 
 import PullRefreshIndicator
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.navigation.Navigator
 import pullRefresh
 import rememberPullRefreshState
-import ui.scaffold.MyScaffold
+import ui.util.scaffold.HomeScaffold
 import viewmodel.TurnierViewModel
 
 @Composable
@@ -31,7 +30,7 @@ fun TurniereListScreen(
 ) {
     val isLoading = viewModel.isLoading
 
-    MyScaffold(
+    HomeScaffold(
         navigator = navigator
     ) { innerPadding ->
         when {

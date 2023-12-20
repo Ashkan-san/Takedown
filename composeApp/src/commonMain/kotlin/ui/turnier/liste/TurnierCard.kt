@@ -1,4 +1,4 @@
-package ui.turnier
+package ui.turnier.liste
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -3,6 +3,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import org.htmlunit.html.HtmlSpan
 import org.htmlunit.html.HtmlTableBody
 import org.htmlunit.html.HtmlTableCell
 import org.htmlunit.html.HtmlTableRow
+import viewmodel.TurnierViewModel
 import kotlin.system.measureTimeMillis
 
 actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
@@ -150,6 +152,7 @@ actual suspend fun fetchDetails(turnier: Turnier): Turnier {
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 actual fun Maps(address: String) {
+    // TODO woanders hin, weil es so aktuell ständig neu recomposed
     val locationState = remember { mutableStateOf<LatLng?>(null) }
     val context = LocalContext.current
 
@@ -174,5 +177,4 @@ actual fun Maps(address: String) {
             )
         }
     }
-
 }

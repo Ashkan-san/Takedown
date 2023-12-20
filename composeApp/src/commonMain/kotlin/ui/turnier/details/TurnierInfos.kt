@@ -1,10 +1,11 @@
-package ui.turnier
+package ui.turnier.details
 
 import Maps
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,9 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.Turnier
 import data.TurnierAlterGewichtKlasse
+import ui.util.SectionText
+import viewmodel.TurnierViewModel
 
 @Composable
-fun TurnierDetailsInfos(aktuellesTurnier: Turnier) {
+fun TurnierInfos(aktuellesTurnier: Turnier) {
     Column(
         modifier = Modifier.fillMaxSize().padding(10.dp).verticalScroll(rememberScrollState())
     ) {
@@ -47,42 +50,32 @@ fun TurnierDetailsInfos(aktuellesTurnier: Turnier) {
 
 @Composable
 fun InfoBox(aktuellesTurnier: Turnier) {
-    Box {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(5.dp)
-        ) {
-            // TITEL UND DATUM
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // TODO evt noch datum daneben
-                Text(
-                    text = aktuellesTurnier.titel,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                )
-            }
-
-            DatumZeitText(aktuellesTurnier.datum.datumString)
-            AdresseText(aktuellesTurnier.adresse)
-
-            Text(text = "Veranstalter: " + aktuellesTurnier.veranstalter, maxLines = 1)
-            Text(text = "Verein: " + aktuellesTurnier.verein, maxLines = 1)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(5.dp),
+        modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)
+    ) {
+        Row {
+            Text(
+                text = aktuellesTurnier.titel,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+            )
         }
+
+        DatumZeitText(aktuellesTurnier.datum.datumString)
+        AdresseText(aktuellesTurnier.adresse)
+
+        Text(text = "Veranstalter: " + aktuellesTurnier.veranstalter, maxLines = 1)
+        Text(text = "Verein: " + aktuellesTurnier.verein, maxLines = 1)
+        Divider()
     }
+
 }
 
 @Composable
 fun AlterGewichtsklasseBox(aktuellesTurnier: Turnier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = "Alters-/Gewichtsklassen",
-            fontSize = 20.sp
-        )
-    }
+    SectionText("Alters-/Gewichtsklassen")
+
     WrestlingStyleCard("Freistil", aktuellesTurnier)
     WrestlingStyleCard("Gr.-röm.", aktuellesTurnier)
 }
@@ -125,16 +118,7 @@ fun WrestlingStyleCard(stil: String, aktuellesTurnier: Turnier) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stil,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        SectionText(stil)
 
         aktuellesTurnier.alterGewichtsKlassen.filter { it.stilart == stil }.forEachIndexed { index, details ->
             AltersGewichtsklasseCard(details)
