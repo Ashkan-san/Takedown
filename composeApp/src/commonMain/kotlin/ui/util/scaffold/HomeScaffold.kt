@@ -31,7 +31,8 @@ fun HomeScaffold(
 ) {
     Scaffold(
         topBar = {
-            HomeTopBar(BottomNavItem.Turniere.title)
+            HomeTopSearchBar(BottomNavItem.Turniere.title)
+            //HomeTopBar(BottomNavItem.Turniere.title)
         },
         bottomBar = {
             HomeBottomBar(navigator = navigator)
@@ -57,6 +58,27 @@ fun HomeTopBar(title: String) {
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold
+            )
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
+@Composable
+fun HomeTopSearchBar(title: String) {
+    CenterAlignedTopAppBar(
+        navigationIcon = {
+            Icon(
+                painter = painterResource("logo.png"),
+                contentDescription = "Top Bar Icon",
+                modifier = Modifier.size(60.dp).padding(start = 10.dp),
+                tint = Color.Unspecified
+            )
+        },
+        title = {
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
             )
         }
     )

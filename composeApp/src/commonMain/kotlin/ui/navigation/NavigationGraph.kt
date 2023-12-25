@@ -1,9 +1,9 @@
+package ui.navigation
+
 import androidx.compose.runtime.Composable
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
-import ui.RulesScreen
-import ui.navigation.BottomNavItem
-import ui.navigation.Screen
+import ui.regelwerk.RulesScreen
 import ui.turnier.details.TurnierDetailsScreen
 import ui.turnier.liste.TurniereListScreen
 import ui.turnier.ranking.TurnierRankingScreen

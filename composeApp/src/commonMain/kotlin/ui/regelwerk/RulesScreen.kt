@@ -1,4 +1,4 @@
-package ui
+package ui.regelwerk
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text

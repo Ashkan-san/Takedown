@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,11 +38,11 @@ fun TurnierCard(turnier: Turnier, onClickCard: (Turnier) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             //.height(120.dp)
-            .padding(8.dp)
+            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
             .clickable {
                 onClickCard(turnier)
             },
-        elevation = CardDefaults.cardElevation(8.dp)
+        //elevation = CardDefaults.cardElevation(8.dp)
         //backgroundColor = MaterialTheme.colors.primary
     ) {
         Row(

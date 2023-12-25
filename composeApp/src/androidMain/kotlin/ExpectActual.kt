@@ -3,7 +3,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,11 +31,17 @@ import org.htmlunit.html.HtmlSpan
 import org.htmlunit.html.HtmlTableBody
 import org.htmlunit.html.HtmlTableCell
 import org.htmlunit.html.HtmlTableRow
-import viewmodel.TurnierViewModel
+import scraper.determineGender
+import scraper.determineWeightclass
+import scraper.fetchAllTables
+import scraper.fetchErgebnisse
+import scraper.setupWebClient
 import kotlin.system.measureTimeMillis
 
+//val webClient = setupWebClient()
+
 actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
-    val browser = setupWebClient()
+    val webClient = setupWebClient()
     val turnierListe = mutableListOf<Turnier>()
 
     val executionTime = measureTimeMillis {
@@ -46,7 +51,7 @@ actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
 
         val referenceLink = "https://www.ringerdb.de/de/Turniere/Turnieruebersicht.aspx?Saison=${startJahr}&land=${startLand}&ZB=${startZeit}"
         val referencePage: HtmlPage = withContext(Dispatchers.IO) {
-            browser.getPage(referenceLink)
+            webClient.getPage(referenceLink)
         }
 
         // TODO später ändern
@@ -60,14 +65,13 @@ actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
 
         val turnierListDeferred = mutableListOf<Deferred<MutableList<Turnier>>>()
 
-        println("$pastUpList, $countryList, $yearList")
         pastUpList.forEach { pastUp ->
             countryList.forEach { country ->
                 yearList.forEach { year ->
                     coroutineScope {
                         val deferred = async {
                             val link = "https://www.ringerdb.de/de/Turniere/Turnieruebersicht.aspx?Saison=${year}&land=${country}&ZB=${pastUp}"
-                            val newHtml: HtmlPage = browser.getPage(link)
+                            val newHtml: HtmlPage = webClient.getPage(link)
                             fetchAllTables(newHtml)
                         }
                         turnierListDeferred.add(deferred)
@@ -78,20 +82,19 @@ actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
         val turnierListResults = turnierListDeferred.awaitAll()
         turnierListe.addAll(turnierListResults.flatten())
 
-        browser.close()
+        webClient.close()
     }
 
     println("Execution time: $executionTime ms")
-    // Duplikate entfernen
-    return turnierListe.distinctBy { it.id }.toMutableList()
+    return turnierListe
 }
 
 actual suspend fun fetchAlterGewichtKlassen(turnier: Turnier): MutableList<TurnierAlterGewichtKlasse> {
-    val browser = setupWebClient()
+    val webClient = setupWebClient()
     val detailsLink =
         "https://www.ringerdb.de/de/turniere/TurnierDetailInfo.aspx?TID=${turnier.id}"
     val detailsPage: HtmlPage = withContext(Dispatchers.IO) {
-        browser.getPage(detailsLink)
+        webClient.getPage(detailsLink)
     }
 
     val tableBody = detailsPage.getFirstByXPath<HtmlTableBody>("//table/tbody")
@@ -120,17 +123,17 @@ actual suspend fun fetchAlterGewichtKlassen(turnier: Turnier): MutableList<Turni
         turnierAGList.add((turnierAlterGewichtKlasse))
     }
 
-    browser.close()
+    webClient.close()
 
     return turnierAGList
 }
 
 actual suspend fun fetchDetails(turnier: Turnier): Turnier {
-    val browser = setupWebClient()
+    val webClient = setupWebClient()
     val detailsLink =
         "https://www.ringerdb.de/de/turniere/TurnierDetailInfo.aspx?TID=${turnier.id}"
     val detailsPage: HtmlPage = withContext(Dispatchers.IO) {
-        browser.getPage(detailsLink)
+        webClient.getPage(detailsLink)
     }
 
     val adresseSpan = detailsPage.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtWettkampfstaette']")
@@ -144,7 +147,8 @@ actual suspend fun fetchDetails(turnier: Turnier): Turnier {
     if (ergebnisseLink.isNotEmpty()) {
         ergebnisse = fetchErgebnisse(ergebnisseLink).toMutableStateList()
     }
-    browser.close()
+
+    webClient.close()
 
     return turnier.copy(adresse = adresse, land = land, platzierungen = ergebnisse)
 }

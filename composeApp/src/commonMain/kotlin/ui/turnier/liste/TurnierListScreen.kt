@@ -6,34 +6,35 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.navigation.Navigator
 import pullRefresh
 import rememberPullRefreshState
 import ui.navigation.Screen
 import ui.util.scaffold.HomeScaffold
+import ui.util.simpleVerticalScrollbar
 import viewmodel.TurnierViewModel
 
 @Composable
@@ -41,115 +42,96 @@ fun TurniereListScreen(
     navigator: Navigator,
     viewModel: TurnierViewModel
 ) {
-    val isLoading = viewModel.isLoading
-
     HomeScaffold(
         navigator = navigator
     ) { innerPadding ->
-        when {
-            isLoading.value -> LoadingUi(innerPadding)
-            else -> TurnierListe(navigator, viewModel, innerPadding)
-        }
+        TurnierListe(navigator, viewModel, innerPadding)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TurnierListe(
     navigator: Navigator,
     viewModel: TurnierViewModel,
     innerPadding: PaddingValues
 ) {
-    val isLoading = viewModel.isLoading
-    val turniere = remember { viewModel.turniere }
-    val refreshState = rememberPullRefreshState(refreshing = isLoading.value, onRefresh = viewModel::populateViewModel)
-
-    // Was wir suchen
+    val turniere = viewModel.turniere
+    val refreshState = rememberPullRefreshState(refreshing = viewModel.isLoading.value, onRefresh = { viewModel.updateTurnierList() })
+    val lazyListState = rememberLazyListState()
     val searchQuery = remember { mutableStateOf("") }
     val filteredTurniere = turniere.filter { it.titel.contains(searchQuery.value, ignoreCase = true) }
 
-    Box(modifier = Modifier.pullRefresh(refreshState)) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top
+    val sheetState = rememberModalBottomSheetState()
+    val showBottomSheet = remember { mutableStateOf(false) }
+
+    // TODO textfield schiebt column etwas runter beim expanden, ändern
+    Column(
+        modifier = Modifier.fillMaxSize().padding(innerPadding),
+        verticalArrangement = Arrangement.Top
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
             SearchBar(
-                onSearch = { query -> searchQuery.value = query }
+                searchDisplay = "",
+                onSearchChanged = {
+                    searchQuery.value = it
+                },
+                onSearchClosed = {
+                    //searchQuery.value = ""
+                }
             )
 
-            filteredTurniere.forEach { turnier ->
-                TurnierCard(
-                    turnier = turnier,
-                    onClickCard = {
-                        viewModel.populateTurnierDetails(turnier)
-                        navigator.navigate(Screen.TurnierDetails.route)
-                    }
+            // FILTER
+            IconButton(
+                onClick = { showBottomSheet.value = true }
+            ) {
+                Icon(
+                    Icons.Default.FilterList,
+                    contentDescription = "Filter"
                 )
             }
         }
+        Spacer(modifier = Modifier.height(10.dp))
 
-        PullRefreshIndicator(
-            refreshing = isLoading.value,
-            state = refreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
-    }
-}
-
-@Composable
-fun SearchBar(
-    onSearch: (String) -> Unit
-) {
-    val textState = remember { mutableStateOf(TextFieldValue("")) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        TextField(
-            value = textState.value,
-            onValueChange = {
-                textState.value = it
-                onSearch(it.text)
-            },
-
-            placeholder = { Text(text = "Turnier suchen") },
-            maxLines = 1,
-            modifier = Modifier.weight(1f).padding(start = 8.dp),
-            singleLine = true,
-
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Search,
-                    contentDescription = "Search",
-                    modifier = Modifier
-                        .padding(15.dp)
-                        .size(24.dp)
-                )
-            },
-            trailingIcon = {
-                if (textState.value != TextFieldValue("")) {
-                    IconButton(
-                        onClick = {
-                            textState.value = TextFieldValue("")
-                            onSearch("")
-                        }
-                    ) {
-                        Icon(
-                            Icons.Default.Close,
-                            contentDescription = "Cancel",
-                            modifier = Modifier
-                                .padding(15.dp)
-                                .size(24.dp)
-                        )
+        Box {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pullRefresh(refreshState)
+                    .simpleVerticalScrollbar(lazyListState),
+                state = lazyListState
+            ) {
+                items(
+                    items = filteredTurniere,
+                    key = {
+                        it.id
                     }
+                ) { turnier ->
+                    TurnierCard(
+                        turnier = turnier,
+                        onClickCard = {
+                            viewModel.updateTurnierDetails(turnier)
+                            navigator.navigate(Screen.TurnierDetails.route)
+                        }
+                    )
                 }
             }
+
+            PullRefreshIndicator(
+                refreshing = viewModel.isLoading.value,
+                state = refreshState,
+                modifier = Modifier.align(Alignment.TopCenter)//.padding(150.dp)
+            )
+        }
+    }
+
+    if (showBottomSheet.value) {
+        BasicBottomSheet(
+            sheetState = sheetState,
+            onSheetDismiss = { showBottomSheet.value = false }
         )
     }
 }

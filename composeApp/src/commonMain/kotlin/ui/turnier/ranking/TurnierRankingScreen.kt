@@ -40,14 +40,24 @@ fun TurnierRankingScreen(navigator: Navigator, viewModel: TurnierViewModel) {
         ) {
             val platzierungen = remember { viewModel.aktuellePlatzierungen }
 
-            SectionText("${platzierungen[0].altersKlasse} / ${platzierungen[0].gewichtsKlasse}kg")
+            Column(
+                modifier = Modifier.padding(10.dp)
+            ) {
+                SectionText("${platzierungen[0].altersKlasse} / ${platzierungen[0].gewichtsKlasse}kg")
 
-            platzierungen.forEachIndexed { index, rank ->
-                RankingCard(rank)
-                Divider()
+                platzierungen.forEach { rank ->
+                    RankingCard(rank)
+                    Divider()
+                }
             }
+
         }
     }
+}
+
+@Composable
+fun AllRankingCards() {
+
 }
 
 @Composable
@@ -90,20 +100,20 @@ fun MedalRank(rank: TurnierPlatzierung) {
     }
 
     Row(
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = medalEmoji,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            //color = MaterialTheme.colorScheme.primary
+            modifier = Modifier.weight(1F)
         )
         Text(
             text = "${rank.platzierung}.",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            //color = MaterialTheme.colorScheme.primary
+            modifier = Modifier.weight(1F)
         )
     }
 }
