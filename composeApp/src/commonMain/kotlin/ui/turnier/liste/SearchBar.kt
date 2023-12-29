@@ -1,6 +1,7 @@
 package ui.turnier.liste
 
-import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -24,31 +25,32 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 
 
 @Composable
 fun SearchBar(
+    modifier: Modifier,
     searchDisplay: String,
     onSearchChanged: (String) -> Unit,
     onSearchClosed: () -> Unit
 ) {
     val (expanded, onExpandedChanged) = remember { mutableStateOf(false) }
 
-    // Crossfade, um zwischen zwei Ansichten mit Animation zu wechseln
-    Crossfade(targetState = expanded) { isSearchFieldVisible ->
-        when (isSearchFieldVisible) {
-            true -> ExpandedSearch(
-                searchDisplay = searchDisplay,
-                onSearchChanged = onSearchChanged,
-                onSearchClosed = onSearchClosed,
-                onExpandedChanged = onExpandedChanged
-            )
+    when (expanded) {
+        true -> ExpandedSearch(
+            modifier = modifier,
+            searchDisplay = searchDisplay,
+            onSearchChanged = onSearchChanged,
+            onSearchClosed = onSearchClosed,
+            onExpandedChanged = onExpandedChanged
+        )
 
-            false -> CollapsedSearch(
-                onExpandedChanged = onExpandedChanged
-            )
-        }
+        false -> CollapsedSearch(
+            onExpandedChanged = onExpandedChanged
+        )
     }
+
 }
 
 @Composable
@@ -71,23 +73,25 @@ fun CollapsedSearch(
 // onExpandedChanged: wenn Back Button gedrückt, Modus wechseln
 @Composable
 fun ExpandedSearch(
+    modifier: Modifier = Modifier,
     searchDisplay: String,
     onSearchChanged: (String) -> Unit,
     onSearchClosed: () -> Unit,
     onExpandedChanged: (Boolean) -> Unit
 ) {
-    // FOCUS
+    // TODO textfield schiebt column etwas runter beim expanden, ändern
     val focusManager = LocalFocusManager.current
     val textFieldFocusRequester = remember { FocusRequester() }
+    val textFieldValue = remember { mutableStateOf(TextFieldValue(searchDisplay, TextRange(searchDisplay.length))) }
+
     SideEffect {
         textFieldFocusRequester.requestFocus()
     }
 
-    val textFieldValue = remember { mutableStateOf(TextFieldValue(searchDisplay, TextRange(searchDisplay.length))) }
-
     TextField(
-        modifier = Modifier
-            //.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp)
             .focusRequester(textFieldFocusRequester),
 
         value = textFieldValue.value,
@@ -126,7 +130,7 @@ fun ExpandedSearch(
                 }
             }
         },
-
+        singleLine = true,
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,

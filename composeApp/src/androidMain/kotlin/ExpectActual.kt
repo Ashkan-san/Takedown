@@ -1,11 +1,21 @@
+import android.content.ContentValues
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -16,8 +26,9 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import data.MyLatLng
+import data.RingenKlasse
 import data.Turnier
-import data.TurnierAlterGewichtKlasse
 import data.TurnierPlatzierung
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -89,96 +100,147 @@ actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
     return turnierListe
 }
 
-actual suspend fun fetchAlterGewichtKlassen(turnier: Turnier): MutableList<TurnierAlterGewichtKlasse> {
-    val webClient = setupWebClient()
-    val detailsLink =
-        "https://www.ringerdb.de/de/turniere/TurnierDetailInfo.aspx?TID=${turnier.id}"
-    val detailsPage: HtmlPage = withContext(Dispatchers.IO) {
-        webClient.getPage(detailsLink)
+actual suspend fun fetchAlterGewichtKlassen(turnier: Turnier): MutableList<RingenKlasse> {
+    val turnierAGList = mutableListOf<RingenKlasse>()
+
+    try {
+        val webClient = setupWebClient()
+        val detailsLink =
+            "https://www.ringerdb.de/de/turniere/TurnierDetailInfo.aspx?TID=${turnier.id}"
+        val detailsPage: HtmlPage = withContext(Dispatchers.IO) {
+            webClient.getPage(detailsLink)
+        }
+
+        val tableBody = detailsPage.getFirstByXPath<HtmlTableBody>("//table/tbody")
+        val rows: List<HtmlTableRow> = tableBody.rows
+
+        rows.forEach { row ->
+            val cells: List<HtmlTableCell> = row.cells
+
+            val altersKlasse = cells[0].asNormalizedText()
+            val stilart = cells[1].asNormalizedText()
+            val gewichtsKlassen = determineWeightclass(cells[2].asNormalizedText())
+            val geschlecht = determineGender(cells[3].asNormalizedText(), cells[4].asNormalizedText())
+            val jahrgaenge = cells[5].asNormalizedText()
+            val modus = cells[6].asNormalizedText()
+
+            val ringenKlasse = RingenKlasse(
+                altersKlasse = altersKlasse,
+                stilart = stilart,
+                gewichtsKlassen = gewichtsKlassen,
+                geschlecht = geschlecht,
+                jahrgaenge = jahrgaenge,
+                modus = modus
+            )
+
+            turnierAGList.add((ringenKlasse))
+        }
+        webClient.close()
+
+    } catch (e: Exception) {
+        Log.d(ContentValues.TAG, "FetchAlterGewichtKlassen Exception: $e")
     }
-
-    val tableBody = detailsPage.getFirstByXPath<HtmlTableBody>("//table/tbody")
-    val rows: List<HtmlTableRow> = tableBody.rows
-    val turnierAGList = mutableListOf<TurnierAlterGewichtKlasse>()
-
-    rows.forEach { row ->
-        val cells: List<HtmlTableCell> = row.cells
-
-        val altersKlasse = cells[0].asNormalizedText()
-        val stilart = cells[1].asNormalizedText()
-        val gewichtsKlassen = determineWeightclass(cells[2].asNormalizedText())
-        val geschlecht = determineGender(cells[3].asNormalizedText(), cells[4].asNormalizedText())
-        val jahrgaenge = cells[5].asNormalizedText()
-        val modus = cells[6].asNormalizedText()
-
-        val turnierAlterGewichtKlasse = TurnierAlterGewichtKlasse(
-            altersKlasse = altersKlasse,
-            stilart = stilart,
-            gewichtsKlassen = gewichtsKlassen,
-            geschlecht = geschlecht,
-            jahrgaenge = jahrgaenge,
-            modus = modus
-        )
-
-        turnierAGList.add((turnierAlterGewichtKlasse))
-    }
-
-    webClient.close()
-
     return turnierAGList
 }
 
 actual suspend fun fetchDetails(turnier: Turnier): Turnier {
-    val webClient = setupWebClient()
-    val detailsLink =
-        "https://www.ringerdb.de/de/turniere/TurnierDetailInfo.aspx?TID=${turnier.id}"
-    val detailsPage: HtmlPage = withContext(Dispatchers.IO) {
-        webClient.getPage(detailsLink)
+    try {
+        val webClient = setupWebClient()
+
+        val detailsLink =
+            "https://www.ringerdb.de/de/turniere/TurnierDetailInfo.aspx?TID=${turnier.id}"
+        val detailsPage: HtmlPage = withContext(Dispatchers.IO) {
+            webClient.getPage(detailsLink)
+        }
+
+        val adresseSpan = detailsPage.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtWettkampfstaette']")
+        val adresse = adresseSpan.textContent
+        val landSpan = detailsPage.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtCountry']")
+        val land = landSpan.textContent
+        val ergebnisseLink =
+            detailsPage.getFirstByXPath<HtmlAnchor>("//a[@id='ctl00_ContentPlaceHolderInhalt_lnkZuDenErgebnisse']").getAttribute("href")
+
+        var ergebnisse = mutableStateListOf<TurnierPlatzierung>()
+        if (ergebnisseLink.isNotEmpty()) {
+            ergebnisse = fetchErgebnisse(ergebnisseLink).toMutableStateList()
+        }
+
+        webClient.close()
+
+        return turnier.copy(adresse = adresse, land = land, platzierungen = ergebnisse)
+    } catch (e: Exception) {
+        Log.d(ContentValues.TAG, "FetchDetails Exception: $e")
     }
 
-    val adresseSpan = detailsPage.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtWettkampfstaette']")
-    val adresse = adresseSpan.textContent
-    val landSpan = detailsPage.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtCountry']")
-    val land = landSpan.textContent
-    val ergebnisseLink = detailsPage.getFirstByXPath<HtmlAnchor>("//a[@id='ctl00_ContentPlaceHolderInhalt_lnkZuDenErgebnisse']").getAttribute("href")
-
-    // TODO entweder hier callen oder beim clicken des "Ergebnisse" Tabs
-    var ergebnisse = mutableStateListOf<TurnierPlatzierung>()
-    if (ergebnisseLink.isNotEmpty()) {
-        ergebnisse = fetchErgebnisse(ergebnisseLink).toMutableStateList()
-    }
-
-    webClient.close()
-
-    return turnier.copy(adresse = adresse, land = land, platzierungen = ergebnisse)
+    return turnier
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-actual fun Maps(address: String) {
-    // TODO woanders hin, weil es so aktuell ständig neu recomposed
-    val locationState = remember { mutableStateOf<LatLng?>(null) }
+actual fun Maps(
+    turnier: Turnier,
+    location: MyLatLng,
+    onUpdateLocation: (Double, Double) -> Unit,
+    isMapLoaded: Boolean,
+    onMapLoaded: () -> Unit
+) {
+    // TODO viewmodel später hier weg und callbacks einfügen
+    // TODO Scrolling bug und click
     val context = LocalContext.current
+    val cameraPositionState = rememberCameraPositionState()
 
-    getLatLngFromAddress(context, address) { latlong ->
-        locationState.value = latlong
+    // Location updaten, wenn neues Turnier
+    LaunchedEffect(turnier) {
+        getLatLngFromAddress(context, turnier.adresse) { latLng ->
+            onUpdateLocation(latLng.latitude, latLng.longitude)
+            onMapLoaded()
+        }
     }
 
-    if (locationState.value != null) {
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(locationState.value!!, 10f)
-        }
-        GoogleMap(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            cameraPositionState = cameraPositionState
-        ) {
-            Marker(
-                state = MarkerState(position = locationState.value!!),
-                title = address,
-                //snippet = "Marker in Singapore"
+    location.let { loc ->
+        DisposableEffect(loc) {
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(
+                LatLng(loc.lat, loc.lng),
+                10f
             )
+
+            onDispose {
+                /* cleanup if needed */
+            }
+        }
+
+        Box {
+            GoogleMap(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
+                cameraPositionState = cameraPositionState,
+                onMapLoaded = {
+                    onMapLoaded()
+                    //viewModel.setMapLoaded()
+                    //isMapLoaded.value = true
+                }
+            ) {
+                Marker(
+                    state = MarkerState(position = LatLng(location.lat, location.lng)),
+                    title = turnier.adresse,
+                )
+            }
+            if (!isMapLoaded) {
+                AnimatedVisibility(
+                    modifier = Modifier
+                        .matchParentSize(),
+                    visible = !isMapLoaded,
+                    enter = EnterTransition.None,
+                    exit = fadeOut()
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.background)
+                            .wrapContentSize()
+                    )
+                }
+            }
         }
     }
 }

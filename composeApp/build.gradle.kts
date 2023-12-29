@@ -9,6 +9,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
+    //id("org.jlleitschuh.gradle.ktlint") version "12.0.3"
+
 }
 
 kotlin {
@@ -32,14 +35,10 @@ kotlin {
     }
 
     sourceSets {
-        // für KMM ViewModel
-        all {
-            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
-        }
-
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
+            //implementation(compose.preview)
             implementation(compose.material3)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
@@ -117,7 +116,16 @@ android {
         }
     }
 }
-dependencies {
-    implementation(libs.androidx.leanback)
+
+// Unnötige Annotations entfernen
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        kotlin.sourceSets.all {
+            languageSettings.optIn("androidx.compose.material3.ExperimentalMaterial3Api")
+            languageSettings.optIn("androidx.compose.foundation.ExperimentalFoundationApi")
+            languageSettings.optIn("org.jetbrains.compose.resources.ExperimentalResourceApi")
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+        }
+    }
 }
  

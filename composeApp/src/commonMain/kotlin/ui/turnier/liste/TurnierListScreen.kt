@@ -5,27 +5,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -49,51 +39,29 @@ fun TurniereListScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TurnierListe(
     navigator: Navigator,
     viewModel: TurnierViewModel,
     innerPadding: PaddingValues
 ) {
-    val turniere = viewModel.turniere
-    val refreshState = rememberPullRefreshState(refreshing = viewModel.isLoading.value, onRefresh = { viewModel.updateTurnierList() })
+    // Viewmodel Variablen
+    val searchQuery = viewModel.searchQuery
+    val isLoading = viewModel.isLoading
+
+    val refreshState = rememberPullRefreshState(refreshing = isLoading.value, onRefresh = { viewModel.updateTurnierList() })
     val lazyListState = rememberLazyListState()
-    val searchQuery = remember { mutableStateOf("") }
-    val filteredTurniere = turniere.filter { it.titel.contains(searchQuery.value, ignoreCase = true) }
 
-    val sheetState = rememberModalBottomSheetState()
-    val showBottomSheet = remember { mutableStateOf(false) }
+    val filteredTurniere = viewModel.turniere.filter { it.titel.contains(searchQuery.value, ignoreCase = true) }
 
-    // TODO textfield schiebt column etwas runter beim expanden, ändern
     Column(
         modifier = Modifier.fillMaxSize().padding(innerPadding),
         verticalArrangement = Arrangement.Top
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            SearchBar(
-                searchDisplay = "",
-                onSearchChanged = {
-                    searchQuery.value = it
-                },
-                onSearchClosed = {
-                    //searchQuery.value = ""
-                }
-            )
+        SearchFilterRow(
+            onSearchChanged = { searchQuery.value = it }
+        )
 
-            // FILTER
-            IconButton(
-                onClick = { showBottomSheet.value = true }
-            ) {
-                Icon(
-                    Icons.Default.FilterList,
-                    contentDescription = "Filter"
-                )
-            }
-        }
         Spacer(modifier = Modifier.height(10.dp))
 
         Box {
@@ -121,18 +89,11 @@ fun TurnierListe(
             }
 
             PullRefreshIndicator(
-                refreshing = viewModel.isLoading.value,
+                refreshing = isLoading.value,
                 state = refreshState,
                 modifier = Modifier.align(Alignment.TopCenter)//.padding(150.dp)
             )
         }
-    }
-
-    if (showBottomSheet.value) {
-        BasicBottomSheet(
-            sheetState = sheetState,
-            onSheetDismiss = { showBottomSheet.value = false }
-        )
     }
 }
 

@@ -1,6 +1,5 @@
 package ui.turnier.details
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +24,6 @@ import ui.navigation.Screen
 import ui.util.scaffold.DetailsScaffold
 import viewmodel.TurnierViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {
     val aktuellesTurnier = remember { viewModel.aktuellesTurnier }
@@ -58,7 +56,16 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {
             ) { index ->
                 // TODO Daten erst anzeigen, wenn geladen
                 when (index) {
-                    0 -> TurnierInfos(aktuellesTurnier.value!!)
+                    0 -> TurnierInfos(
+                        aktuellesTurnier = aktuellesTurnier.value!!,
+                        location = viewModel.locationState.value,
+                        onUpdateLocation = { lat, lng ->
+                            viewModel.updateLocation(lat, lng)
+                        },
+                        isMapLoaded = viewModel.isMapLoaded.value,
+                        onMapLoaded = { viewModel.setMapLoaded() }
+                    )
+
                     1 -> TurnierErgebnisse(
                         aktuellesTurnier = aktuellesTurnier.value!!,
                         onCardClick = { updatedPlatzierungen ->
@@ -72,7 +79,6 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TurnierDetailsTabRow(pagerState: PagerState, tabTitles: List<String>) {
     val coroutineScope = rememberCoroutineScope()

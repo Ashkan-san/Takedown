@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import com.rickclephas.kmm.viewmodel.KMMViewModel
 import com.rickclephas.kmm.viewmodel.coroutineScope
+import data.MyLatLng
+import data.RingenKlasse
 import data.Turnier
 import data.TurnierDatum
 import data.TurnierPlatzierung
@@ -20,12 +22,12 @@ class TurnierViewModel : KMMViewModel() {
     var turniere = mutableStateListOf<Turnier>()
     val isLoading = mutableStateOf(false)
     var aktuellesTurnier = mutableStateOf<Turnier?>(null)
-
-    // TODO später ändern, iwie mit callback und so
     var aktuellePlatzierungen = listOf<TurnierPlatzierung>()
 
-    //var lat = mutableStateOf(0.0)
-    //var lng = mutableStateOf(0.0)
+    val searchQuery = mutableStateOf("")
+
+    val locationState = mutableStateOf<MyLatLng?>(MyLatLng(0.0, 0.0))
+    val isMapLoaded = mutableStateOf(false)
 
     init {
         // TODO Nur zum Testen, später ändern
@@ -42,7 +44,23 @@ class TurnierViewModel : KMMViewModel() {
                     "Mann",
                     "Männerverein",
                     mutableStateListOf(
-                        //TurnierAlterGewichtKlasse("Adults", "Freistil", listOf("Freie Einteilung"))
+                        RingenKlasse(
+                            "Adultsjjjjjjjjjjjjjjjjjjjjjjjj",
+                            "Freistil",
+                            gewichtsKlassen = listOf("Freie Einteilungkkkkkkkkkkkkk"),
+                            geschlecht = listOf("Männlich", "Weiblich"),
+                            jahrgaenge = "U2hhhhhhhhhhhhhhhhh5",
+                            modus = "Pool"
+                        ),
+                        RingenKlasse(
+                            "Elderly",
+                            "Freistil",
+                            listOf("30, 45, 60, 120, 160"),
+                            geschlecht = listOf("Weiblich"),
+                            jahrgaenge = "U520",
+                            modus = "Pool"
+                        ),
+                        //RingenKlasse("Kids", "Gr.-röm.", listOf("Freie Einteilung"), geschlecht = listOf("Männlich"), jahrgaenge = "2012", modus = "Pool"),
                     ),
                     mutableStateListOf(
                         TurnierPlatzierung("80", "U17", "1", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
@@ -138,6 +156,14 @@ class TurnierViewModel : KMMViewModel() {
 
     fun updatePlatzierungen(platzierungen: List<TurnierPlatzierung>) {
         aktuellePlatzierungen = platzierungen
+    }
+
+    fun updateLocation(latitude: Double, longitude: Double) {
+        locationState.value = MyLatLng(latitude, longitude)
+    }
+
+    fun setMapLoaded() {
+        isMapLoaded.value = true
     }
 
 }

@@ -31,12 +31,17 @@ fun TurnierErgebnisse(
     Column(
         modifier = Modifier.fillMaxSize().padding(10.dp).verticalScroll(rememberScrollState())
     ) {
-        SectionText("\uD83E\uDD47 Sieger \uD83E\uDD47")
+        if (aktuellesTurnier.platzierungen.isNotEmpty()) {
+            SectionText("\uD83E\uDD47 Sieger \uD83E\uDD47")
 
-        AlleSiegerCards(
-            aktuellesTurnier.platzierungen,
-            onCardClick = onCardClick
-        )
+            AlleSiegerCards(
+                aktuellesTurnier.platzierungen,
+                onCardClick = onCardClick
+            )
+        } else {
+            SectionText("Keine Ergebnisse")
+        }
+
     }
 }
 
@@ -54,9 +59,7 @@ fun AlleSiegerCards(
         // JEDER SIEGER
         val sieger = gewichtsGruppen.mapValues { (_, value) -> value.first() }
 
-        Column(
-            //modifier = Modifier.padding(5.dp)
-        ) {
+        Column {
             SectionText(alter)
 
             // TODO divider nur bis ende wenn ganze sektionen abschließt, sonst nicht

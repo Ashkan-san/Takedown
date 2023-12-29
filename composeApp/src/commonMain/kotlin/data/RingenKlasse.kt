@@ -1,6 +1,6 @@
 package data
 
-data class TurnierAlterGewichtKlasse(
+data class RingenKlasse(
     val altersKlasse: String,
     val stilart: String,
     val gewichtsKlassen: List<String>,

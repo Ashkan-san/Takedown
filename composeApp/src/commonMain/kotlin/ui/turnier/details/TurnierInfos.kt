@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -16,7 +19,6 @@ import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Male
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -24,25 +26,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import data.MyLatLng
+import data.RingenKlasse
 import data.Turnier
-import data.TurnierAlterGewichtKlasse
 import ui.util.SectionText
 
 @Composable
-fun TurnierInfos(aktuellesTurnier: Turnier) {
+fun TurnierInfos(
+    aktuellesTurnier: Turnier,
+    location: MyLatLng?,
+    onUpdateLocation: (Double, Double) -> Unit,
+    isMapLoaded: Boolean,
+    onMapLoaded: () -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize().padding(10.dp).verticalScroll(rememberScrollState())
     ) {
         // TURNIER INFOS
         InfoBox(aktuellesTurnier)
         // ALTERS-/GEWICHTSKLASSEN
-        AlterGewichtsklasseBox(aktuellesTurnier)
+        RingenKlasseBox(aktuellesTurnier)
         // MAPS
-        //TODO scrolling bug fixen und auf click maps öffnen
-        Maps(aktuellesTurnier.adresse)
+        Maps(
+            turnier = aktuellesTurnier,
+            location = location!!,
+            onUpdateLocation = { lat, lng -> onUpdateLocation(lat, lng) },
+            isMapLoaded = isMapLoaded,
+            onMapLoaded = { onMapLoaded() }
+        )
+        //Maps(aktuellesTurnier)
     }
 }
 
@@ -50,7 +64,7 @@ fun TurnierInfos(aktuellesTurnier: Turnier) {
 fun InfoBox(aktuellesTurnier: Turnier) {
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
-        modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row {
             Text(
@@ -60,22 +74,25 @@ fun InfoBox(aktuellesTurnier: Turnier) {
             )
         }
 
+        Text(text = "Veranstalter: " + aktuellesTurnier.veranstalter, maxLines = 1)
+        Text(text = "Verein: " + aktuellesTurnier.verein, maxLines = 1)
+
         DatumZeitText(aktuellesTurnier.datum.datumString)
         AdresseText(aktuellesTurnier.adresse)
 
-        Text(text = "Veranstalter: " + aktuellesTurnier.veranstalter, maxLines = 1)
-        Text(text = "Verein: " + aktuellesTurnier.verein, maxLines = 1)
-        Divider()
+        Divider(modifier = Modifier.padding(vertical = 5.dp))
     }
 
 }
 
 @Composable
-fun AlterGewichtsklasseBox(aktuellesTurnier: Turnier) {
+fun RingenKlasseBox(aktuellesTurnier: Turnier) {
     SectionText("Alters-/Gewichtsklassen")
-
-    WrestlingStyleCard("Freistil", aktuellesTurnier)
-    WrestlingStyleCard("Gr.-röm.", aktuellesTurnier)
+    Spacer(modifier = Modifier.height(10.dp))
+    RingenStil("Freistil", aktuellesTurnier)
+    Spacer(modifier = Modifier.height(10.dp))
+    RingenStil("Gr.-röm.", aktuellesTurnier)
+    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Composable
@@ -112,82 +129,72 @@ fun AdresseText(adresse: String) {
 }
 
 @Composable
-fun WrestlingStyleCard(stil: String, aktuellesTurnier: Turnier) {
-    Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
-    ) {
-        SectionText(stil)
+fun RingenStil(stil: String, aktuellesTurnier: Turnier) {
+    val filteredKlassen = filterKlassenNachStil(aktuellesTurnier, stil)
 
-        aktuellesTurnier.alterGewichtsKlassen.filter { it.stilart == stil }.forEachIndexed { index, details ->
-            AltersGewichtsklasseCard(details)
-            if (index < aktuellesTurnier.alterGewichtsKlassen.lastIndex) Divider()
+    if (filteredKlassen.isNotEmpty()) {
+        Text(
+            text = stil,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+        )
+
+        filteredKlassen.forEachIndexed { index, details ->
+            RingenKlasse(details)
+            if (index < filteredKlassen.lastIndex) Divider(modifier = Modifier.padding(5.dp))
         }
     }
 }
 
-@Composable
-fun AltersGewichtsklasseCard(details: TurnierAlterGewichtKlasse) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+private fun filterKlassenNachStil(aktuellesTurnier: Turnier, stil: String): List<RingenKlasse> {
+    return aktuellesTurnier.alterGewichtsKlassen.filter { it.stilart == stil }
+}
 
-            // GESCHLECHT
-            Box(modifier = Modifier.weight(1F)) {
+@Composable
+fun RingenKlasse(details: RingenKlasse) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(2.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // GESCHLECHT
+        Box(modifier = Modifier.weight(3F)) {
+            Row {
                 details.geschlecht.forEach { geschlecht ->
                     GeschlechtIcon(geschlecht)
                 }
             }
+        }
 
-            // ALTERSKLASSE, JAHRGÄNGE
-            Box(modifier = Modifier.weight(4F)) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = details.altersKlasse,
-                        //fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2
-                    )
-                    Text(
-                        text = details.jahrgaenge,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1
-                    )
-                }
+        // ALTERSKLASSE, JAHRGÄNGE
+        Box(modifier = Modifier.weight(4F)) {
+            Column {
+                Text(
+                    text = details.altersKlasse,
+                    fontWeight = FontWeight.Bold,
+                    //textAlign = TextAlign.Center,
+                    //maxLines = 2
+                )
+                Text(
+                    text = details.jahrgaenge,
+                    //textAlign = TextAlign.Center,
+                )
             }
+        }
 
-            // STIL
-            Box(modifier = Modifier.weight(4F)) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    // GEWICHTSKLASSEN
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val gewichtsKlassenText = details.gewichtsKlassen.joinToString(", ") { gewicht ->
-                            gewicht
-                        }
-                        Text(
-                            text = gewichtsKlassenText,
-                            //textAlign = TextAlign.Center
-                        )
-                    }
+        Spacer(Modifier.width(5.dp))
+
+        // STIL
+        Box(modifier = Modifier.weight(4F)) {
+            // GEWICHTSKLASSEN
+            Row {
+                val gewichtsKlassenText = details.gewichtsKlassen.joinToString(", ") { gewicht ->
+                    gewicht
                 }
+                Text(
+                    text = gewichtsKlassenText
+                )
             }
-
         }
     }
 }
@@ -195,7 +202,7 @@ fun AltersGewichtsklasseCard(details: TurnierAlterGewichtKlasse) {
 @Composable
 fun GeschlechtIcon(gender: String) {
     when (gender) {
-        "Männlich" -> Icon(imageVector = Icons.Default.Male, contentDescription = "Männlich Icon", modifier = Modifier.size(50.dp))
-        "Weiblich" -> Icon(imageVector = Icons.Default.Female, contentDescription = "Weiblich Icon", modifier = Modifier.size(50.dp))
+        "Männlich" -> Icon(imageVector = Icons.Default.Male, contentDescription = "Männlich Icon", modifier = Modifier.size(40.dp))
+        "Weiblich" -> Icon(imageVector = Icons.Default.Female, contentDescription = "Weiblich Icon", modifier = Modifier.size(40.dp))
     }
 }

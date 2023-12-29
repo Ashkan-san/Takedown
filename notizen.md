@@ -18,11 +18,15 @@
 - Shift + Win + Pfeiltaste: Fenster in Bilschrimen verschieben
 - Win + Pfeiltaste: Fenster verschieben
 
-### IntelliJ Shortcuts
+### Android Studio Shortcuts
 
 - Move to File: Markieren und dann Fn + F6
 - Comment Line: Ctrl + 7
 - Comment Block: Ctrl + Shift + 7
+- Rename: Ctrl + F6
+- Copy Line: Ctrl + C
+- Clipboard: Ctrl + Shift + V
+- Surround with Code: Ctrl + Alt + T
 
 ## Allgemein
 

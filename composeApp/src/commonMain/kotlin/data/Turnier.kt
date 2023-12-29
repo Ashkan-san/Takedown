@@ -16,7 +16,7 @@ data class Turnier(
     val veranstalter: String,
     val verein: String,
 
-    var alterGewichtsKlassen: SnapshotStateList<TurnierAlterGewichtKlasse>,
+    var alterGewichtsKlassen: SnapshotStateList<RingenKlasse>,
 
     var platzierungen: SnapshotStateList<TurnierPlatzierung>
 )
