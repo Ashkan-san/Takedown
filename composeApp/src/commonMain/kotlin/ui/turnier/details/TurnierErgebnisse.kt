@@ -64,7 +64,7 @@ fun AlleSiegerCards(
 
             // TODO divider nur bis ende wenn ganze sektionen abschließt, sonst nicht
             sieger.forEach { (gewicht, platzierung) ->
-                WinnerCard(
+                SiegerCard(
                     winner = platzierung,
                     onCardClick = {
                         gewichtsGruppen[gewicht]?.let { p -> onCardClick(p) }
@@ -77,7 +77,7 @@ fun AlleSiegerCards(
 }
 
 @Composable
-fun WinnerCard(
+fun SiegerCard(
     winner: TurnierPlatzierung,
     onCardClick: () -> Unit
 ) {

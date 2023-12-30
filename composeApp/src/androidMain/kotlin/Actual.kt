@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,13 +17,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -30,6 +36,7 @@ import data.MyLatLng
 import data.RingenKlasse
 import data.Turnier
 import data.TurnierPlatzierung
+import de.takedown.app.R
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -184,10 +191,19 @@ actual fun Maps(
     isMapLoaded: Boolean,
     onMapLoaded: () -> Unit
 ) {
-    // TODO viewmodel später hier weg und callbacks einfügen
     // TODO Scrolling bug und click
     val context = LocalContext.current
     val cameraPositionState = rememberCameraPositionState()
+
+    val mapTheme = if (isSystemInDarkTheme()) R.raw.map_dark else R.raw.map_light
+
+    val mapProperties = remember {
+        mutableStateOf(
+            MapProperties(
+                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context, mapTheme)
+            )
+        )
+    }
 
     // Location updaten, wenn neues Turnier
     LaunchedEffect(turnier) {
@@ -219,7 +235,9 @@ actual fun Maps(
                     onMapLoaded()
                     //viewModel.setMapLoaded()
                     //isMapLoaded.value = true
-                }
+                },
+                uiSettings = MapUiSettings(),
+                properties = mapProperties.value
             ) {
                 Marker(
                     state = MarkerState(position = LatLng(location.lat, location.lng)),
