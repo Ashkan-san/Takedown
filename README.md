@@ -1,12 +1,12 @@
 <!-- PROJECT LOGO -->
 <br />
-<div align="center">
+<div>
   <a href="https://github.com/Ashkan-san/Takedown">
-    <img src="composeApp/src/androidMain/res/mipmap-xxxhdpi/ic_launcher_round.png" alt="Logo" width="200" height="200">
+    <img src="composeApp/src/androidMain/res/mipmap-xxxhdpi/ic_launcher_round.png" alt="Logo" width="192" height="192">
   </a>
 
 <h3 align="center">Takedown - Wrestling Companion</h3>
-  <p align="center">
+  <p>
     Takedown - Wrestling Companion: Turniere finden, neue Techniken lernen und deinen Progress tracken
 </div>
 

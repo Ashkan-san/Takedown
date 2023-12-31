@@ -1,7 +1,6 @@
 package ui.turnier.liste
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,21 +32,18 @@ import data.TurnierDatum
 
 
 @Composable
-fun TurnierCard(turnier: Turnier, onClickCard: (Turnier) -> Unit) {
+fun TurnierCard(modifier: Modifier, turnier: Turnier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             //.height(120.dp)
             .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
-            .clickable {
-                onClickCard(turnier)
-            },
-        //elevation = CardDefaults.cardElevation(8.dp)
-        //backgroundColor = MaterialTheme.colors.primary
+        /*.clickable {
+            onClickCard(turnier)
+        },*/
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(5.dp),
-            //horizontalArrangement = Arrangement,
             verticalAlignment = Alignment.CenterVertically
         ) {
             // 1.

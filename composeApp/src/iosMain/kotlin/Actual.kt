@@ -7,7 +7,7 @@ actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
     TODO("Not yet implemented")
 }
 
-actual suspend fun fetchAlterGewichtKlassen(turnier: Turnier): MutableList<RingenKlasse> {
+actual suspend fun fetchRingenKlassen(turnier: Turnier): MutableList<RingenKlasse> {
     TODO("Not yet implemented")
 }
 

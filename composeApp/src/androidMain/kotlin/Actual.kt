@@ -28,7 +28,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -107,7 +106,7 @@ actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
     return turnierListe
 }
 
-actual suspend fun fetchAlterGewichtKlassen(turnier: Turnier): MutableList<RingenKlasse> {
+actual suspend fun fetchRingenKlassen(turnier: Turnier): MutableList<RingenKlasse> {
     val turnierAGList = mutableListOf<RingenKlasse>()
 
     try {
@@ -191,7 +190,7 @@ actual fun Maps(
     isMapLoaded: Boolean,
     onMapLoaded: () -> Unit
 ) {
-    // TODO Scrolling bug und click
+    // TODO loading screen fixen
     val context = LocalContext.current
     val cameraPositionState = rememberCameraPositionState()
 
@@ -233,10 +232,7 @@ actual fun Maps(
                 cameraPositionState = cameraPositionState,
                 onMapLoaded = {
                     onMapLoaded()
-                    //viewModel.setMapLoaded()
-                    //isMapLoaded.value = true
                 },
-                uiSettings = MapUiSettings(),
                 properties = mapProperties.value
             ) {
                 Marker(
@@ -262,3 +258,4 @@ actual fun Maps(
         }
     }
 }
+

@@ -8,6 +8,7 @@ data class Turnier(
     val titel: String,
 
     val datum: TurnierDatum,
+    val beendet: Boolean,
 
     val land: String = "",
     val adresse: String = "",

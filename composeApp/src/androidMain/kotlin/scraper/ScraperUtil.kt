@@ -2,6 +2,9 @@ package scraper
 
 import org.htmlunit.BrowserVersion
 import org.htmlunit.WebClient
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 // Web Client Setup
 fun setupWebClient(): WebClient {
@@ -30,6 +33,22 @@ fun determineGender(male: String, female: String): List<String> {
 
 // Gewichtsklassenstring in einzelne Strings splitten und Liste
 fun determineWeightclass(weightclassesString: String): List<String> {
-    val weightClassesList = weightclassesString.split(", ")
-    return weightClassesList
+    return weightclassesString.split(", ")
+}
+
+fun isTurnierBeendet(turnierDatum: String): Boolean {
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
+    val currentDate = Date()
+    println("HEUTE " + currentDate)
+
+    try {
+        val turnierDate = dateFormat.parse(turnierDatum)
+        println("TURNIER " + turnierDate)
+        // Wenn aktuelles Datum nach Turnierdatum ist, ist Turnier beendet
+        return currentDate.after(turnierDate)
+    } catch (e: Exception) {
+        println("Bla")
+    }
+
+    return false
 }

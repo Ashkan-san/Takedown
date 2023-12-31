@@ -70,6 +70,11 @@
 - Recomposition: @Composable, remember, by, key
 - remember benutzen, wenn Composable nach Recomposition den selben State behalten soll!
 
+- Die 3 sind das selbe, nur andere Syntax
+- val mutableState = remember { mutableStateOf(default) }
+- var value by remember { mutableStateOf(default) }
+- val (value, setValue) = remember { mutableStateOf(default) }
+
 ## Coroutines
 
 - Coroutine: asynchroner Thread

@@ -57,6 +57,8 @@ kotlin {
             // MAPS
             implementation("com.google.maps.android:maps-compose:4.3.0")
             implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+            implementation("io.github.theapache64:rebugger:1.0.0-rc02")
         }
 
         androidMain.dependencies {

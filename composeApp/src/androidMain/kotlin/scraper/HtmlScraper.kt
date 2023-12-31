@@ -66,6 +66,7 @@ private fun fetchTable(page: HtmlPage): MutableList<Turnier> {
         val turnier = Turnier(
             id = id,
             datum = turnierDatum,
+            beendet = isTurnierBeendet(turnierDatum.datumString),
             titel = titel,
             stadt = ort,
             veranstalter = veranstalter,

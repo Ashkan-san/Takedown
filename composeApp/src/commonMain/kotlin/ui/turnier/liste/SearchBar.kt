@@ -1,5 +1,7 @@
 package ui.turnier.liste
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -7,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -29,25 +33,58 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun SearchBar(
+fun SearchFilterBar(
+    onSearchChanged: (String) -> Unit,
+    onClickFilterButton: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        SearchField(
+            modifier = Modifier.weight(1F),
+            searchDisplay = "",
+            onSearchChanged = {
+                onSearchChanged(it)
+            },
+            onSearchClosed = {
+                //searchQuery.value = ""
+            }
+        )
+
+        // FILTER BUTTON
+        IconButton(
+            onClick = { onClickFilterButton() }
+        ) {
+            Icon(
+                Icons.Default.FilterList,
+                contentDescription = "Filter"
+            )
+        }
+    }
+}
+
+@Composable
+fun SearchField(
     modifier: Modifier,
     searchDisplay: String,
     onSearchChanged: (String) -> Unit,
     onSearchClosed: () -> Unit
 ) {
-    val (expanded, onExpandedChanged) = remember { mutableStateOf(false) }
+    val expanded = remember { mutableStateOf(false) }
 
-    when (expanded) {
+    when (expanded.value) {
         true -> ExpandedSearch(
             modifier = modifier,
             searchDisplay = searchDisplay,
             onSearchChanged = onSearchChanged,
             onSearchClosed = onSearchClosed,
-            onExpandedChanged = onExpandedChanged
+            onExpandedChanged = { expanded.value = false }
         )
 
         false -> CollapsedSearch(
-            onExpandedChanged = onExpandedChanged
+            onExpandedChanged = { expanded.value = true }
         )
     }
 
@@ -55,10 +92,10 @@ fun SearchBar(
 
 @Composable
 fun CollapsedSearch(
-    onExpandedChanged: (Boolean) -> Unit
+    onExpandedChanged: () -> Unit
 ) {
     IconButton(
-        onClick = { onExpandedChanged(true) }
+        onClick = { onExpandedChanged() }
     ) {
         Icon(
             Icons.Default.Search,
@@ -77,12 +114,12 @@ fun ExpandedSearch(
     searchDisplay: String,
     onSearchChanged: (String) -> Unit,
     onSearchClosed: () -> Unit,
-    onExpandedChanged: (Boolean) -> Unit
+    onExpandedChanged: () -> Unit
 ) {
     // TODO textfield schiebt column etwas runter beim expanden, ändern
     val focusManager = LocalFocusManager.current
     val textFieldFocusRequester = remember { FocusRequester() }
-    val textFieldValue = remember { mutableStateOf(TextFieldValue(searchDisplay, TextRange(searchDisplay.length))) }
+    var textFieldValue = remember { mutableStateOf(TextFieldValue(searchDisplay, TextRange(searchDisplay.length))) }
 
     SideEffect {
         textFieldFocusRequester.requestFocus()
@@ -104,7 +141,7 @@ fun ExpandedSearch(
         leadingIcon = {
             IconButton(
                 onClick = {
-                    onExpandedChanged(false)
+                    onExpandedChanged()
                     onSearchClosed()
                 }
             ) {

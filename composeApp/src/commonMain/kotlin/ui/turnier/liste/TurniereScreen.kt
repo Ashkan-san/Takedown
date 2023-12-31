@@ -1,6 +1,7 @@
 package ui.turnier.liste
 
 import PullRefreshIndicator
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,13 +10,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,7 +29,7 @@ import ui.util.simpleVerticalScrollbar
 import viewmodel.TurnierViewModel
 
 @Composable
-fun TurniereListScreen(
+fun TurniereScreen(
     navigator: Navigator,
     viewModel: TurnierViewModel
 ) {
@@ -48,18 +49,27 @@ fun TurnierListe(
     // Viewmodel Variablen
     val searchQuery = viewModel.searchQuery
     val isLoading = viewModel.isLoading
+    val turniere = viewModel.turniere
+    val filteredTurniere = turniere.filter { it.titel.contains(searchQuery.value, ignoreCase = true) }
+
+    // BOTTOM SHEET
+    // Ob der Sheet hidden, expanded ist usw.
+    val sheetState = rememberModalBottomSheetState()
+    // Ob der Sheet in der Composition zu sehen ist
+    val showBottomSheet = remember { mutableStateOf(false) }
+    val filterOptions = viewModel.filterOptions
+    val selectedOptions = viewModel.selectedOptions
 
     val refreshState = rememberPullRefreshState(refreshing = isLoading.value, onRefresh = { viewModel.updateTurnierList() })
     val lazyListState = rememberLazyListState()
-
-    val filteredTurniere = viewModel.turniere.filter { it.titel.contains(searchQuery.value, ignoreCase = true) }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(innerPadding),
         verticalArrangement = Arrangement.Top
     ) {
-        SearchFilterRow(
-            onSearchChanged = { searchQuery.value = it }
+        SearchFilterBar(
+            onSearchChanged = { searchQuery.value = it },
+            onClickFilterButton = { showBottomSheet.value = true },
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -78,12 +88,17 @@ fun TurnierListe(
                         it.id
                     }
                 ) { turnier ->
-                    TurnierCard(
-                        turnier = turnier,
-                        onClickCard = {
+                    // Zwischenlösung, da clickable UI ständig recomposed
+                    val clickableModifier = remember(turnier) {
+                        Modifier.clickable {
                             viewModel.updateTurnierDetails(turnier)
                             navigator.navigate(Screen.TurnierDetails.route)
                         }
+                    }
+
+                    TurnierCard(
+                        modifier = clickableModifier,
+                        turnier = turnier
                     )
                 }
             }
@@ -95,19 +110,30 @@ fun TurnierListe(
             )
         }
     }
-}
 
-@Composable
-fun LoadingUi(innerPadding: PaddingValues) {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(innerPadding),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.width(60.dp),
-            color = MaterialTheme.colorScheme.secondary,
-            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+    if (showBottomSheet.value) {
+        TurnierBottomSheet(
+            sheetState = sheetState,
+            onSheetDismiss = {
+                showBottomSheet.value = false
+            },
+            filterOptions = filterOptions,
+            selectedOptions = selectedOptions,
+            // TODO jenachdem welcher chip angeklickt anderer filter
+            onClickFilterChip = { clickedOption ->
+                when (clickedOption) {
+                    "FilterOption1" -> {
+                    }
+
+                    "FilterOption2" -> {
+                    }
+
+                    else -> {
+                    }
+                }
+
+            }
         )
     }
 }
+

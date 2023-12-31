@@ -5,7 +5,7 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import ui.regelwerk.RulesScreen
 import ui.turnier.details.TurnierDetailsScreen
-import ui.turnier.liste.TurniereListScreen
+import ui.turnier.liste.TurniereScreen
 import ui.turnier.ranking.TurnierRankingScreen
 import viewmodel.TurnierViewModel
 
@@ -17,7 +17,7 @@ fun NavigationGraph(navigator: Navigator, viewModel: TurnierViewModel) {
     ) {
         // HOME/TURNIERE
         scene(route = BottomNavItem.Turniere.route) {
-            TurniereListScreen(navigator = navigator, viewModel = viewModel)
+            TurniereScreen(navigator = navigator, viewModel = viewModel)
         }
 
         scene(route = Screen.TurnierDetails.route) {
