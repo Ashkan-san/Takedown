@@ -16,11 +16,19 @@ fun NavigationGraph(navigator: Navigator, viewModel: TurnierViewModel) {
         initialRoute = BottomNavItem.Turniere.route
     ) {
         // HOME/TURNIERE
-        scene(route = BottomNavItem.Turniere.route) {
+        scene(
+            route = BottomNavItem.Turniere.route
+        ) {
             TurniereScreen(navigator = navigator, viewModel = viewModel)
         }
 
-        scene(route = Screen.TurnierDetails.route) {
+        scene(
+            route = Screen.TurnierDetails.route,
+            /*navTransition = NavTransition(
+                createTransition = slideInHorizontally(animationSpec = tween(300)),
+                //destroyTransition = ExitTransition()
+            )*/
+        ) {
             TurnierDetailsScreen(navigator = navigator, viewModel = viewModel)
         }
 
@@ -31,7 +39,7 @@ fun NavigationGraph(navigator: Navigator, viewModel: TurnierViewModel) {
 
         // RULES
         scene(route = BottomNavItem.Rules.route) {
-            RulesScreen(navigator = navigator)
+            RulesScreen(navigator = navigator, viewModel = viewModel)
         }
         // MOVES
         scene(route = BottomNavItem.Moves.route) {

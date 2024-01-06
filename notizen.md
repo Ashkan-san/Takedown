@@ -9,7 +9,13 @@
 - Filtern, sortieren
 - Pull Refresh ersetzen durchs offizielle irgendwann
 
-## Shortcuts
+## Versionen
+
+- Kotlin: 1.9.20
+- Kotlinx (Extensions), Androidx (Android Extensions)
+- Coroutines:
+- AGP (Android Gradle Plugin): 8.2.0
+- Gradle: 8.4
 
 ### Windows Shortcuts
 
@@ -124,3 +130,18 @@ werden können.
 - Spacer nutzen bei Listen wie Rows und Columns
 - Padding für Elemente selbst
 - Box, wenn ich Elemente übereinander rendern möchte
+
+## Animation
+
+- Navigation:
+- Im NavHost kann man Default Animation einstellen
+- In einzelnen scenes dann für jeden Screen
+- Enter: Fade, Scale, Slide, Expand
+- Exit: Fade, Scale, Slide, Shrink
+
+## Realm
+
+- RealmConfiguration() für lokale DB
+- SyncConfiguration für online DB
+- Lokale DB ist im Device Manager unter data/data/de.takedown.app/files zu finden
+- Schemas lassen sich automatisch generieren

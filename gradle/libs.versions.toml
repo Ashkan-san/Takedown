@@ -3,6 +3,7 @@ logback = "1.4.11"
 compose = "1.5.4"
 compose-plugin = "1.5.10"
 compose-compiler = "1.5.4"
+
 agp = "8.2.0"
 android-minSdk = "24"
 android-compileSdk = "34"
@@ -14,7 +15,9 @@ androidx-material = "1.11.0"
 androidx-constraintlayout = "2.1.4"
 androidx-test-junit = "1.1.5"
 androidx-espresso-core = "3.5.1"
+
 kotlin = "1.9.20"
+
 junit = "4.13.2"
 leanback = "1.0.0"
 maps = "2.0.1"

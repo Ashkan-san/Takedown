@@ -1,6 +1,5 @@
 package ui.turnier.details
 
-import Maps
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,14 +48,13 @@ fun TurnierInfos(
         // ALTERS-/GEWICHTSKLASSEN
         RingenKlasseBox(aktuellesTurnier)
         // MAPS
-        Maps(
+        /*Maps(
             turnier = aktuellesTurnier,
             location = location!!,
             onUpdateLocation = { lat, lng -> onUpdateLocation(lat, lng) },
             isMapLoaded = isMapLoaded,
             onMapLoaded = { onMapLoaded() }
-        )
-        //Maps(aktuellesTurnier)
+        )*/
     }
 }
 

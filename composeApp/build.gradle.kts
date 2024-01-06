@@ -3,15 +3,14 @@ import org.jetbrains.compose.ExperimentalComposeLibrary
 val precomposeVersion = "1.5.7"
 val htmlUnitVersion = "3.7.0"
 val kmmViewModelVersion = "1.0.0-ALPHA-15"
+val realmVersion = "1.13.0"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-
-    //id("org.jlleitschuh.gradle.ktlint") version "12.0.3"
-
+    id("io.realm.kotlin") version "1.13.0"
 }
 
 kotlin {
@@ -58,7 +57,12 @@ kotlin {
             implementation("com.google.maps.android:maps-compose:4.3.0")
             implementation("com.google.android.gms:play-services-maps:18.2.0")
 
+            // REBUGGER
             implementation("io.github.theapache64:rebugger:1.0.0-rc02")
+
+            // REALM DB
+            implementation("io.realm.kotlin:library-base:$realmVersion")
+            implementation("io.realm.kotlin:library-sync:$realmVersion")
         }
 
         androidMain.dependencies {

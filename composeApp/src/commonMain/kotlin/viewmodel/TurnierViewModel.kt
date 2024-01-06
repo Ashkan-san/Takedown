@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import repo.ExampleRepo
 
 class TurnierViewModel : KMMViewModel() {
     var turniere = mutableStateListOf<Turnier>()
@@ -32,6 +33,9 @@ class TurnierViewModel : KMMViewModel() {
 
     val locationState = mutableStateOf<MyLatLng?>(MyLatLng(0.0, 0.0))
     val isMapLoaded = mutableStateOf(false)
+
+    // Realm Repo
+    val repo = ExampleRepo()
 
     init {
         // TODO Nur zum Testen, später ändern
@@ -215,6 +219,12 @@ class TurnierViewModel : KMMViewModel() {
 
     fun setMapLoaded() {
         isMapLoaded.value = true
+    }
+
+    fun addExample() {
+        viewModelScope.coroutineScope.launch {
+            repo.addExample()
+        }
     }
 
 }
