@@ -3,7 +3,7 @@ import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.rememberNavigator
 import theme.AppTheme
 import ui.navigation.NavigationGraph
-import viewmodel.TurnierViewModel
+import ui.turnier.TurnierViewModel
 
 @Composable
 fun App(viewModel: TurnierViewModel) {

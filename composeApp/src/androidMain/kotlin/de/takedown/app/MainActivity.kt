@@ -10,7 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.core.view.WindowInsetsControllerCompat
-import viewmodel.TurnierViewModel
+import ui.turnier.TurnierViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<TurnierViewModel>()

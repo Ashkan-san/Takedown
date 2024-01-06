@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.sp
 import data.TurnierPlatzierung
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
+import ui.turnier.TurnierViewModel
 import ui.util.SectionText
 import ui.util.scaffold.DetailsScaffold
-import viewmodel.TurnierViewModel
 
 
 @Composable

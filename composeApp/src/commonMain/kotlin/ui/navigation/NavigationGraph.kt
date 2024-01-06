@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import ui.regelwerk.RulesScreen
+import ui.turnier.TurnierViewModel
 import ui.turnier.details.TurnierDetailsScreen
 import ui.turnier.liste.TurniereScreen
 import ui.turnier.ranking.TurnierRankingScreen
-import viewmodel.TurnierViewModel
 
 @Composable
 fun NavigationGraph(navigator: Navigator, viewModel: TurnierViewModel) {

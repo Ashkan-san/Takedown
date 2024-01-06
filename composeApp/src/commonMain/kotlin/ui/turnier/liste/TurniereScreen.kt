@@ -24,9 +24,9 @@ import moe.tlaster.precompose.navigation.Navigator
 import pullRefresh
 import rememberPullRefreshState
 import ui.navigation.Screen
+import ui.turnier.TurnierViewModel
 import ui.util.scaffold.HomeScaffold
 import ui.util.simpleVerticalScrollbar
-import viewmodel.TurnierViewModel
 
 @Composable
 fun TurniereScreen(

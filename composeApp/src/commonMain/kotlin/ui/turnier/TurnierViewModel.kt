@@ -1,4 +1,4 @@
-package viewmodel
+package ui.turnier
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
