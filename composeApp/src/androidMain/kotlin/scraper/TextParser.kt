@@ -1,7 +1,7 @@
 package scraper
 
-import data.TurnierDatum
-import data.TurnierPlatzierung
+import model.TurnierDatum
+import model.TurnierPlatzierung
 
 fun parseDate(dateString: String): TurnierDatum {
     // 2 Zahlen

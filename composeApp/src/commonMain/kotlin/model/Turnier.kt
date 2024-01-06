@@ -1,4 +1,4 @@
-package data
+package model
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
@@ -17,7 +17,8 @@ data class Turnier(
     val veranstalter: String,
     val verein: String,
 
+    // TODO var weg, immutable machen
     var alterGewichtsKlassen: SnapshotStateList<RingenKlasse>,
 
-    var platzierungen: SnapshotStateList<TurnierPlatzierung>
+    val platzierungen: List<TurnierPlatzierung>
 )

@@ -6,11 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import com.rickclephas.kmm.viewmodel.KMMViewModel
 import com.rickclephas.kmm.viewmodel.coroutineScope
-import data.MyLatLng
-import data.RingenKlasse
-import data.Turnier
-import data.TurnierDatum
-import data.TurnierPlatzierung
 import fetchAllTurniere
 import fetchDetails
 import fetchRingenKlassen
@@ -18,11 +13,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import model.RingenKlasse
+import model.Turnier
+import model.TurnierDatum
+import model.TurnierLatLng
+import model.TurnierPlatzierung
 import repo.ExampleRepo
 
 class TurnierViewModel : KMMViewModel() {
     var turniere = mutableStateListOf<Turnier>()
-    val isLoading = mutableStateOf(false)
+    val isTurniereLoading = mutableStateOf(false)
     var aktuellesTurnier = mutableStateOf<Turnier?>(null)
     var aktuellePlatzierungen = listOf<TurnierPlatzierung>()
 
@@ -31,7 +31,7 @@ class TurnierViewModel : KMMViewModel() {
     val selectedOptions = mutableStateMapOf<String, Boolean>()
     val searchQuery = mutableStateOf("")
 
-    val locationState = mutableStateOf<MyLatLng?>(MyLatLng(0.0, 0.0))
+    val locationState = mutableStateOf<TurnierLatLng?>(TurnierLatLng(0.0, 0.0))
     val isMapLoaded = mutableStateOf(false)
 
     // Realm Repo
@@ -73,9 +73,12 @@ class TurnierViewModel : KMMViewModel() {
                     ),
                     mutableStateListOf(
                         TurnierPlatzierung("80", "U17", "1", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
-                        TurnierPlatzierung("80", "U17", "2", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
-                        TurnierPlatzierung("80", "U17", "3", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
-                        TurnierPlatzierung("80", "U17", "4", "Ashkan Haghighi Fashi", "TSV Wandsetal")
+                        TurnierPlatzierung("90", "U17", "1", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
+                        TurnierPlatzierung("100", "U17", "1", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
+                        TurnierPlatzierung("120", "U17", "1", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
+                        TurnierPlatzierung("80", "U18", "2", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
+                        TurnierPlatzierung("80", "U19", "3", "Ashkan Haghighi Fashi", "TSV Wandsetal"),
+                        TurnierPlatzierung("80", "Erwachsene Männer", "4", "Ashkan Haghighi Fashi", "TSV Wandsetal")
                     )
                 )
             )
@@ -163,7 +166,7 @@ class TurnierViewModel : KMMViewModel() {
     // aktuelle Turniere updaten und neue hinzufügen
     fun updateTurnierList() {
         viewModelScope.coroutineScope.launch {
-            isLoading.value = true
+            isTurniereLoading.value = true
             withContext(Dispatchers.IO) {
                 val fetchedTurniere = fetchAllTurniere()
 
@@ -172,7 +175,7 @@ class TurnierViewModel : KMMViewModel() {
                     turniere = turniere.distinctBy { it.id }.toMutableStateList()
                 }
             }
-            isLoading.value = false
+            isTurniereLoading.value = false
         }
     }
 
@@ -199,22 +202,53 @@ class TurnierViewModel : KMMViewModel() {
                 }
             }
 
-            updateTurnier(aktuellesTurnier.value!!)
+            updateTurnierListe(aktuellesTurnier.value!!)
         }
     }
 
-    fun updateTurnier(turnier: Turnier) {
+    fun updateTurnierKlassen() {
+
+    }
+
+    fun updateTurnierListe(turnier: Turnier) {
         // Turnier mit selber ID finden und updaten
         val turnierIndex = turniere.indexOfFirst { it.id == turnier.id }
         turniere[turnierIndex] = turnier
     }
 
-    fun updatePlatzierungen(platzierungen: List<TurnierPlatzierung>) {
-        aktuellePlatzierungen = platzierungen
+    fun getWinners(): Map<String, List<TurnierPlatzierung>> {
+        val altersGruppen = groupByAge(aktuellesTurnier.value!!.platzierungen)
+        val winnerMap = mutableMapOf<String, List<TurnierPlatzierung>>()
+
+        altersGruppen.forEach { (alter, platzierungen) ->
+            val gewichtsGruppen = groupByWeight(platzierungen)
+            val sieger = gewichtsGruppen.mapValues { (_, value) -> value.first() }
+            winnerMap[alter] = sieger.values.toList()
+        }
+
+        return winnerMap
     }
 
+    fun groupByAge(platzierungen: List<TurnierPlatzierung>): Map<String, List<TurnierPlatzierung>> {
+        // 1. Alle Ringer einer Altersklasse kriegen
+        return platzierungen.groupBy { it.altersKlasse }
+    }
+
+    fun groupByWeight(platzierungen: List<TurnierPlatzierung>): Map<String, List<TurnierPlatzierung>> {
+        // 2. Alle Ringer einer Gewichtsklasse kriegen
+        return platzierungen.groupBy { it.gewichtsKlasse }
+    }
+
+    // Nur die Platzierungen der jeweiligen Alters und Gewichtsklasse zeigen
+    fun updatePlatzierungen(gewinner: TurnierPlatzierung) {
+        aktuellePlatzierungen = aktuellesTurnier.value!!.platzierungen.filter {
+            it.altersKlasse == gewinner.altersKlasse && it.gewichtsKlasse == gewinner.gewichtsKlasse
+        }
+    }
+
+
     fun updateLocation(latitude: Double, longitude: Double) {
-        locationState.value = MyLatLng(latitude, longitude)
+        locationState.value = TurnierLatLng(latitude, longitude)
     }
 
     fun setMapLoaded() {

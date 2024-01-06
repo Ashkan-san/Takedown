@@ -68,10 +68,11 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {
 
                     1 -> TurnierErgebnisse(
                         aktuellesTurnier = aktuellesTurnier.value!!,
-                        onCardClick = { updatedPlatzierungen ->
-                            viewModel.updatePlatzierungen(updatedPlatzierungen)
+                        onCardClick = { sieger ->
+                            viewModel.updatePlatzierungen(sieger)
                             navigator.navigate(Screen.TurnierRanking.route)
-                        }
+                        },
+                        alleSieger = viewModel.getWinners()
                     )
                 }
             }

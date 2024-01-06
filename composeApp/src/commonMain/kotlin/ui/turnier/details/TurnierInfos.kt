@@ -27,15 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.MyLatLng
-import data.RingenKlasse
-import data.Turnier
+import model.RingenKlasse
+import model.Turnier
+import model.TurnierLatLng
 import ui.util.SectionText
 
 @Composable
 fun TurnierInfos(
     aktuellesTurnier: Turnier,
-    location: MyLatLng?,
+    location: TurnierLatLng?,
     onUpdateLocation: (Double, Double) -> Unit,
     isMapLoaded: Boolean,
     onMapLoaded: () -> Unit

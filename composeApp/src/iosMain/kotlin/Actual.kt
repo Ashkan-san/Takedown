@@ -1,7 +1,7 @@
 import androidx.compose.runtime.Composable
-import data.MyLatLng
-import data.RingenKlasse
-import data.Turnier
+import model.RingenKlasse
+import model.Turnier
+import model.TurnierLatLng
 
 actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
     TODO("Not yet implemented")
@@ -18,7 +18,7 @@ actual suspend fun fetchDetails(turnier: Turnier): Turnier {
 @Composable
 actual fun Maps(
     turnier: Turnier,
-    location: MyLatLng,
+    location: TurnierLatLng,
     onUpdateLocation: (Double, Double) -> Unit,
     isMapLoaded: Boolean,
     onMapLoaded: () -> Unit,

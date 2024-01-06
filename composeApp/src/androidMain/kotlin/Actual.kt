@@ -31,10 +31,6 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import data.MyLatLng
-import data.RingenKlasse
-import data.Turnier
-import data.TurnierPlatzierung
 import de.takedown.app.R
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +38,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import model.RingenKlasse
+import model.Turnier
+import model.TurnierLatLng
+import model.TurnierPlatzierung
 import org.htmlunit.html.HtmlAnchor
 import org.htmlunit.html.HtmlPage
 import org.htmlunit.html.HtmlSpan
@@ -185,7 +185,7 @@ actual suspend fun fetchDetails(turnier: Turnier): Turnier {
 @Composable
 actual fun Maps(
     turnier: Turnier,
-    location: MyLatLng,
+    location: TurnierLatLng,
     onUpdateLocation: (Double, Double) -> Unit,
     isMapLoaded: Boolean,
     onMapLoaded: () -> Unit

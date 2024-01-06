@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -17,61 +18,59 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.Turnier
-import data.TurnierPlatzierung
+import model.Turnier
+import model.TurnierPlatzierung
 import ui.util.SectionText
 
 @Composable
 fun TurnierErgebnisse(
     aktuellesTurnier: Turnier,
-    onCardClick: (List<TurnierPlatzierung>) -> Unit
+    onCardClick: (TurnierPlatzierung) -> Unit,
+    alleSieger: Map<String, List<TurnierPlatzierung>>
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(10.dp).verticalScroll(rememberScrollState())
     ) {
         if (aktuellesTurnier.platzierungen.isNotEmpty()) {
-            SectionText("\uD83E\uDD47 Sieger \uD83E\uDD47")
-
-            AlleSiegerCards(
-                aktuellesTurnier.platzierungen,
-                onCardClick = onCardClick
-            )
+            alleSieger.forEach { (alter, sieger) ->
+                AlleSiegerCards(
+                    alter = alter,
+                    sieger = sieger,
+                    onCardClick = onCardClick
+                )
+            }
         } else {
             SectionText("Keine Ergebnisse")
         }
-
     }
 }
 
 @Composable
 fun AlleSiegerCards(
-    platzierungen: List<TurnierPlatzierung>,
-    onCardClick: (List<TurnierPlatzierung>) -> Unit
+    alter: String,
+    sieger: List<TurnierPlatzierung>,
+    onCardClick: (TurnierPlatzierung) -> Unit
 ) {
-    // NACH ALTER GRUPPIEREN
-    val altersGruppen = groupByAge(platzierungen)
+    Column {
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "\uD83E\uDD47 $alter",
+            fontSize = 30.sp,
+            textAlign = TextAlign.Start,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(2.dp).fillMaxWidth()
+        )
+        //Spacer(modifier = Modifier.height(10.dp))
 
-    altersGruppen.forEach { (alter, platzierungen) ->
-        // NACH GEWICHT GRUPPIEREN
-        val gewichtsGruppen = groupByWeight(platzierungen)
-        // JEDER SIEGER
-        val sieger = gewichtsGruppen.mapValues { (_, value) -> value.first() }
-
-        Column {
-            SectionText(alter)
-
-            // TODO divider nur bis ende wenn ganze sektionen abschließt, sonst nicht
-            sieger.forEach { (gewicht, platzierung) ->
-                SiegerCard(
-                    winner = platzierung,
-                    onCardClick = {
-                        gewichtsGruppen[gewicht]?.let { p -> onCardClick(p) }
-                    }
-                )
-                Divider()
-            }
+        sieger.forEach { platzierung ->
+            SiegerCard(
+                winner = platzierung,
+                onCardClick = { onCardClick(platzierung) }
+            )
+            Divider()
         }
     }
 }
@@ -92,7 +91,7 @@ fun SiegerCard(
     ) {
         Box(modifier = Modifier.weight(1F)) {
             Text(
-                text = "${winner.gewichtsKlasse}kg:",
+                text = "${winner.gewichtsKlasse}kg",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -116,12 +115,4 @@ fun SiegerCard(
             }
         }
     }
-}
-
-fun groupByAge(platzierungen: List<TurnierPlatzierung>): Map<String, List<TurnierPlatzierung>> {
-    return platzierungen.groupBy { it.altersKlasse }
-}
-
-fun groupByWeight(platzierungen: List<TurnierPlatzierung>): Map<String, List<TurnierPlatzierung>> {
-    return platzierungen.groupBy { it.gewichtsKlasse }
 }

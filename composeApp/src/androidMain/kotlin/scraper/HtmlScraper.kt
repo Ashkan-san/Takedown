@@ -3,10 +3,10 @@ package scraper
 import android.content.ContentValues
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import data.Turnier
-import data.TurnierPlatzierung
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import model.Turnier
+import model.TurnierPlatzierung
 import org.htmlunit.TextPage
 import org.htmlunit.html.HtmlAnchor
 import org.htmlunit.html.HtmlDivision

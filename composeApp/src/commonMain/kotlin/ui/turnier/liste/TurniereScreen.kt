@@ -48,7 +48,7 @@ fun TurnierListe(
 ) {
     // Viewmodel Variablen
     val searchQuery = viewModel.searchQuery
-    val isLoading = viewModel.isLoading
+    val isLoading = viewModel.isTurniereLoading
     val turniere = viewModel.turniere
     val filteredTurniere = turniere.filter { it.titel.contains(searchQuery.value, ignoreCase = true) }
 

@@ -1,6 +1,6 @@
-package data
+package model
 
-data class MyLatLng(
+data class TurnierLatLng(
     val lat: Double,
     val lng: Double
 )

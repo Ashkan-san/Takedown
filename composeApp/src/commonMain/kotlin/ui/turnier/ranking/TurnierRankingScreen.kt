@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.TurnierPlatzierung
+import model.TurnierPlatzierung
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
 import ui.turnier.TurnierViewModel
@@ -28,6 +28,8 @@ import ui.util.scaffold.DetailsScaffold
 
 @Composable
 fun TurnierRankingScreen(navigator: Navigator, viewModel: TurnierViewModel) {
+    val platzierungen = remember { viewModel.aktuellePlatzierungen }
+
     DetailsScaffold(
         navigator = navigator,
         title = Screen.TurnierRanking.title
@@ -38,8 +40,6 @@ fun TurnierRankingScreen(navigator: Navigator, viewModel: TurnierViewModel) {
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val platzierungen = remember { viewModel.aktuellePlatzierungen }
-
             Column(
                 modifier = Modifier.padding(10.dp)
             ) {

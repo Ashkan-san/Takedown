@@ -27,8 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.Turnier
-import data.TurnierDatum
+import model.Turnier
+import model.TurnierDatum
 
 
 @Composable

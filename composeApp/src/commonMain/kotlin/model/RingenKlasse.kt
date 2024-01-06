@@ -1,4 +1,4 @@
-package data
+package model
 
 data class RingenKlasse(
     val altersKlasse: String,
