@@ -1,7 +1,7 @@
 import androidx.compose.runtime.Composable
-import model.RingenKlasse
-import model.Turnier
-import model.TurnierLatLng
+import model.turnier.RingenKlasse
+import model.turnier.Turnier
+import model.turnier.TurnierLatLng
 
 actual suspend fun fetchAllTurniere(): MutableList<Turnier> {
     TODO("Not yet implemented")

@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import model.Turnier
-import model.TurnierPlatzierung
+import model.turnier.Turnier
+import model.turnier.TurnierPlatzierung
 import org.htmlunit.TextPage
 import org.htmlunit.html.HtmlAnchor
 import org.htmlunit.html.HtmlDivision

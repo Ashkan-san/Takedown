@@ -27,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import model.RingenKlasse
-import model.Turnier
-import model.TurnierLatLng
+import model.turnier.RingenKlasse
+import model.turnier.Turnier
+import model.turnier.TurnierLatLng
 import ui.util.SectionText
 
 @Composable

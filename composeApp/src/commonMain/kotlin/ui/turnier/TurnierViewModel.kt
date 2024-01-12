@@ -13,11 +13,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import model.RingenKlasse
-import model.Turnier
-import model.TurnierDatum
-import model.TurnierLatLng
-import model.TurnierPlatzierung
+import model.turnier.RingenKlasse
+import model.turnier.Turnier
+import model.turnier.TurnierDatum
+import model.turnier.TurnierLatLng
+import model.turnier.TurnierPlatzierung
 import repo.ExampleRepo
 
 class TurnierViewModel : KMMViewModel() {

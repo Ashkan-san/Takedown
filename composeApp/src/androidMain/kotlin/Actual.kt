@@ -38,10 +38,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
-import model.RingenKlasse
-import model.Turnier
-import model.TurnierLatLng
-import model.TurnierPlatzierung
+import model.turnier.RingenKlasse
+import model.turnier.Turnier
+import model.turnier.TurnierLatLng
+import model.turnier.TurnierPlatzierung
 import org.htmlunit.html.HtmlAnchor
 import org.htmlunit.html.HtmlPage
 import org.htmlunit.html.HtmlSpan

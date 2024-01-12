@@ -1,4 +1,4 @@
-package model
+package model.turnier
 
 data class TurnierPlatzierung(
     var gewichtsKlasse: String = "",

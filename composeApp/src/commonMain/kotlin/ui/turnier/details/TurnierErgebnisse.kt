@@ -21,8 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import model.Turnier
-import model.TurnierPlatzierung
+import model.turnier.Turnier
+import model.turnier.TurnierPlatzierung
 import ui.util.SectionText
 
 @Composable

@@ -1,4 +1,4 @@
-package model
+package model.turnier
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 

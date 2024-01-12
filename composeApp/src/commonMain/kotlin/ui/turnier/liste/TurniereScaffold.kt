@@ -1,4 +1,4 @@
-package ui.util.scaffold
+package ui.turnier.liste
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -23,17 +23,17 @@ import org.jetbrains.compose.resources.painterResource
 import ui.navigation.BottomNavItem
 
 @Composable
-fun HomeScaffold(
+fun TurniereScaffold(
     navigator: Navigator,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
         topBar = {
-            HomeTopSearchBar(BottomNavItem.Turniere.title)
+            TurniereTopSearchBar(BottomNavItem.Turniere.title)
             //HomeTopBar(BottomNavItem.Turniere.title)
         },
         bottomBar = {
-            HomeBottomBar(navigator = navigator)
+            TurniereBottomBar(navigator = navigator)
         }
     ) { innerPadding ->
         content(innerPadding)
@@ -61,7 +61,7 @@ fun HomeTopBar(title: String) {
 }
 
 @Composable
-fun HomeTopSearchBar(title: String) {
+fun TurniereTopSearchBar(title: String) {
     CenterAlignedTopAppBar(
         navigationIcon = {
             Icon(
@@ -81,7 +81,7 @@ fun HomeTopSearchBar(title: String) {
 }
 
 @Composable
-fun HomeBottomBar(navigator: Navigator) {
+fun TurniereBottomBar(navigator: Navigator) {
     val items = listOf(
         BottomNavItem.Turniere,
         BottomNavItem.Rules,

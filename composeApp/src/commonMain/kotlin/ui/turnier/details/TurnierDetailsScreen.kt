@@ -22,7 +22,6 @@ import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
 import ui.turnier.TurnierViewModel
-import ui.util.scaffold.DetailsScaffold
 
 @Composable
 fun TurnierDetailsScreen(navigator: Navigator, viewModel: TurnierViewModel) {

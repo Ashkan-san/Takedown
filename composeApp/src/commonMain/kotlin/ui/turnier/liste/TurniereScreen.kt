@@ -25,7 +25,6 @@ import pullRefresh
 import rememberPullRefreshState
 import ui.navigation.Screen
 import ui.turnier.TurnierViewModel
-import ui.util.scaffold.HomeScaffold
 import ui.util.simpleVerticalScrollbar
 
 @Composable
@@ -33,7 +32,7 @@ fun TurniereScreen(
     navigator: Navigator,
     viewModel: TurnierViewModel
 ) {
-    HomeScaffold(
+    TurniereScaffold(
         navigator = navigator
     ) { innerPadding ->
         TurnierListe(navigator, viewModel, innerPadding)

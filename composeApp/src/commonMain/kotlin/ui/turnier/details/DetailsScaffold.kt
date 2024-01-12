@@ -1,4 +1,4 @@
-package ui.util.scaffold
+package ui.turnier.details
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons

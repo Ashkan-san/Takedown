@@ -1,4 +1,4 @@
-package model
+package model.turnier
 
 data class TurnierDatum(
     val startTag: String,

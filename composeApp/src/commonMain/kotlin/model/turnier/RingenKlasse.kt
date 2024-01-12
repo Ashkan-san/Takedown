@@ -1,4 +1,4 @@
-package model
+package model.turnier
 
 data class RingenKlasse(
     val altersKlasse: String,

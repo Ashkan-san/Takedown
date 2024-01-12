@@ -18,12 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import model.TurnierPlatzierung
+import model.turnier.TurnierPlatzierung
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
 import ui.turnier.TurnierViewModel
+import ui.turnier.details.DetailsScaffold
 import ui.util.SectionText
-import ui.util.scaffold.DetailsScaffold
 
 
 @Composable
