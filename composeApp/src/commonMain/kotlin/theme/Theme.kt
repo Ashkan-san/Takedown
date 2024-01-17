@@ -20,8 +20,6 @@ import md_theme_dark_onSecondary
 import md_theme_dark_onSecondaryContainer
 import md_theme_dark_onSurface
 import md_theme_dark_onSurfaceVariant
-import md_theme_dark_onTertiary
-import md_theme_dark_onTertiaryContainer
 import md_theme_dark_outline
 import md_theme_dark_outlineVariant
 import md_theme_dark_primary
@@ -32,8 +30,6 @@ import md_theme_dark_secondaryContainer
 import md_theme_dark_surface
 import md_theme_dark_surfaceTint
 import md_theme_dark_surfaceVariant
-import md_theme_dark_tertiary
-import md_theme_dark_tertiaryContainer
 import md_theme_light_background
 import md_theme_light_error
 import md_theme_light_errorContainer
@@ -49,8 +45,6 @@ import md_theme_light_onSecondary
 import md_theme_light_onSecondaryContainer
 import md_theme_light_onSurface
 import md_theme_light_onSurfaceVariant
-import md_theme_light_onTertiary
-import md_theme_light_onTertiaryContainer
 import md_theme_light_outline
 import md_theme_light_outlineVariant
 import md_theme_light_primary
@@ -61,8 +55,6 @@ import md_theme_light_secondaryContainer
 import md_theme_light_surface
 import md_theme_light_surfaceTint
 import md_theme_light_surfaceVariant
-import md_theme_light_tertiary
-import md_theme_light_tertiaryContainer
 
 
 private val LightColors = lightColorScheme(
@@ -74,10 +66,6 @@ private val LightColors = lightColorScheme(
     onSecondary = md_theme_light_onSecondary,
     secondaryContainer = md_theme_light_secondaryContainer,
     onSecondaryContainer = md_theme_light_onSecondaryContainer,
-    tertiary = md_theme_light_tertiary,
-    onTertiary = md_theme_light_onTertiary,
-    tertiaryContainer = md_theme_light_tertiaryContainer,
-    onTertiaryContainer = md_theme_light_onTertiaryContainer,
     error = md_theme_light_error,
     errorContainer = md_theme_light_errorContainer,
     onError = md_theme_light_onError,
@@ -106,10 +94,6 @@ private val DarkColors = darkColorScheme(
     onSecondary = md_theme_dark_onSecondary,
     secondaryContainer = md_theme_dark_secondaryContainer,
     onSecondaryContainer = md_theme_dark_onSecondaryContainer,
-    tertiary = md_theme_dark_tertiary,
-    onTertiary = md_theme_dark_onTertiary,
-    tertiaryContainer = md_theme_dark_tertiaryContainer,
-    onTertiaryContainer = md_theme_dark_onTertiaryContainer,
     error = md_theme_dark_error,
     errorContainer = md_theme_dark_errorContainer,
     onError = md_theme_dark_onError,

@@ -19,7 +19,7 @@ fun NavigationGraph(
 ) {
     NavHost(
         navigator = navigator,
-        initialRoute = BottomNavItem.Turniere.route
+        initialRoute = BottomNavItem.Scoreboard.route // TODO später ändern, nur debug
     ) {
         // HOME/TURNIERE
         scene(

@@ -1,27 +1,28 @@
 package ui.scoreboard
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
+import ui.scoreboard.punkte.PunkteSurface
+import ui.scoreboard.timer.Timer
 
 @Composable
 fun ScoreboardScaffold(
@@ -69,29 +70,54 @@ fun ScoreboardScaffold(
 @Composable
 fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
     val scoreBlue = remember { viewModel.scoreBlue }
-    val scoreRed = viewModel.scoreRed
+    val scoreRed = remember { viewModel.scoreRed }
+
+    val timerState = remember { viewModel.timerState }
+    val runningState = remember { viewModel.isRunning }
 
     ScoreboardScaffold(
         navigator = navigator,
         title = Screen.Scoreboard.title
     ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding)
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Surface(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    modifier = Modifier.clickable { viewModel.increaseBlue() },
-                    text = "${scoreBlue.value}"
-                )
-                IconButton(
+            // RUNDE
+            Runde()
+
+            // TIMER
+            Timer(
+                timerState = timerState.value,
+                runningState = runningState.value,
+                onSelectTimer = { viewModel.pauseTimer() },
+                onChangeTimerMin = { value -> viewModel.setTimerState(minutes = value) },
+                onChangeTimerSec = { value -> viewModel.setTimerState(seconds = value) },
+                onClickPlay = { viewModel.startTimer() },
+                onClickStop = { viewModel.stopTimer() },
+                onClickReset = { viewModel.resetTimer() }
+            )
+
+            // PUNKTE
+            Row(
+                modifier = Modifier
+            ) {
+                PunkteSurface(
+                    modifier = Modifier.weight(1F),
+                    //color = MaterialTheme.colorScheme.primary,
+                    color = Color(0xFF0B61A4),
+                    score = scoreBlue.value,
                     onClick = { viewModel.increaseBlue() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add Icon"
-                    )
-                }
+                )
+                PunkteSurface(
+                    modifier = Modifier.weight(1F),
+                    //color = MaterialTheme.colorScheme.secondary,
+                    color = Color(0xFFB72200),
+                    score = scoreRed.value,
+                    onClick = { viewModel.increaseRed() }
+                )
             }
+
         }
 
     }

@@ -8,6 +8,7 @@
 - ViewModel!!!
 - Filtern, sortieren
 - Pull Refresh ersetzen durchs offizielle irgendwann
+- Timer Probleme: cursor ans ende bringen, näher nebeneinander
 
 ## Versionen
 
@@ -80,6 +81,8 @@
 - val mutableState = remember { mutableStateOf(default) }
 - var value by remember { mutableStateOf(default) }
 - val (value, setValue) = remember { mutableStateOf(default) }
+- "You should use remember when you don't want an object to be instantiated again on recomposition
+- with initial values of that object."
 
 ## Coroutines
 
@@ -95,6 +98,7 @@
 - LaunchedEffect: für coroutine und background tasks
 - DisposableEffect: für Resource Kram, wie z.B. bei den Sensoren damals
 - SideEffect:
+- Die werden immer gerufen, wenn sich ein value ÄNDERT (nicht wenn er true ist...)
 
 ## Gradle
 
@@ -130,6 +134,13 @@ werden können.
 - Spacer nutzen bei Listen wie Rows und Columns
 - Padding für Elemente selbst
 - Box, wenn ich Elemente übereinander rendern möchte
+- requiredWidth (ignoriert parent max constraints) vs width (hält sich dran)
+
+## TextField und Keyboard
+
+- Textfield: Cursor ist blinkende Linie, Cursor Handle sind die Drops, Toolbar sind Optionen wie cut und copy
+- Keyboard Options behinaltet: Autocorrect, Capitalization, Keyboard Type und IME Action (Input Method Editors)
+- Keyboard Types: Default, Number, Password, Url usw.
 
 ## Animation
 
