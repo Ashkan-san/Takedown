@@ -1,8 +1,9 @@
 package model.scoreboard
 
 data class TimerState(
-    val minutes: String,
-    val seconds: String,
+    val minutes: String = "03",
+    val seconds: String = "00",
+    val isRunning: Boolean = false
 ) {
     override fun toString(): String {
         return "$minutes:$seconds"

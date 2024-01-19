@@ -27,6 +27,7 @@ class TurnierViewModel : KMMViewModel() {
     var aktuellePlatzierungen = listOf<TurnierPlatzierung>()
 
     // Filter Optionen und State
+    val showBottomSheet = mutableStateOf(false)
     val filterOptions = listOf("Option 1", "Option 2", "Option 3")
     val selectedOptions = mutableStateMapOf<String, Boolean>()
     val searchQuery = mutableStateOf("")
@@ -259,6 +260,10 @@ class TurnierViewModel : KMMViewModel() {
         viewModelScope.coroutineScope.launch {
             repo.addExample()
         }
+    }
+
+    fun toggleBottomSheet(boolean: Boolean) {
+        showBottomSheet.value = boolean
     }
 
 }
