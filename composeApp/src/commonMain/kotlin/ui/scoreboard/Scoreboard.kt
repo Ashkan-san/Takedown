@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import model.scoreboard.WrestlerColor
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
 import ui.scoreboard.punkte.Punkte
@@ -72,7 +71,8 @@ fun ScoreboardScaffold(
 
 @Composable
 fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
-    val scoreState = remember { viewModel.scoreState }
+    val blueState = remember { viewModel.wrestlerBlue }
+    val redState = remember { viewModel.wrestlerRed }
 
     val roundState = remember { viewModel.round }
 
@@ -117,15 +117,12 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
             // PUNKTE, PENALTY, NAME
             Punkte(
-                scoreState = scoreState.value,
-                onAddBlue = { viewModel.increaseScore(WrestlerColor.BLUE) },
-                onAddRed = { viewModel.increaseScore(WrestlerColor.RED) },
-                onSubBlue = { viewModel.decreaseScore(WrestlerColor.BLUE) },
-                onSubRed = { viewModel.decreaseScore(WrestlerColor.RED) },
-                onPenaltyBlue = { viewModel.setPenalty(WrestlerColor.BLUE) },
-                onPenaltyRed = { viewModel.setPenalty(WrestlerColor.RED) },
-                onClickItemBlue = { value -> viewModel.increaseScore(WrestlerColor.BLUE, value) },
-                onClickItemRed = { value -> viewModel.increaseScore(WrestlerColor.RED, value) },
+                blueState = blueState.value,
+                redState = redState.value,
+                onAdd = { state -> viewModel.increaseScore(state) },
+                onSub = { state -> viewModel.decreaseScore(state) },
+                onPenalty = { state -> viewModel.setPenalty(state) },
+                onClickItem = { state, value -> viewModel.increaseScore(state, value) },
             )
 
         }

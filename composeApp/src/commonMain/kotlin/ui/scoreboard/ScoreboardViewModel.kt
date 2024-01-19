@@ -1,68 +1,73 @@
 package ui.scoreboard
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import com.rickclephas.kmm.viewmodel.KMMViewModel
 import com.rickclephas.kmm.viewmodel.coroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import model.scoreboard.PunkteState
 import model.scoreboard.TimerState
 import model.scoreboard.WrestlerColor
+import model.scoreboard.WrestlerState
 
 
 class ScoreboardViewModel : KMMViewModel() {
-    val scoreState = mutableStateOf(PunkteState(0, 0, 0, 0))
+    val wrestlerBlue = mutableStateOf(
+        WrestlerState(WrestlerColor.BLUE, Color(0xFF0B61A4), 0, 0)
+    )
+    val wrestlerRed = mutableStateOf(
+        WrestlerState(WrestlerColor.RED, Color(0xFFB72200), 0, 0)
+    )
 
-    fun setPenalty(color: WrestlerColor) {
-        when (color) {
+    fun setPenalty(state: WrestlerState) {
+        when (state.colorName) {
             WrestlerColor.BLUE -> {
-                scoreState.value = scoreState.value.copy(penaltyBlue = scoreState.value.penaltyBlue + 1)
-                if (scoreState.value.penaltyBlue > 3) {
-                    scoreState.value = scoreState.value.copy(penaltyBlue = 0)
+                wrestlerBlue.value = state.copy(penalty = state.penalty + 1)
+                if (wrestlerBlue.value.penalty > 3) {
+                    wrestlerBlue.value = state.copy(penalty = 0)
                 }
             }
 
             WrestlerColor.RED -> {
-                scoreState.value = scoreState.value.copy(penaltyRed = scoreState.value.penaltyRed + 1)
-                if (scoreState.value.penaltyRed > 3) {
-                    scoreState.value = scoreState.value.copy(penaltyRed = 0)
+                wrestlerRed.value = state.copy(penalty = state.penalty + 1)
+                if (wrestlerRed.value.penalty > 3) {
+                    wrestlerRed.value = state.copy(penalty = 0)
                 }
             }
         }
     }
 
-    fun increaseScore(color: WrestlerColor, value: Int = 1) {
-        when (color) {
+    fun increaseScore(state: WrestlerState, value: Int = 1) {
+        when (state.colorName) {
             WrestlerColor.BLUE -> {
-                scoreState.value = scoreState.value.copy(scoreBlue = scoreState.value.scoreBlue + value)
+                wrestlerBlue.value = state.copy(score = state.score + value)
             }
 
             WrestlerColor.RED -> {
-                scoreState.value = scoreState.value.copy(scoreRed = scoreState.value.scoreRed + value)
+                wrestlerRed.value = state.copy(score = state.score + value)
             }
         }
     }
 
-    fun decreaseScore(color: WrestlerColor) {
-        when (color) {
-            WrestlerColor.BLUE -> {
-                if (scoreState.value.scoreBlue != 0) {
-                    scoreState.value = scoreState.value.copy(scoreBlue = scoreState.value.scoreBlue - 1)
+    fun decreaseScore(state: WrestlerState) {
+        if (state.score != 0) {
+            when (state.colorName) {
+                WrestlerColor.BLUE -> {
+                    wrestlerBlue.value = state.copy(score = state.score - 1)
                 }
-            }
 
-            WrestlerColor.RED -> {
-                if (scoreState.value.scoreRed != 0) {
-                    scoreState.value = scoreState.value.copy(scoreRed = scoreState.value.scoreRed - 1)
+                WrestlerColor.RED -> {
+                    wrestlerRed.value = state.copy(score = state.score - 1)
                 }
             }
         }
     }
 
     fun resetAllScores() {
-        scoreState.value = scoreState.value.copy(0, 0, 0, 0)
+        wrestlerBlue.value = wrestlerBlue.value.copy(score = 0, penalty = 0)
+        wrestlerRed.value = wrestlerRed.value.copy(score = 0, penalty = 0)
     }
 
     /*fun updateScoreState(

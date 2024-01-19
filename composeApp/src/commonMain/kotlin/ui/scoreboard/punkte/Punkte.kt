@@ -3,43 +3,35 @@ package ui.scoreboard.punkte
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import model.scoreboard.PunkteState
+import model.scoreboard.WrestlerState
 
 @Composable
 fun Punkte(
-    scoreState: PunkteState,
-    onAddBlue: () -> Unit,
-    onAddRed: () -> Unit,
-    onSubBlue: () -> Unit,
-    onSubRed: () -> Unit,
-    onPenaltyBlue: () -> Unit,
-    onPenaltyRed: () -> Unit,
-    onClickItemBlue: (Int) -> Unit,
-    onClickItemRed: (Int) -> Unit
+    blueState: WrestlerState,
+    redState: WrestlerState,
+    onAdd: (WrestlerState) -> Unit,
+    onSub: (WrestlerState) -> Unit,
+    onPenalty: (WrestlerState) -> Unit,
+    onClickItem: (WrestlerState, Int) -> Unit
 ) {
     Row(
         modifier = Modifier
     ) {
         PunkteSurface(
             modifier = Modifier.weight(1F),
-            color = Color(0xFF0B61A4),
-            score = scoreState.scoreBlue,
-            penaltyScore = scoreState.penaltyBlue,
-            onClickAdd = onAddBlue,
-            onClickSub = onSubBlue,
-            onClickPenalty = onPenaltyBlue,
-            onClickItem = onClickItemBlue
+            state = blueState,
+            onClickAdd = { onAdd(blueState) },
+            onClickSub = { onSub(blueState) },
+            onClickPenalty = { onPenalty(blueState) },
+            onClickItem = { value -> onClickItem(blueState, value) }
         )
         PunkteSurface(
             modifier = Modifier.weight(1F),
-            color = Color(0xFFB72200),
-            score = scoreState.scoreRed,
-            penaltyScore = scoreState.penaltyRed,
-            onClickAdd = onAddRed,
-            onClickSub = onSubRed,
-            onClickPenalty = onPenaltyRed,
-            onClickItem = onClickItemRed
+            state = redState,
+            onClickAdd = { onAdd(redState) },
+            onClickSub = { onSub(redState) },
+            onClickPenalty = { onPenalty(redState) },
+            onClickItem = { value -> onClickItem(redState, value) }
         )
     }
 }
