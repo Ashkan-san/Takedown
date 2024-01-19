@@ -14,13 +14,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import model.scoreboard.TimerState
 
 @Composable
 fun TimerButtons(
     runningState: Boolean,
     onClickPlay: () -> Unit,
     onClickStop: () -> Unit,
-    onClickReset: () -> Unit
+    onClickReset: () -> Unit,
+    onSetTimer: (TimerState) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -30,6 +32,7 @@ fun TimerButtons(
             onClick = { onClickPlay() }
         ) {
             Icon(
+                modifier = Modifier.size(128.dp),
                 imageVector = if (runningState) Icons.Default.Pause else Icons.Default.PlayArrow,
                 contentDescription = "Play/Pause Icon"
             )
@@ -49,10 +52,14 @@ fun TimerButtons(
             onClick = { onClickReset() }
         ) {
             Icon(
+                modifier = Modifier.size(128.dp),
                 imageVector = Icons.Default.Replay,
                 contentDescription = "Reset Icon"
             )
         }
 
+        TimerDropdown(
+            onClickItem = onSetTimer
+        )
     }
 }

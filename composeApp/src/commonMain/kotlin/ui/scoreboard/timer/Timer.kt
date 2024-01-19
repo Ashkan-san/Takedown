@@ -1,15 +1,14 @@
 package ui.scoreboard.timer
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.scoreboard.TimerState
@@ -18,15 +17,19 @@ import model.scoreboard.TimerState
 fun Timer(
     timerState: TimerState,
     runningState: Boolean,
-    onSelectTimer: () -> Unit,
+    hideKeyboard: Boolean,
+    onFocusTimer: () -> Unit,
     onChangeTimerMin: (String) -> Unit,
     onChangeTimerSec: (String) -> Unit,
     onClickPlay: () -> Unit,
     onClickStop: () -> Unit,
     onClickReset: () -> Unit,
+    onSetTimer: (TimerState) -> Unit,
+    onResetKeyboard: () -> Unit
 ) {
     Row(
         modifier = Modifier.padding(horizontal = 50.dp),
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         TimerTextField(
@@ -34,21 +37,26 @@ fun Timer(
             runningState = runningState,
             modifier = Modifier.weight(1f),
             imeAction = ImeAction.Next,
-            onSelect = onSelectTimer,
-            onChange = onChangeTimerMin
+            hideKeyboard = hideKeyboard,
+            onFocus = onFocusTimer,
+            onChange = onChangeTimerMin,
+            onResetKeyboard = onResetKeyboard
         )
         Text(
             text = ":",
             fontSize = 100.sp,
-            modifier = Modifier.border(1.dp, Color.Red, ShapeDefaults.Small)
+            textAlign = TextAlign.Center,
+            modifier = Modifier
         )
         TimerTextField(
             timerState = timerState.seconds,
             runningState = runningState,
             modifier = Modifier.weight(1f),
             imeAction = ImeAction.Done,
-            onSelect = onSelectTimer,
-            onChange = onChangeTimerSec
+            hideKeyboard = hideKeyboard,
+            onFocus = onFocusTimer,
+            onChange = onChangeTimerSec,
+            onResetKeyboard = onResetKeyboard
         )
     }
 
@@ -56,6 +64,7 @@ fun Timer(
         runningState = runningState,
         onClickPlay = onClickPlay,
         onClickStop = onClickStop,
-        onClickReset = onClickReset
+        onClickReset = onClickReset,
+        onSetTimer = onSetTimer
     )
 }

@@ -7,23 +7,75 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import model.scoreboard.PunkteState
 import model.scoreboard.TimerState
+import model.scoreboard.WrestlerColor
+
 
 class ScoreboardViewModel : KMMViewModel() {
-    val scoreBlue = mutableStateOf(0)
-    val scoreRed = mutableStateOf(0)
+    val scoreState = mutableStateOf(PunkteState(0, 0, 0, 0))
 
-    fun increaseBlue() {
-        scoreBlue.value += 1
+    fun setPenalty(color: WrestlerColor) {
+        when (color) {
+            WrestlerColor.BLUE -> {
+                scoreState.value = scoreState.value.copy(penaltyBlue = scoreState.value.penaltyBlue + 1)
+                if (scoreState.value.penaltyBlue > 3) {
+                    scoreState.value = scoreState.value.copy(penaltyBlue = 0)
+                }
+            }
+
+            WrestlerColor.RED -> {
+                scoreState.value = scoreState.value.copy(penaltyRed = scoreState.value.penaltyRed + 1)
+                if (scoreState.value.penaltyRed > 3) {
+                    scoreState.value = scoreState.value.copy(penaltyRed = 0)
+                }
+            }
+        }
     }
 
-    fun increaseRed() {
-        scoreRed.value += 1
+    fun increaseScore(color: WrestlerColor, value: Int = 1) {
+        when (color) {
+            WrestlerColor.BLUE -> {
+                scoreState.value = scoreState.value.copy(scoreBlue = scoreState.value.scoreBlue + value)
+            }
+
+            WrestlerColor.RED -> {
+                scoreState.value = scoreState.value.copy(scoreRed = scoreState.value.scoreRed + value)
+            }
+        }
     }
 
-    fun resetPoints() {
-        scoreBlue.value = 0
-        scoreRed.value = 0
+    fun decreaseScore(color: WrestlerColor) {
+        when (color) {
+            WrestlerColor.BLUE -> {
+                if (scoreState.value.scoreBlue != 0) {
+                    scoreState.value = scoreState.value.copy(scoreBlue = scoreState.value.scoreBlue - 1)
+                }
+            }
+
+            WrestlerColor.RED -> {
+                if (scoreState.value.scoreRed != 0) {
+                    scoreState.value = scoreState.value.copy(scoreRed = scoreState.value.scoreRed - 1)
+                }
+            }
+        }
+    }
+
+    fun resetAllScores() {
+        scoreState.value = scoreState.value.copy(0, 0, 0, 0)
+    }
+
+    /*fun updateScoreState(
+        blue: Int = scoreState.value.scoreBlue,
+        red: Int = scoreState.value.scoreRed
+    ) {
+        scoreState.value = scoreState.value.copy(scoreBlue = blue, scoreRed = red)
+    }*/
+
+    val round = mutableStateOf(1)
+
+    fun increaseRound() {
+        round.value += 1
     }
 
     private var timerJob: Job? = null
@@ -50,9 +102,8 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun stopTimer() {
-        timerJob?.cancel()
-        isRunning.value = false
-        timerState.value = setTimer(startValue)
+        resetTimer()
+        increaseRound()
     }
 
     fun resetTimer() {
@@ -82,13 +133,13 @@ class ScoreboardViewModel : KMMViewModel() {
                 delay(1000)
 
                 if (i == 0) {
-                    resetTimer()
+                    stopTimer()
                 }
             }
         }
     }
 
-    fun setTimer(value: Int): TimerState {
+    private fun setTimer(value: Int): TimerState {
         val minutes = if (value / 60 < 10) "0${value / 60}" else "${value / 60}"
         val seconds = if (value % 60 < 10) "0${value % 60}" else "${value % 60}"
 

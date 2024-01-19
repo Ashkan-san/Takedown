@@ -1,32 +1,46 @@
 package ui.scoreboard.punkte
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
+import model.scoreboard.PunkteState
 
 @Composable
-fun PunkteSurface(
-    modifier: Modifier,
-    score: Int,
-    onClick: () -> Unit,
-    color: Color
+fun Punkte(
+    scoreState: PunkteState,
+    onAddBlue: () -> Unit,
+    onAddRed: () -> Unit,
+    onSubBlue: () -> Unit,
+    onSubRed: () -> Unit,
+    onPenaltyBlue: () -> Unit,
+    onPenaltyRed: () -> Unit,
+    onClickItemBlue: (Int) -> Unit,
+    onClickItemRed: (Int) -> Unit
 ) {
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        color = color,
-        contentColor = Color.White
+    Row(
+        modifier = Modifier
     ) {
-        Text(
-            modifier = Modifier.clickable { onClick() },
-            text = "$score",
-            fontSize = 100.sp,
-            textAlign = TextAlign.Center
+        PunkteSurface(
+            modifier = Modifier.weight(1F),
+            color = Color(0xFF0B61A4),
+            score = scoreState.scoreBlue,
+            penaltyScore = scoreState.penaltyBlue,
+            onClickAdd = onAddBlue,
+            onClickSub = onSubBlue,
+            onClickPenalty = onPenaltyBlue,
+            onClickItem = onClickItemBlue
+        )
+        PunkteSurface(
+            modifier = Modifier.weight(1F),
+            color = Color(0xFFB72200),
+            score = scoreState.scoreRed,
+            penaltyScore = scoreState.penaltyRed,
+            onClickAdd = onAddRed,
+            onClickSub = onSubRed,
+            onClickPenalty = onPenaltyRed,
+            onClickItem = onClickItemRed
         )
     }
 }
+

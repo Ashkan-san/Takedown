@@ -1,6 +1,5 @@
 package ui.scoreboard.timer
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -11,7 +10,6 @@ import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +29,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -40,8 +37,10 @@ fun TimerTextField(
     runningState: Boolean,
     modifier: Modifier,
     imeAction: ImeAction,
-    onSelect: () -> Unit,
-    onChange: (String) -> Unit
+    hideKeyboard: Boolean,
+    onFocus: () -> Unit,
+    onChange: (String) -> Unit,
+    onResetKeyboard: () -> Unit
 ) {
     var textFieldValue by remember(timerState) {
         mutableStateOf(TextFieldValue(text = timerState, selection = TextRange(timerState.length)))
@@ -58,6 +57,12 @@ fun TimerTextField(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
+    if (hideKeyboard) {
+        focusManager.clearFocus()
+        keyboardController?.hide()
+        onResetKeyboard()
+    }
+
     LaunchedEffect(runningState) {
         if (runningState) {
             focusManager.clearFocus()
@@ -71,7 +76,7 @@ fun TimerTextField(
 
         if (isFocused) {
             endRange = textFieldValue.text.length
-            onSelect()
+            onFocus()
         }
 
         textFieldValue = textFieldValue.copy(
@@ -124,8 +129,12 @@ fun TimerTextField(
                 }
             },
 
-            modifier = modifier.border(1.dp, Color.White, ShapeDefaults.Small),
-            textStyle = LocalTextStyle.current.copy(fontSize = 100.sp, textAlign = TextAlign.Center, color = Color.White),
+            modifier = modifier,
+            textStyle = LocalTextStyle.current.copy(
+                fontSize = 100.sp,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface
+            ),
             singleLine = true,
             cursorBrush = SolidColor(Color.Unspecified),
 
@@ -135,16 +144,13 @@ fun TimerTextField(
             ),
             keyboardActions = KeyboardActions(
                 onNext = {
-                    // reset, falls man blank weiter geht
-                    if (textFieldValue.text.isBlank()) {
-                        textFieldValue = TextFieldValue(timerState)
-                    }
+                    textFieldValue = TextFieldValue(formatTimerState(timerState))
+
                     focusManager.moveFocus(FocusDirection.Next)
                 },
                 onDone = {
-                    if (textFieldValue.text.isBlank()) {
-                        textFieldValue = TextFieldValue(timerState)
-                    }
+                    textFieldValue = TextFieldValue(formatTimerState(timerState))
+
                     focusManager.clearFocus()
                     keyboardController?.hide()
                 }
@@ -152,6 +158,18 @@ fun TimerTextField(
 
             interactionSource = interactionSource
         )
+    }
+}
+
+/**
+ * String formatieren, wenn es eine Zahl zwischen 0 und 9 ist
+ */
+fun formatTimerState(value: String): String {
+    val intString = value.toInt()
+    return if (value.length == 1 && intString in 0..9) {
+        "0$value"
+    } else {
+        value
     }
 }
 
