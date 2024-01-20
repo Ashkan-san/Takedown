@@ -7,7 +7,10 @@ import ui.scoreboard.ScoreboardViewModel
 import ui.turnier.TurnierViewModel
 
 @Composable
-fun App(turnierViewModel: TurnierViewModel, scoreboardViewModel: ScoreboardViewModel) {
+fun App(
+    turnierViewModel: TurnierViewModel,
+    scoreboardViewModel: ScoreboardViewModel
+) {
     PreComposeApp {
         val navigator = rememberNavigator()
 

@@ -26,7 +26,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            /*// Dynamic color is available on Android 12+
+            val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+            val darkTheme = isSystemInDarkTheme()
+            val colors = when {
+                dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
+                dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
+                darkTheme -> DarkColorScheme
+                else -> LightColorScheme
+            }*/
+
             WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = isSystemInDarkTheme().not()
+            WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = isSystemInDarkTheme().not()
             App(turnierViewModel = turnierViewModel, scoreboardViewModel = scoreboardViewModel)
         }
     }

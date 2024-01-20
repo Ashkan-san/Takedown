@@ -23,7 +23,7 @@ fun CustomBottomSheet(
         sheetState = sheetState
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(10.dp)
+            modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp)
         ) {
             BottomSheetHead(
                 title = title,

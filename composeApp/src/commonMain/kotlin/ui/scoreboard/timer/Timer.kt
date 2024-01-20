@@ -12,14 +12,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.scoreboard.TimerState
+import model.scoreboard.TimerType
 
 @Composable
 fun Timer(
     timerState: TimerState,
     hideKeyboard: Boolean,
     onFocusTimer: () -> Unit,
-    onChangeTimerMin: (String) -> Unit,
-    onChangeTimerSec: (String) -> Unit,
+    onTimerUpdate: (TimerState) -> Unit,
     onClickPlay: () -> Unit,
     onClickStop: () -> Unit,
     onClickReset: () -> Unit,
@@ -32,13 +32,14 @@ fun Timer(
         horizontalArrangement = Arrangement.Center
     ) {
         TimerTextField(
-            timerState = timerState.minutes,
-            runningState = timerState.isRunning,
             modifier = Modifier.weight(1f),
+            timerType = TimerType.MIN,
+            timerValue = timerState.minutes,
+            timerState = timerState,
             imeAction = ImeAction.Next,
             hideKeyboard = hideKeyboard,
             onFocus = onFocusTimer,
-            onChange = onChangeTimerMin,
+            onChange = onTimerUpdate,
             onResetKeyboard = onResetKeyboard
         )
         Text(
@@ -48,13 +49,14 @@ fun Timer(
             modifier = Modifier
         )
         TimerTextField(
-            timerState = timerState.seconds,
-            runningState = timerState.isRunning,
             modifier = Modifier.weight(1f),
+            timerType = TimerType.SEC,
+            timerValue = timerState.seconds,
+            timerState = timerState,
             imeAction = ImeAction.Done,
             hideKeyboard = hideKeyboard,
             onFocus = onFocusTimer,
-            onChange = onChangeTimerSec,
+            onChange = onTimerUpdate,
             onResetKeyboard = onResetKeyboard
         )
     }

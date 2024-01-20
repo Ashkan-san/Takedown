@@ -30,20 +30,23 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import model.scoreboard.TimerState
+import model.scoreboard.TimerType
 
 @Composable
 fun TimerTextField(
-    timerState: String,
-    runningState: Boolean,
     modifier: Modifier,
+    timerType: TimerType,
+    timerValue: String,
+    timerState: TimerState,
     imeAction: ImeAction,
     hideKeyboard: Boolean,
     onFocus: () -> Unit,
-    onChange: (String) -> Unit,
+    onChange: (TimerState) -> Unit,
     onResetKeyboard: () -> Unit
 ) {
-    var textFieldValue by remember(timerState) {
-        mutableStateOf(TextFieldValue(text = timerState, selection = TextRange(timerState.length)))
+    var textFieldValue by remember(timerValue) {
+        mutableStateOf(TextFieldValue(text = timerValue, selection = TextRange(timerValue.length)))
     }
 
     val edited = remember { mutableStateOf(false) }
@@ -63,8 +66,8 @@ fun TimerTextField(
         onResetKeyboard()
     }
 
-    LaunchedEffect(runningState) {
-        if (runningState) {
+    LaunchedEffect(timerState.isRunning) {
+        if (timerState.isRunning) {
             focusManager.clearFocus()
             keyboardController?.hide()
         }
@@ -104,7 +107,15 @@ fun TimerTextField(
 
                     // value im vm nur speichern, wenn nicht blank
                     if (it.text.isNotBlank()) {
-                        onChange(it.text)
+                        when (timerType) {
+                            TimerType.MIN -> {
+                                onChange(timerState.copy(minutes = it.text))
+                            }
+
+                            TimerType.SEC -> {
+                                onChange(timerState.copy(seconds = it.text))
+                            }
+                        }
                     }
 
                     // wenn 2 Zahlen eingegeben entweder zum nächsten Feld springen oder Keyboard schließen
@@ -144,12 +155,12 @@ fun TimerTextField(
             ),
             keyboardActions = KeyboardActions(
                 onNext = {
-                    textFieldValue = TextFieldValue(formatTimerState(timerState))
+                    textFieldValue = TextFieldValue(formatTimerState(timerValue))
 
                     focusManager.moveFocus(FocusDirection.Next)
                 },
                 onDone = {
-                    textFieldValue = TextFieldValue(formatTimerState(timerState))
+                    textFieldValue = TextFieldValue(formatTimerState(timerValue))
 
                     focusManager.clearFocus()
                     keyboardController?.hide()

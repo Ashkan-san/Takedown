@@ -9,12 +9,20 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import model.scoreboard.TimerState
+import model.scoreboard.WrestleMode
+import model.scoreboard.WrestleModeType
 import model.scoreboard.WrestlerColor
 import model.scoreboard.WrestlerState
 
 
 class ScoreboardViewModel : KMMViewModel() {
-    val showBottomSheet = mutableStateOf(false)
+    val showBottomSheet = mutableStateOf(true)
+    val wrestleModes = listOf(
+        WrestleMode("Classic Mode", "Timer doesn't start automatically", WrestleModeType.CLASSIC),
+        WrestleMode("Tournament Mode", "Timer starts automatically", WrestleModeType.TOURNAMENT),
+        WrestleMode("Infinite Mode", "Timer repeats indefinitely", WrestleModeType.INFINITE)
+    )
+    val currentMode = mutableStateOf(wrestleModes[0])
 
     val wrestlerBlue = mutableStateOf(
         WrestlerState(WrestlerColor.BLUE, Color(0xFF0B61A4), 0, 0)
@@ -26,7 +34,16 @@ class ScoreboardViewModel : KMMViewModel() {
     val round = mutableStateOf(1)
 
     private var timerJob: Job? = null
-    val timerState = mutableStateOf(TimerState())
+    private val defaultTimerState = mutableStateOf(TimerState())
+    val timerState = mutableStateOf(defaultTimerState.value)
+
+    fun toggleBottomSheet(boolean: Boolean) {
+        showBottomSheet.value = boolean
+    }
+
+    fun setWrestleMode(mode: WrestleMode) {
+        currentMode.value = mode
+    }
 
     fun increaseScore(state: WrestlerState, value: Int = 1) {
         when (state.colorName) {
@@ -81,10 +98,25 @@ class ScoreboardViewModel : KMMViewModel() {
         round.value += 1
     }
 
+    fun wrestleMode() {
+        // ÄNDERN
+        /*viewModelScope.coroutineScope.launch(Dispatchers.Main) {
+            setTimerState("00", "05")
+            startTimerJob()
+            delay(5000)
+            setTimerState("00", "10")
+            startTimerJob()
+            delay(5000)
+        }*/
+    }
+
     fun startTimer() {
+        //if (wrestleMode.value && !timerState.value.isRunning) wrestleMode()
         if (timerJob?.isActive != true) {
+            println("start")
             startTimerJob()
         } else {
+            println("stop")
             pauseTimer()
         }
     }
@@ -95,38 +127,36 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun stopTimer() {
+        // Nur Runde erhöhen, wenn der Timer läuft
+        // Nur Timer resetten, wenn nicht wrestle mode
+        if (timerState.value.isRunning) increaseRound()
         resetTimer()
-        increaseRound()
+        //if (!wrestleMode.value) resetTimer()
     }
 
     fun resetTimer() {
         timerJob?.cancel()
-        timerState.value = TimerState()
+        timerState.value = defaultTimerState.value
     }
 
-    fun setTimerState(
-        minutes: String = timerState.value.minutes,
-        seconds: String = timerState.value.seconds
-    ) {
-        timerState.value = timerState.value.copy(minutes = minutes, seconds = seconds)
-    }
-    /*fun setTimerState(
-        state: TimerState
-    ) {
+    fun setDefaultTimerState(state: TimerState) {
         timerState.value = state
-    }*/
+        defaultTimerState.value = state
+    }
+
+    fun setTimerState(state: TimerState) {
+        timerState.value = state
+    }
 
     private fun startTimerJob() {
         timerState.value = timerState.value.copy(isRunning = true)
-
-        var timerValue = timerState.value.minutes.toInt() * 60 + timerState.value.seconds.toInt()
+        val timerValue = timerState.value.minutes.toInt() * 60 + timerState.value.seconds.toInt()
 
         timerJob = viewModelScope.coroutineScope.launch(Dispatchers.Main) {
             for (i in timerValue downTo 0) {
-                timerValue = i
-                timerState.value = setTimer(timerState.value, i)
+                //timerValue = i
+                timerState.value = setFormatTimer(timerState.value, i)
 
-                // Wait for one second
                 delay(1000)
 
                 if (i == 0) {
@@ -136,15 +166,11 @@ class ScoreboardViewModel : KMMViewModel() {
         }
     }
 
-    private fun setTimer(timerState: TimerState, value: Int): TimerState {
+    private fun setFormatTimer(timerState: TimerState, value: Int): TimerState {
         val minutes = if (value / 60 < 10) "0${value / 60}" else "${value / 60}"
         val seconds = if (value % 60 < 10) "0${value % 60}" else "${value % 60}"
 
         return timerState.copy(minutes = minutes, seconds = seconds)
-    }
-
-    fun toggleBottomSheet(boolean: Boolean) {
-        showBottomSheet.value = boolean
     }
 
 }

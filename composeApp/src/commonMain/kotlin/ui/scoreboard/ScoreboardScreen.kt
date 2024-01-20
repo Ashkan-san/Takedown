@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +15,7 @@ import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
 import ui.scoreboard.punkte.Punkte
 import ui.scoreboard.runde.Runde
+import ui.scoreboard.settings.SelectorSetting
 import ui.scoreboard.timer.Timer
 import ui.scoreboard.timer.noRippleClickable
 import ui.util.bottomSheet.CustomBottomSheet
@@ -30,6 +32,8 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
     val sheetState = rememberModalBottomSheetState()
     val showBottomSheet = remember { viewModel.showBottomSheet }
+    val modeState = remember { viewModel.currentMode }
+    val wrestleModes = remember { viewModel.wrestleModes }
 
     ScoreboardScaffold(
         navigator = navigator,
@@ -52,14 +56,16 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 timerState = timerState.value,
                 hideKeyboard = hideKeyboard.value,
                 onFocusTimer = { viewModel.pauseTimer() },
-                onChangeTimerMin = { value -> viewModel.setTimerState(minutes = value) },
-                onChangeTimerSec = { value -> viewModel.setTimerState(seconds = value) },
-                onClickPlay = { viewModel.startTimer() },
+                onTimerUpdate = { state -> viewModel.setTimerState(state) },
+                onClickPlay = {
+                    viewModel.startTimer()
+                    //if (wrestleModeState.value) viewModel.wrestleMode() else viewModel.startTimer()
+                },
                 onClickStop = { viewModel.stopTimer() },
                 onClickReset = { viewModel.resetTimer() },
-                onSetTimer = { timer ->
+                onSetTimer = { state ->
                     viewModel.pauseTimer()
-                    viewModel.setTimerState(minutes = timer.minutes, seconds = timer.seconds)
+                    viewModel.setDefaultTimerState(state)
                 },
                 onResetKeyboard = { hideKeyboard.value = false }
             )
@@ -80,8 +86,24 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                     sheetState = sheetState,
                     onSheetDismiss = { viewModel.toggleBottomSheet(false) }
                 ) {
-                    // Style, Appearance, Fight Mode, Resets
+                    // Wrestling Style
 
+                    // Wrestle Mode
+                    wrestleModes.forEach { mode ->
+                        SelectorSetting(
+                            title = mode.title,
+                            description = mode.description,
+                            leading = {
+                                RadioButton(
+                                    selected = (mode == modeState.value),
+                                    onClick = { viewModel.setWrestleMode(mode) }
+                                )
+                            }
+                        )
+                    }
+                    // Appearance
+
+                    // Reset
                 }
             }
 
@@ -89,3 +111,13 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
     }
 }
+
+//SettingIcon(Icons.Default.SportsKabaddi)
+/*Switch(
+    modifier = Modifier.scale(0.8f),
+    checked = modeState.value,
+    onCheckedChange = {
+        viewModel.setWrestleMode()
+    }
+)*/
+

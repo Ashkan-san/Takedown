@@ -34,6 +34,7 @@
 - Copy Line: Ctrl + C
 - Clipboard: Ctrl + Shift + V
 - Surround with Code: Ctrl + Alt + T
+- Put Arguments on seperate lins: Alt+Enter und dann auswählen
 
 ## Allgemein
 
@@ -135,6 +136,7 @@ werden können.
 - Padding für Elemente selbst
 - Box, wenn ich Elemente übereinander rendern möchte
 - requiredWidth (ignoriert parent max constraints) vs width (hält sich dran)
+- Default Icon Size: 24.dp, Default Font Size: 14.sp
 
 ## TextField und Keyboard
 
