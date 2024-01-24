@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
-import ui.scoreboard.punkte.Punkte
-import ui.scoreboard.runde.Runde
+import ui.scoreboard.info.Info
+import ui.scoreboard.score.Score
 import ui.scoreboard.settings.SelectorSetting
 import ui.scoreboard.timer.Timer
 import ui.scoreboard.timer.noRippleClickable
@@ -22,10 +22,16 @@ import ui.util.bottomSheet.CustomBottomSheet
 
 @Composable
 fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
-    val blueState = remember { viewModel.wrestlerBlue }
-    val redState = remember { viewModel.wrestlerRed }
-    val roundState = remember { viewModel.round }
+    val infoState = remember { viewModel.infoState }
+    val styleState = remember { viewModel.wrestleStyle }
+    val styleList = remember { viewModel.wrestleStyles }
+    val roundList = remember { viewModel.roundList }
+
     val timerState = remember { viewModel.timerState }
+    val timerList = remember { viewModel.timerList }
+
+    val redState = remember { viewModel.wrestlerRed }
+    val blueState = remember { viewModel.wrestlerBlue }
 
     // In Kombination mit clickable, um keyboard zu hiden, wenn man außerhalb des timers clickt
     val hideKeyboard = remember { mutableStateOf(false) }
@@ -49,11 +55,26 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
             verticalArrangement = Arrangement.SpaceAround
         ) {
             // RUNDE
-            Runde(roundState.value)
+            Info(
+                style = styleState.value,
+                styleList = styleList,
+                roundList = roundList,
+                infoState = infoState.value,
+                onClickStyle = { style ->
+                    viewModel.setWrestleStyle(style)
+                    viewModel.setInfoState(style = style.abbreviation, weight = "${style.weightClasses[0]} kg")
+                },
+                onClickRound = { round ->
+                    viewModel.setRound(round)
+                },
+                onClickWeight = { weight -> viewModel.setInfoState(weight = "$weight kg") }
+
+            )
 
             // TIMER
             Timer(
                 timerState = timerState.value,
+                timerList = timerList,
                 hideKeyboard = hideKeyboard.value,
                 onFocusTimer = { viewModel.pauseTimer() },
                 onTimerUpdate = { state -> viewModel.setTimerState(state) },
@@ -71,15 +92,16 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
             )
 
             // PUNKTE, PENALTY, NAME
-            Punkte(
-                blueState = blueState.value,
+            Score(
                 redState = redState.value,
+                blueState = blueState.value,
                 onAdd = { state -> viewModel.increaseScore(state) },
                 onSub = { state -> viewModel.decreaseScore(state) },
                 onPenalty = { state -> viewModel.setPenalty(state) },
                 onClickItem = { state, value -> viewModel.increaseScore(state, value) },
             )
 
+            // TODO bug fixen mit navbar, die ist transparent wenn sheet expanded ist
             if (showBottomSheet.value) {
                 CustomBottomSheet(
                     title = "Scoreboard Settings",

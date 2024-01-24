@@ -142,8 +142,9 @@ fun TimerTextField(
 
             modifier = modifier,
             textStyle = LocalTextStyle.current.copy(
-                fontSize = 100.sp,
+                fontSize = 120.sp,
                 textAlign = TextAlign.Center,
+                //letterSpacing = (-8).sp,
                 color = MaterialTheme.colorScheme.onSurface
             ),
             singleLine = true,

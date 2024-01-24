@@ -37,7 +37,7 @@ val md_theme_light_onBackground = almostBlack
 val md_theme_light_surface = almostWhite
 val md_theme_light_onSurface = almostBlack
 val md_theme_light_surfaceVariant = lightGrey
-val md_theme_light_onSurfaceVariant = darkGrey
+val md_theme_light_onSurfaceVariant = almostWhite // für Scoreboard Surface
 
 val md_theme_light_outline = Color(0xFF73777F)
 val md_theme_light_inverseOnSurface = Color(0xFFF1F0F4)
@@ -72,7 +72,7 @@ val md_theme_dark_onBackground = Color(0xFFE3E2E6)
 val md_theme_dark_surface = Color(0xFF1A1C1E)
 val md_theme_dark_onSurface = Color(0xFFE3E2E6)
 val md_theme_dark_surfaceVariant = Color(0xFF43474E)
-val md_theme_dark_onSurfaceVariant = Color(0xFFC3C6CF)
+val md_theme_dark_onSurfaceVariant = almostWhite // für Scoreboard Surface
 
 val md_theme_dark_outline = Color(0xFF8D9199)
 val md_theme_dark_inverseOnSurface = Color(0xFF1A1C1E)

@@ -19,6 +19,7 @@ import model.scoreboard.TimerState
 @Composable
 fun TimerButtons(
     runningState: Boolean,
+    timerList: List<TimerState>,
     onClickPlay: () -> Unit,
     onClickStop: () -> Unit,
     onClickReset: () -> Unit,
@@ -59,6 +60,7 @@ fun TimerButtons(
         }
 
         TimerDropdown(
+            timerList = timerList,
             onClickItem = onSetTimer
         )
     }

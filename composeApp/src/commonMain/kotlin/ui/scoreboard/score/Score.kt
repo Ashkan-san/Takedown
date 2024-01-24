@@ -1,4 +1,4 @@
-package ui.scoreboard.punkte
+package ui.scoreboard.score
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
@@ -6,9 +6,9 @@ import androidx.compose.ui.Modifier
 import model.scoreboard.WrestlerState
 
 @Composable
-fun Punkte(
-    blueState: WrestlerState,
+fun Score(
     redState: WrestlerState,
+    blueState: WrestlerState,
     onAdd: (WrestlerState) -> Unit,
     onSub: (WrestlerState) -> Unit,
     onPenalty: (WrestlerState) -> Unit,
@@ -17,22 +17,25 @@ fun Punkte(
     Row(
         modifier = Modifier
     ) {
-        PunkteSurface(
+        ScoreSurface(
             modifier = Modifier.weight(1F),
-            state = blueState,
-            onClickAdd = { onAdd(blueState) },
-            onClickSub = { onSub(blueState) },
-            onClickPenalty = { onPenalty(blueState) },
-            onClickItem = { value -> onClickItem(blueState, value) }
-        )
-        PunkteSurface(
-            modifier = Modifier.weight(1F),
+            reverse = false,
             state = redState,
             onClickAdd = { onAdd(redState) },
             onClickSub = { onSub(redState) },
             onClickPenalty = { onPenalty(redState) },
             onClickItem = { value -> onClickItem(redState, value) }
         )
+        ScoreSurface(
+            modifier = Modifier.weight(1F),
+            reverse = true,
+            state = blueState,
+            onClickAdd = { onAdd(blueState) },
+            onClickSub = { onSub(blueState) },
+            onClickPenalty = { onPenalty(blueState) },
+            onClickItem = { value -> onClickItem(blueState, value) }
+        )
+
     }
 }
 

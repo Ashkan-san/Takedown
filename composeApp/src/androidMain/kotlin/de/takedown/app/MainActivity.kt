@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
 
             WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = isSystemInDarkTheme().not()
             WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = isSystemInDarkTheme().not()
+
             App(turnierViewModel = turnierViewModel, scoreboardViewModel = scoreboardViewModel)
         }
     }

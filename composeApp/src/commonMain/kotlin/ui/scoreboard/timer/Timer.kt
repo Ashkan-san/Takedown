@@ -1,8 +1,10 @@
 package ui.scoreboard.timer
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +19,7 @@ import model.scoreboard.TimerType
 @Composable
 fun Timer(
     timerState: TimerState,
+    timerList: List<TimerState>,
     hideKeyboard: Boolean,
     onFocusTimer: () -> Unit,
     onTimerUpdate: (TimerState) -> Unit,
@@ -26,8 +29,9 @@ fun Timer(
     onSetTimer: (TimerState) -> Unit,
     onResetKeyboard: () -> Unit
 ) {
+
     Row(
-        modifier = Modifier.padding(horizontal = 50.dp),
+        modifier = Modifier.padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -42,12 +46,17 @@ fun Timer(
             onChange = onTimerUpdate,
             onResetKeyboard = onResetKeyboard
         )
-        Text(
-            text = ":",
-            fontSize = 100.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-        )
+
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                modifier = Modifier.wrapContentSize(),
+                text = ":",
+                fontSize = 120.sp,
+                textAlign = TextAlign.Center,
+            )
+        }
         TimerTextField(
             modifier = Modifier.weight(1f),
             timerType = TimerType.SEC,
@@ -63,9 +72,11 @@ fun Timer(
 
     TimerButtons(
         runningState = timerState.isRunning,
+        timerList = timerList,
         onClickPlay = onClickPlay,
         onClickStop = onClickStop,
         onClickReset = onClickReset,
         onSetTimer = onSetTimer
     )
+
 }

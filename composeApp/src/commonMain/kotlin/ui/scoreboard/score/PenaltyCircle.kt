@@ -1,9 +1,10 @@
-package ui.scoreboard.punkte
+package ui.scoreboard.score
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +20,6 @@ fun PenaltyCircle(
         modifier = Modifier
             .size(24.dp)
             .clip(CircleShape)
-            .background(if (penaltyScore >= circleNumber) Color.Yellow else Color.White.copy(alpha = 0.4f))
+            .background(if (penaltyScore >= circleNumber) Color.Yellow else MaterialTheme.colorScheme.background.copy(alpha = 0.4f))
     )
 }
