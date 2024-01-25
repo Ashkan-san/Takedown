@@ -11,14 +11,19 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun PenaltiesHorizontal(
-    penaltyScore: Int
+    penaltyScore: Int,
+    isPassive: Boolean,
+    onClickPassive: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Passive()
+        Passive(
+            isPassive = isPassive,
+            onClick = onClickPassive
+        )
         repeat(3) {
             PenaltyCircle(
                 circleNumber = it + 1,

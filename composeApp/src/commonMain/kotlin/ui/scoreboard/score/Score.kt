@@ -12,6 +12,7 @@ fun Score(
     onAdd: (WrestlerState) -> Unit,
     onSub: (WrestlerState) -> Unit,
     onPenalty: (WrestlerState) -> Unit,
+    onPassive: (WrestlerState) -> Unit,
     onClickItem: (WrestlerState, Int) -> Unit
 ) {
     Row(
@@ -24,6 +25,7 @@ fun Score(
             onClickAdd = { onAdd(redState) },
             onClickSub = { onSub(redState) },
             onClickPenalty = { onPenalty(redState) },
+            onClickPassive = { onPassive(redState) },
             onClickItem = { value -> onClickItem(redState, value) }
         )
         ScoreSurface(
@@ -33,6 +35,7 @@ fun Score(
             onClickAdd = { onAdd(blueState) },
             onClickSub = { onSub(blueState) },
             onClickPenalty = { onPenalty(blueState) },
+            onClickPassive = { onPassive(blueState) },
             onClickItem = { value -> onClickItem(blueState, value) }
         )
 

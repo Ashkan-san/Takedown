@@ -1,21 +1,27 @@
 package theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+
+// Display: große kurze Texte
+// Headline: kleiner als Display, auch kurze Überschriften
+// Title: nochmal kleiner, für Medium großen Text
+// Body: für Paragraphen
+// Label: für sehr kleine Texte, z.B. in Buttons auch
 
 val Typography = Typography(
-    /*body1 = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+    // Scoreboard Timer und Score
+    displayLarge = TextStyle(
+        fontSize = 120.sp,
+        textAlign = TextAlign.Center,
     ),
-    h1 = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    )*/
-
+    // Scoreboard Info Buttons
+    labelMedium = TextStyle(
+        fontSize = 25.sp,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center
+    )
 )

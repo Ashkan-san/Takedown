@@ -17,3 +17,6 @@ expect fun Maps(
     isMapLoaded: Boolean,
     onMapLoaded: () -> Unit
 )
+
+@Composable
+expect fun PlayWhistle()

@@ -8,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -28,8 +27,6 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import model.scoreboard.TimerState
 import model.scoreboard.TimerType
 
@@ -141,12 +138,7 @@ fun TimerTextField(
             },
 
             modifier = modifier,
-            textStyle = LocalTextStyle.current.copy(
-                fontSize = 120.sp,
-                textAlign = TextAlign.Center,
-                //letterSpacing = (-8).sp,
-                color = MaterialTheme.colorScheme.onSurface
-            ),
+            textStyle = MaterialTheme.typography.displayLarge.copy(color = MaterialTheme.colorScheme.onSurface),
             singleLine = true,
             cursorBrush = SolidColor(Color.Unspecified),
 

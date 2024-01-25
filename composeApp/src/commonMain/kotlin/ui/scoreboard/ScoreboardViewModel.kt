@@ -56,33 +56,10 @@ class ScoreboardViewModel : KMMViewModel() {
 
     val wrestleStyle = mutableStateOf(wrestleStyles[0])
     val roundList = (1..10).toList()
-    val currentRound = mutableStateOf(1)
+    val round = mutableStateOf(1)
+
     val infoState =
-        mutableStateOf(InfoState(wrestleStyle.value.abbreviation, "Round ${currentRound.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
-
-    fun setWrestleStyle(style: WrestleStyle) {
-        wrestleStyle.value = style
-    }
-
-    fun setInfoState(
-        style: String = infoState.value.style,
-        round: String = infoState.value.round,
-        weight: String = infoState.value.weight
-    ) {
-        infoState.value = infoState.value.copy(style = style, round = round, weight = weight)
-    }
-
-    fun roundsToStrings(roundList: List<Int>): List<String> {
-        return roundList.map { round ->
-            "Round $round"
-        }
-    }
-
-    fun weightsToStrings(weightList: List<Int>): List<String> {
-        return weightList.map { weight ->
-            "${weight}kg"
-        }
-    }
+        mutableStateOf(InfoState(wrestleStyle.value.abbreviation, "Round ${round.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
 
     private var timerJob: Job? = null
     val timerList = listOf(
@@ -102,6 +79,23 @@ class ScoreboardViewModel : KMMViewModel() {
 
     fun setWrestleMode(mode: WrestleMode) {
         currentMode.value = mode
+    }
+
+    fun setWrestleStyle(style: WrestleStyle) {
+        wrestleStyle.value = style
+    }
+
+    fun setRound(value: Int = 1, increment: Boolean = false) {
+        if (increment) round.value += value else round.value = value
+        setInfoState(round = "Round ${round.value}")
+    }
+
+    fun setInfoState(
+        style: String = infoState.value.style,
+        round: String = infoState.value.round,
+        weight: String = infoState.value.weight
+    ) {
+        infoState.value = infoState.value.copy(style = style, round = round, weight = weight)
     }
 
     fun increaseScore(state: WrestlerState, value: Int = 1) {
@@ -148,19 +142,29 @@ class ScoreboardViewModel : KMMViewModel() {
         }
     }
 
-    fun resetAllScores() {
-        wrestlerRed.value = wrestlerRed.value.copy(score = 0, penalty = 0)
-        wrestlerBlue.value = wrestlerBlue.value.copy(score = 0, penalty = 0)
+    fun togglePassive(state: WrestlerState) {
+        when (state.colorName) {
+            WrestlerColor.RED -> {
+                wrestlerRed.value = state.copy(passive = !wrestlerRed.value.passive)
+            }
+
+            WrestlerColor.BLUE -> {
+                wrestlerBlue.value = state.copy(passive = !wrestlerBlue.value.passive)
+            }
+        }
     }
 
-    fun increaseRound() {
-        currentRound.value += 1
-        infoState.value = infoState.value.copy(round = "Round ${currentRound.value}")
-    }
+    fun resetAll() {
+        // Score, Penalty
+        wrestlerRed.value = wrestlerRed.value.copy(score = 0, penalty = 0, passive = false)
+        wrestlerBlue.value = wrestlerBlue.value.copy(score = 0, penalty = 0, passive = false)
 
-    fun setRound(value: Int) {
-        currentRound.value = value
-        infoState.value = infoState.value.copy(round = "Round ${currentRound.value}")
+        // Timer
+        resetTimer()
+
+        // Wrestle Style, Round, Weight
+        wrestleStyle.value = wrestleStyles[0]
+        round.value = 1
     }
 
     fun wrestleMode() {
@@ -191,7 +195,7 @@ class ScoreboardViewModel : KMMViewModel() {
     fun stopTimer() {
         // Nur Runde erhöhen, wenn der Timer läuft
         // Nur Timer resetten, wenn nicht wrestle mode
-        if (timerState.value.isRunning) increaseRound()
+        if (timerState.value.isRunning) setRound(increment = true)
         resetTimer()
     }
 
@@ -201,7 +205,7 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun setDefaultTimerState(state: TimerState) {
-        timerState.value = state
+        setTimerState(state)
         defaultTimerState.value = state
     }
 

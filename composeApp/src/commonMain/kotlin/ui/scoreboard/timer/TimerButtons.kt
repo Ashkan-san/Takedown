@@ -25,6 +25,7 @@ fun TimerButtons(
     onClickReset: () -> Unit,
     onSetTimer: (TimerState) -> Unit
 ) {
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
@@ -63,5 +64,8 @@ fun TimerButtons(
             timerList = timerList,
             onClickItem = onSetTimer
         )
+
+        WhistleButton()
     }
+
 }

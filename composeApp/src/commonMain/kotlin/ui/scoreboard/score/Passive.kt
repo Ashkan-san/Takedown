@@ -8,8 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,18 +18,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Passive() {
-    val showIcon = remember { mutableStateOf(false) }
-
+fun Passive(
+    isPassive: Boolean,
+    onClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .size(70.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.background.copy(alpha = 0.4f), RoundedCornerShape(10.dp))
-            .clickable { showIcon.value = !showIcon.value },
+            .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        if (showIcon.value) {
+        if (isPassive) {
             Text(
                 text = "P",
                 color = Color.Yellow,

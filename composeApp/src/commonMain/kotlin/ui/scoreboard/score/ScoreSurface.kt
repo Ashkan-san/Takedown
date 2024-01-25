@@ -21,6 +21,7 @@ fun ScoreSurface(
     onClickAdd: () -> Unit,
     onClickSub: () -> Unit,
     onClickPenalty: () -> Unit,
+    onClickPassive: () -> Unit,
     onClickItem: (Int) -> Unit,
 ) {
     val direction = if (reverse) LayoutDirection.Rtl else LayoutDirection.Ltr
@@ -43,7 +44,11 @@ fun ScoreSurface(
                     onClick = onClickAdd
                 )
 
-                PenaltiesHorizontal(penaltyScore = state.penalty)
+                PenaltiesHorizontal(
+                    penaltyScore = state.penalty,
+                    isPassive = state.passive,
+                    onClickPassive = onClickPassive
+                )
 
                 ScoreButtons(
                     onClickSub = onClickSub,

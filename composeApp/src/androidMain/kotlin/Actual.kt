@@ -1,4 +1,5 @@
 import android.content.ContentValues
+import android.media.MediaPlayer
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -257,5 +258,11 @@ actual fun Maps(
             }
         }
     }
+}
+
+@Composable
+actual fun PlayWhistle() {
+    var mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.whistle)
+    mediaPlayer.start()
 }
 

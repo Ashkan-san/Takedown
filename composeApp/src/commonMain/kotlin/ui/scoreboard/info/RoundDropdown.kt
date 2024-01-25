@@ -11,8 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun RoundDropdown(
@@ -31,8 +29,7 @@ fun RoundDropdown(
         ) {
             Text(
                 text = text,
-                textAlign = TextAlign.Center,
-                fontSize = 25.sp
+                style = MaterialTheme.typography.labelMedium
             )
         }
 
