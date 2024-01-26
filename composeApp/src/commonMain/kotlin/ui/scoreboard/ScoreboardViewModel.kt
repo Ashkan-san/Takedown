@@ -1,5 +1,10 @@
 package ui.scoreboard
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExposureZero
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import com.rickclephas.kmm.viewmodel.KMMViewModel
@@ -9,6 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import model.scoreboard.InfoState
+import model.scoreboard.SettingState
 import model.scoreboard.TimerState
 import model.scoreboard.WrestleMode
 import model.scoreboard.WrestleModeType
@@ -18,6 +24,7 @@ import model.scoreboard.WrestlerState
 
 
 class ScoreboardViewModel : KMMViewModel() {
+    // SETTINGS
     val showBottomSheet = mutableStateOf(false)
     val wrestleModes = listOf(
         WrestleMode("Classic Mode", "Timer doesn't start automatically", WrestleModeType.CLASSIC),
@@ -25,13 +32,15 @@ class ScoreboardViewModel : KMMViewModel() {
         WrestleMode("Infinite Mode", "Timer repeats indefinitely", WrestleModeType.INFINITE)
     )
     val currentMode = mutableStateOf(wrestleModes[0])
+    val settings = listOf(
+        SettingState("Reset infos", "Reset wrestle style, round and weight class", Icons.Default.Info, "Reset Info Icon", ::resetInfos),
+        SettingState("Reset timer", "Reset timer", Icons.Default.Timer, "Reset Timer Icon", ::resetTimer),
+        SettingState("Reset scores", "Reset scores, penalties and passivity", Icons.Default.ExposureZero, "Reset Scores Icon", ::resetScores),
+        SettingState("Reset all", "Reset all", Icons.Default.Refresh, "Reset All Icon", ::resetAll)
+    )
 
-    val wrestlerRed = mutableStateOf(
-        WrestlerState(WrestlerColor.RED, Color(0xFFB72200), 0, 0)
-    )
-    val wrestlerBlue = mutableStateOf(
-        WrestlerState(WrestlerColor.BLUE, Color(0xFF0B61A4), 0, 0)
-    )
+    val wrestlerRed = mutableStateOf(WrestlerState(WrestlerColor.RED, Color(0xFFB72200), 0, 0))
+    val wrestlerBlue = mutableStateOf(WrestlerState(WrestlerColor.BLUE, Color(0xFF0B61A4), 0, 0))
 
     val wrestleStyles = listOf(
         WrestleStyle(
@@ -61,6 +70,7 @@ class ScoreboardViewModel : KMMViewModel() {
     val infoState =
         mutableStateOf(InfoState(wrestleStyle.value.abbreviation, "Round ${round.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
 
+    // TIMER
     private var timerJob: Job? = null
     val timerList = listOf(
         TimerState("00", "30"),
@@ -83,11 +93,16 @@ class ScoreboardViewModel : KMMViewModel() {
 
     fun setWrestleStyle(style: WrestleStyle) {
         wrestleStyle.value = style
+        setInfoState(style = style.abbreviation, weight = "${style.weightClasses[0]} kg")
     }
 
     fun setRound(value: Int = 1, increment: Boolean = false) {
         if (increment) round.value += value else round.value = value
         setInfoState(round = "Round ${round.value}")
+    }
+
+    fun setWeight(weight: Int) {
+        setInfoState(weight = "$weight kg")
     }
 
     fun setInfoState(
@@ -96,6 +111,12 @@ class ScoreboardViewModel : KMMViewModel() {
         weight: String = infoState.value.weight
     ) {
         infoState.value = infoState.value.copy(style = style, round = round, weight = weight)
+    }
+
+    fun resetInfos() {
+        // TODO ÄNDERN ALLES, SEHR DRECKIG AKTUELL
+        setWrestleStyle(wrestleStyles[0])
+        setRound()
     }
 
     fun increaseScore(state: WrestlerState, value: Int = 1) {
@@ -154,17 +175,20 @@ class ScoreboardViewModel : KMMViewModel() {
         }
     }
 
-    fun resetAll() {
-        // Score, Penalty
+    fun resetScores() {
         wrestlerRed.value = wrestlerRed.value.copy(score = 0, penalty = 0, passive = false)
         wrestlerBlue.value = wrestlerBlue.value.copy(score = 0, penalty = 0, passive = false)
+    }
+
+    fun resetAll() {
+        // Wrestle Style, Round, Weight
+        resetInfos()
 
         // Timer
         resetTimer()
 
-        // Wrestle Style, Round, Weight
-        wrestleStyle.value = wrestleStyles[0]
-        round.value = 1
+        // Score, Penalty
+        resetScores()
     }
 
     fun wrestleMode() {

@@ -34,12 +34,13 @@ fun SelectorSetting(
         // Text
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = title
+                text = title,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurface),
             )
         }
 

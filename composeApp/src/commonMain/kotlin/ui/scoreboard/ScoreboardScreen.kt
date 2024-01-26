@@ -4,9 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +17,7 @@ import ui.navigation.Screen
 import ui.scoreboard.info.Info
 import ui.scoreboard.score.Score
 import ui.scoreboard.settings.SelectorSetting
+import ui.scoreboard.settings.SettingsBox
 import ui.scoreboard.timer.Timer
 import ui.scoreboard.timer.noRippleClickable
 import ui.util.bottomSheet.CustomBottomSheet
@@ -42,6 +42,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
     val showBottomSheet = remember { viewModel.showBottomSheet }
     val modeState = remember { viewModel.currentMode }
     val wrestleModes = remember { viewModel.wrestleModes }
+    val settings = remember { viewModel.settings }
 
     ScoreboardScaffold(
         navigator = navigator,
@@ -62,14 +63,9 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 styleList = styleList,
                 roundList = roundList,
                 infoState = infoState.value,
-                onClickStyle = { style ->
-                    viewModel.setWrestleStyle(style)
-                    viewModel.setInfoState(style = style.abbreviation, weight = "${style.weightClasses[0]} kg")
-                },
-                onClickRound = { round ->
-                    viewModel.setRound(round)
-                },
-                onClickWeight = { weight -> viewModel.setInfoState(weight = "$weight kg") }
+                onClickStyle = { style -> viewModel.setWrestleStyle(style) },
+                onClickRound = { round -> viewModel.setRound(round) },
+                onClickWeight = { weight -> viewModel.setWeight(weight) }
 
             )
 
@@ -114,36 +110,43 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                     // Wrestling Style
 
                     // Wrestle Mode
-                    Text(
-                        text = "Wrestle Mode",
-                        style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.primary)
-                    )
-                    wrestleModes.forEach { mode ->
-                        SelectorSetting(
-                            title = mode.title,
-                            description = mode.description,
-                            leading = {
-                                RadioButton(
-                                    selected = (mode == modeState.value),
-                                    onClick = { viewModel.setWrestleMode(mode) }
-                                )
-                            },
-                            onClick = { viewModel.setWrestleMode(mode) }
-                        )
+                    SettingsBox(
+                        title = "Wrestle Mode"
+                    ) {
+                        wrestleModes.forEach { mode ->
+                            SelectorSetting(
+                                title = mode.title,
+                                description = mode.description,
+                                leading = {
+                                    RadioButton(
+                                        selected = (mode == modeState.value),
+                                        onClick = { viewModel.setWrestleMode(mode) }
+                                    )
+                                },
+                                onClick = { viewModel.setWrestleMode(mode) }
+                            )
+                        }
                     }
+
                     // Appearance
 
                     // Reset
-                    Text(
-                        text = "Reset",
-                        style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.primary)
-                    )
-                    SelectorSetting(
-                        title = "Reset all",
-                        description = "Resets scores, timer, penalties, passitivity, wrestle style, round and weight class",
-                        onClick = { viewModel.resetAll() }
-                    )
-
+                    SettingsBox(
+                        title = "Reset"
+                    ) {
+                        settings.forEach { setting ->
+                            SelectorSetting(
+                                title = setting.title,
+                                description = setting.description,
+                                leading = {
+                                    Icon(setting.icon, setting.iconDescription)
+                                },
+                                onClick = {
+                                    setting.function()
+                                }
+                            )
+                        }
+                    }
                 }
             }
 

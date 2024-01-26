@@ -23,5 +23,10 @@ val Typography = Typography(
         fontSize = 25.sp,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center
+    ),
+    // Top Bar
+    titleLarge = TextStyle(
+        fontSize = 22.sp,
+        fontWeight = FontWeight.Bold,
     )
 )
