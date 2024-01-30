@@ -15,7 +15,7 @@ import model.scoreboard.WrestlerState
 
 @Composable
 fun ScoreSurface(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     reverse: Boolean,
     state: WrestlerState,
     onClickAdd: () -> Unit,

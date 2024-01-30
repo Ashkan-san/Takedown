@@ -67,7 +67,7 @@ fun SearchFilterBar(
 
 @Composable
 fun SearchField(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     searchDisplay: String,
     onSearchChanged: (String) -> Unit,
     onSearchClosed: () -> Unit

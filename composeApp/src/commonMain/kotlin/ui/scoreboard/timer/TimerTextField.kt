@@ -32,7 +32,7 @@ import model.scoreboard.TimerType
 
 @Composable
 fun TimerTextField(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     timerType: TimerType,
     timerValue: String,
     timerState: TimerState,

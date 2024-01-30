@@ -17,8 +17,6 @@ fun Settings(
     playSound: Boolean,
     onSetWrestleMode: (SettingState) -> Unit
 ) {
-    // Wrestling Style
-
     // Wrestle Mode
     SettingsBox(
         title = "Wrestle Mode"

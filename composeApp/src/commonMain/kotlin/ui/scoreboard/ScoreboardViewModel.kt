@@ -15,6 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import model.scoreboard.SettingState
+import model.scoreboard.SettingType
 import model.scoreboard.TimerState
 import model.scoreboard.WrestleDetailsState
 import model.scoreboard.WrestleStyle
@@ -27,21 +28,45 @@ class ScoreboardViewModel : KMMViewModel() {
     val showBottomSheet = mutableStateOf(false)
 
     val wrestleModeSettings = listOf(
-        SettingState("Classic Mode", "Timer doesn't start automatically", null, null, null, ::classicMode),
-        SettingState("Tournament Mode", "Timer starts automatically", null, null, null, ::tournamentMode),
-        SettingState("Infinite Mode", "Timer repeats indefinitely", null, null, null, ::infiniteMode),
+        SettingState(SettingType.MODE, "Classic Mode", "Timer doesn't start automatically", null, null, null, ::classicMode),
+        SettingState(SettingType.MODE, "Tournament Mode", "Timer starts automatically", null, null, null, ::tournamentMode),
+        SettingState(SettingType.MODE, "Infinite Mode", "Timer repeats indefinitely", null, null, null, ::infiniteMode),
     )
     val currentWrestleMode = mutableStateOf(wrestleModeSettings[0])
 
     val resetSettings = listOf(
-        SettingState("Reset infos", "Reset wrestle style, round and weight class", null, Icons.Default.Info, "Reset Info Icon", ::resetInfos),
-        SettingState("Reset timer", "Reset timer", null, Icons.Default.Timer, "Reset Timer Icon", ::resetTimer),
-        SettingState("Reset scores", "Reset scores, penalties and passivity", null, Icons.Default.ExposureZero, "Reset Scores Icon", ::resetScores),
-        SettingState("Reset all", "Reset all", null, Icons.Default.Refresh, "Reset All Icon", ::resetAll)
+        SettingState(
+            SettingType.RESET,
+            "Reset infos",
+            "Reset wrestle style, round and weight class",
+            null,
+            Icons.Default.Info,
+            "Reset Info Icon",
+            ::resetInfos
+        ),
+        SettingState(SettingType.RESET, "Reset timer", "Reset timer", null, Icons.Default.Timer, "Reset Timer Icon", ::resetTimer),
+        SettingState(
+            SettingType.RESET,
+            "Reset scores",
+            "Reset scores, penalties and passivity",
+            null,
+            Icons.Default.ExposureZero,
+            "Reset Scores Icon",
+            ::resetScores
+        ),
+        SettingState(SettingType.RESET, "Reset all", "Reset all", null, Icons.Default.Refresh, "Reset All Icon", ::resetAll)
     )
 
     val soundSettings = listOf(
-        SettingState("Sound Effect", "Sound when the round ends or whistle is clicked", null, Icons.Default.Sports, "Play Sound Icon", ::setSoundPlay)
+        SettingState(
+            SettingType.SOUND,
+            "Sound Effect",
+            "Sound when the round ends or whistle is clicked",
+            null,
+            Icons.Default.Sports,
+            "Play Sound Icon",
+            ::setSoundPlay
+        ),
     )
 
     val isSoundPlaying = mutableStateOf(false)

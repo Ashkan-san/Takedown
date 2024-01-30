@@ -32,7 +32,10 @@ import model.turnier.TurnierDatum
 
 
 @Composable
-fun TurnierCard(modifier: Modifier, turnier: Turnier) {
+fun TurnierCard(
+    modifier: Modifier = Modifier,
+    turnier: Turnier
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()

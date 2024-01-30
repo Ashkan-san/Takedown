@@ -15,7 +15,7 @@ import model.scoreboard.WrestleStyle
 
 @Composable
 fun StyleDropdown(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     styleList: List<WrestleStyle>,
     text: String,
     onClickItem: (WrestleStyle) -> Unit

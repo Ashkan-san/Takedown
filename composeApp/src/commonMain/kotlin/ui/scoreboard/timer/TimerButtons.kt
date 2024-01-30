@@ -1,20 +1,21 @@
 package ui.scoreboard.timer
 
+import PlayWhistle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Replay
+import androidx.compose.material.icons.filled.Sports
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import model.scoreboard.TimerState
+import ui.util.buttonModifier
 
 @Composable
 fun TimerButtons(
@@ -36,7 +37,7 @@ fun TimerButtons(
             onClick = { onClickPlay() }
         ) {
             Icon(
-                modifier = Modifier.size(128.dp),
+                modifier = buttonModifier,
                 imageVector = if (runningState) Icons.Default.Pause else Icons.Default.PlayArrow,
                 contentDescription = "Play/Pause Icon"
             )
@@ -46,7 +47,7 @@ fun TimerButtons(
             onClick = { onClickStop() }
         ) {
             Icon(
-                modifier = Modifier.size(128.dp),
+                modifier = buttonModifier,
                 imageVector = Icons.Default.Stop,
                 contentDescription = "Stop Icon"
             )
@@ -56,7 +57,7 @@ fun TimerButtons(
             onClick = { onClickReset() }
         ) {
             Icon(
-                modifier = Modifier.size(128.dp),
+                modifier = buttonModifier,
                 imageVector = Icons.Default.Replay,
                 contentDescription = "Reset Icon"
             )
@@ -67,10 +68,22 @@ fun TimerButtons(
             onClickItem = onSetTimer
         )
 
-        WhistleButton(
-            isSoundPlaying = isSoundPlaying,
-            onSetPlaySound = onSetPlaySound
-        )
-    }
+        // Whistle Button
+        IconButton(
+            onClick = {
+                onSetPlaySound(true)
+            }
+        ) {
+            Icon(
+                modifier = buttonModifier,
+                imageVector = Icons.Default.Sports,
+                contentDescription = "Whistle Icon"
+            )
 
+            if (isSoundPlaying) {
+                PlayWhistle()
+                onSetPlaySound(false)
+            }
+        }
+    }
 }

@@ -126,12 +126,3 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
     }
 }
 
-//SettingIcon(Icons.Default.SportsKabaddi)
-/*Switch(
-    modifier = Modifier.scale(0.8f),
-    checked = modeState.value,
-    onCheckedChange = {
-        viewModel.setWrestleMode()
-    }
-)*/
-

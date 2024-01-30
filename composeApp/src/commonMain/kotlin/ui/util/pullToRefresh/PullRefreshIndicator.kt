@@ -87,7 +87,7 @@ fun PullRefreshIndicator(
                         modifier = Modifier.size(spinnerSize),
                     )
                 } else {
-                    CircularArrowIndicator(state, contentColor, Modifier.size(spinnerSize))
+                    CircularArrowIndicator(Modifier.size(spinnerSize), state, contentColor)
                 }
             }
         }
@@ -99,9 +99,9 @@ fun PullRefreshIndicator(
  */
 @Composable
 private fun CircularArrowIndicator(
+    modifier: Modifier = Modifier,
     state: PullRefreshState,
     color: Color,
-    modifier: Modifier,
 ) {
     val path = remember { Path().apply { fillType = PathFillType.EvenOdd } }
 

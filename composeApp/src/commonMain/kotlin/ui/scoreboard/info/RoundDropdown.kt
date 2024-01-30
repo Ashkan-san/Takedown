@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun RoundDropdown(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     list: List<Int>,
     text: String,
     onClickItem: (Int) -> Unit
