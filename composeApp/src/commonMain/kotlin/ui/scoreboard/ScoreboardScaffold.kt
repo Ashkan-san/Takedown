@@ -3,7 +3,7 @@ package ui.scoreboard
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,7 +46,7 @@ fun ScoreboardScaffold(
                         onClick = { viewModel.toggleBottomSheet(true) }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.MoreVert,
+                            imageVector = Icons.Default.Settings,
                             contentDescription = "More Options Icon",
                             tint = MaterialTheme.colorScheme.onSurface
                         )

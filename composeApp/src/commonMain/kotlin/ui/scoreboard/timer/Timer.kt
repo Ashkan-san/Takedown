@@ -21,13 +21,15 @@ fun Timer(
     timerState: TimerState,
     timerList: List<TimerState>,
     hideKeyboard: Boolean,
+    isSoundPlaying: Boolean,
     onFocusTimer: () -> Unit,
     onTimerUpdate: (TimerState) -> Unit,
     onClickPlay: () -> Unit,
     onClickStop: () -> Unit,
     onClickReset: () -> Unit,
     onSetTimer: (TimerState) -> Unit,
-    onResetKeyboard: () -> Unit
+    onResetKeyboard: () -> Unit,
+    onSetPlaySound: (Boolean) -> Unit
 ) {
 
     Row(
@@ -73,10 +75,12 @@ fun Timer(
     TimerButtons(
         runningState = timerState.isRunning,
         timerList = timerList,
+        isSoundPlaying = isSoundPlaying,
         onClickPlay = onClickPlay,
         onClickStop = onClickStop,
         onClickReset = onClickReset,
-        onSetTimer = onSetTimer
+        onSetTimer = onSetTimer,
+        onSetPlaySound = onSetPlaySound
     )
 
 }

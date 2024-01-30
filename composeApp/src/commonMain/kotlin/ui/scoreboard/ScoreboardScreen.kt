@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -16,15 +14,14 @@ import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
 import ui.scoreboard.info.Info
 import ui.scoreboard.score.Score
-import ui.scoreboard.settings.SelectorSetting
-import ui.scoreboard.settings.SettingsBox
+import ui.scoreboard.settings.Settings
 import ui.scoreboard.timer.Timer
 import ui.scoreboard.timer.noRippleClickable
 import ui.util.bottomSheet.CustomBottomSheet
 
 @Composable
 fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
-    val infoState = remember { viewModel.infoState }
+    val infoState = remember { viewModel.wrestleDetailsState }
     val styleState = remember { viewModel.wrestleStyle }
     val styleList = remember { viewModel.wrestleStyles }
     val roundList = remember { viewModel.roundList }
@@ -40,9 +37,13 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
     val sheetState = rememberModalBottomSheetState()
     val showBottomSheet = remember { viewModel.showBottomSheet }
-    val modeState = remember { viewModel.currentMode }
-    val wrestleModes = remember { viewModel.wrestleModes }
-    val settings = remember { viewModel.settings }
+
+    val modeState = remember { viewModel.currentWrestleMode }
+    val wrestleModeSettings = remember { viewModel.wrestleModeSettings }
+    val resetSettings = remember { viewModel.resetSettings }
+    val soundSettings = remember { viewModel.soundSettings }
+    val isSoundPlaying = remember { viewModel.isSoundPlaying }
+    val playSound = remember { viewModel.playSound }
 
     ScoreboardScaffold(
         navigator = navigator,
@@ -62,7 +63,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 style = styleState.value,
                 styleList = styleList,
                 roundList = roundList,
-                infoState = infoState.value,
+                wrestleDetailsState = infoState.value,
                 onClickStyle = { style -> viewModel.setWrestleStyle(style) },
                 onClickRound = { round -> viewModel.setRound(round) },
                 onClickWeight = { weight -> viewModel.setWeight(weight) }
@@ -74,6 +75,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 timerState = timerState.value,
                 timerList = timerList,
                 hideKeyboard = hideKeyboard.value,
+                isSoundPlaying = isSoundPlaying.value,
                 onFocusTimer = { viewModel.pauseTimer() },
                 onTimerUpdate = { state -> viewModel.setTimerState(state) },
                 onClickPlay = {
@@ -84,9 +86,10 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 onClickReset = { viewModel.resetTimer() },
                 onSetTimer = { state ->
                     viewModel.pauseTimer()
-                    viewModel.setDefaultTimerState(state)
+                    viewModel.setTimerState(state, true)
                 },
-                onResetKeyboard = { hideKeyboard.value = false }
+                onResetKeyboard = { hideKeyboard.value = false },
+                onSetPlaySound = { bool -> viewModel.setIsSoundPlaying(bool) }
             )
 
             // PUNKTE, PENALTY, NAME
@@ -107,46 +110,14 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                     sheetState = sheetState,
                     onSheetDismiss = { viewModel.toggleBottomSheet(false) }
                 ) {
-                    // Wrestling Style
-
-                    // Wrestle Mode
-                    SettingsBox(
-                        title = "Wrestle Mode"
-                    ) {
-                        wrestleModes.forEach { mode ->
-                            SelectorSetting(
-                                title = mode.title,
-                                description = mode.description,
-                                leading = {
-                                    RadioButton(
-                                        selected = (mode == modeState.value),
-                                        onClick = { viewModel.setWrestleMode(mode) }
-                                    )
-                                },
-                                onClick = { viewModel.setWrestleMode(mode) }
-                            )
-                        }
-                    }
-
-                    // Appearance
-
-                    // Reset
-                    SettingsBox(
-                        title = "Reset"
-                    ) {
-                        settings.forEach { setting ->
-                            SelectorSetting(
-                                title = setting.title,
-                                description = setting.description,
-                                leading = {
-                                    Icon(setting.icon, setting.iconDescription)
-                                },
-                                onClick = {
-                                    setting.function()
-                                }
-                            )
-                        }
-                    }
+                    Settings(
+                        wrestleModeSettings = wrestleModeSettings,
+                        resetSettings = resetSettings,
+                        soundSettings = soundSettings,
+                        modeState = modeState.value,
+                        playSound = playSound.value,
+                        onSetWrestleMode = { mode -> viewModel.setWrestleModeSetting(mode) }
+                    )
                 }
             }
 

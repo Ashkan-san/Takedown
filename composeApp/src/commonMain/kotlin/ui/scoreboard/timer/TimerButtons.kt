@@ -20,10 +20,12 @@ import model.scoreboard.TimerState
 fun TimerButtons(
     runningState: Boolean,
     timerList: List<TimerState>,
+    isSoundPlaying: Boolean,
     onClickPlay: () -> Unit,
     onClickStop: () -> Unit,
     onClickReset: () -> Unit,
-    onSetTimer: (TimerState) -> Unit
+    onSetTimer: (TimerState) -> Unit,
+    onSetPlaySound: (Boolean) -> Unit
 ) {
 
     Row(
@@ -65,7 +67,10 @@ fun TimerButtons(
             onClickItem = onSetTimer
         )
 
-        WhistleButton()
+        WhistleButton(
+            isSoundPlaying = isSoundPlaying,
+            onSetPlaySound = onSetPlaySound
+        )
     }
 
 }

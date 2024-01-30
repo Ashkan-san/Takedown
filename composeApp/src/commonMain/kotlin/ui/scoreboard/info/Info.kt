@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import model.scoreboard.InfoState
+import model.scoreboard.WrestleDetailsState
 import model.scoreboard.WrestleStyle
 
 @Composable
@@ -18,7 +18,7 @@ fun Info(
     style: WrestleStyle,
     styleList: List<WrestleStyle>,
     roundList: List<Int>,
-    infoState: InfoState,
+    wrestleDetailsState: WrestleDetailsState,
     onClickStyle: (WrestleStyle) -> Unit,
     onClickRound: (Int) -> Unit,
     onClickWeight: (Int) -> Unit,
@@ -37,19 +37,19 @@ fun Info(
             StyleDropdown(
                 modifier = Modifier.weight(1f),
                 styleList = styleList,
-                text = infoState.style,
+                text = wrestleDetailsState.style,
                 onClickItem = onClickStyle
             )
             RoundDropdown(
                 modifier = Modifier,
                 list = roundList,
-                text = infoState.round,
+                text = wrestleDetailsState.round,
                 onClickItem = onClickRound
             )
             WeightDropdown(
                 modifier = Modifier.weight(1f),
                 list = style.weightClasses,
-                text = infoState.weight,
+                text = wrestleDetailsState.weight,
                 onClickItem = onClickWeight
             )
         }

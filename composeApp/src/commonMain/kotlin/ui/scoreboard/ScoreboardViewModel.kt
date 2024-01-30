@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExposureZero
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Sports
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -13,11 +14,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import model.scoreboard.InfoState
 import model.scoreboard.SettingState
 import model.scoreboard.TimerState
-import model.scoreboard.WrestleMode
-import model.scoreboard.WrestleModeType
+import model.scoreboard.WrestleDetailsState
 import model.scoreboard.WrestleStyle
 import model.scoreboard.WrestlerColor
 import model.scoreboard.WrestlerState
@@ -26,18 +25,27 @@ import model.scoreboard.WrestlerState
 class ScoreboardViewModel : KMMViewModel() {
     // SETTINGS
     val showBottomSheet = mutableStateOf(false)
-    val wrestleModes = listOf(
-        WrestleMode("Classic Mode", "Timer doesn't start automatically", WrestleModeType.CLASSIC),
-        WrestleMode("Tournament Mode", "Timer starts automatically", WrestleModeType.TOURNAMENT),
-        WrestleMode("Infinite Mode", "Timer repeats indefinitely", WrestleModeType.INFINITE)
+
+    val wrestleModeSettings = listOf(
+        SettingState("Classic Mode", "Timer doesn't start automatically", null, null, null, ::classicMode),
+        SettingState("Tournament Mode", "Timer starts automatically", null, null, null, ::tournamentMode),
+        SettingState("Infinite Mode", "Timer repeats indefinitely", null, null, null, ::infiniteMode),
     )
-    val currentMode = mutableStateOf(wrestleModes[0])
-    val settings = listOf(
-        SettingState("Reset infos", "Reset wrestle style, round and weight class", Icons.Default.Info, "Reset Info Icon", ::resetInfos),
-        SettingState("Reset timer", "Reset timer", Icons.Default.Timer, "Reset Timer Icon", ::resetTimer),
-        SettingState("Reset scores", "Reset scores, penalties and passivity", Icons.Default.ExposureZero, "Reset Scores Icon", ::resetScores),
-        SettingState("Reset all", "Reset all", Icons.Default.Refresh, "Reset All Icon", ::resetAll)
+    val currentWrestleMode = mutableStateOf(wrestleModeSettings[0])
+
+    val resetSettings = listOf(
+        SettingState("Reset infos", "Reset wrestle style, round and weight class", null, Icons.Default.Info, "Reset Info Icon", ::resetInfos),
+        SettingState("Reset timer", "Reset timer", null, Icons.Default.Timer, "Reset Timer Icon", ::resetTimer),
+        SettingState("Reset scores", "Reset scores, penalties and passivity", null, Icons.Default.ExposureZero, "Reset Scores Icon", ::resetScores),
+        SettingState("Reset all", "Reset all", null, Icons.Default.Refresh, "Reset All Icon", ::resetAll)
     )
+
+    val soundSettings = listOf(
+        SettingState("Sound Effect", "Sound when the round ends or whistle is clicked", null, Icons.Default.Sports, "Play Sound Icon", ::setSoundPlay)
+    )
+
+    val isSoundPlaying = mutableStateOf(false)
+    val playSound = mutableStateOf(true)
 
     val wrestlerRed = mutableStateOf(WrestlerState(WrestlerColor.RED, Color(0xFFB72200), 0, 0))
     val wrestlerBlue = mutableStateOf(WrestlerState(WrestlerColor.BLUE, Color(0xFF0B61A4), 0, 0))
@@ -67,8 +75,8 @@ class ScoreboardViewModel : KMMViewModel() {
     val roundList = (1..10).toList()
     val round = mutableStateOf(1)
 
-    val infoState =
-        mutableStateOf(InfoState(wrestleStyle.value.abbreviation, "Round ${round.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
+    val wrestleDetailsState =
+        mutableStateOf(WrestleDetailsState(wrestleStyle.value.abbreviation, "Round ${round.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
 
     // TIMER
     private var timerJob: Job? = null
@@ -87,8 +95,28 @@ class ScoreboardViewModel : KMMViewModel() {
         showBottomSheet.value = boolean
     }
 
-    fun setWrestleMode(mode: WrestleMode) {
-        currentMode.value = mode
+    fun setIsSoundPlaying(boolean: Boolean) {
+        if (playSound.value) isSoundPlaying.value = boolean
+    }
+
+    fun setSoundPlay() {
+        playSound.value = !playSound.value
+    }
+
+    fun classicMode() {
+
+    }
+
+    fun tournamentMode() {
+
+    }
+
+    fun infiniteMode() {
+
+    }
+
+    fun setWrestleModeSetting(mode: SettingState) {
+        currentWrestleMode.value = mode
     }
 
     fun setWrestleStyle(style: WrestleStyle) {
@@ -106,11 +134,11 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun setInfoState(
-        style: String = infoState.value.style,
-        round: String = infoState.value.round,
-        weight: String = infoState.value.weight
+        style: String = wrestleDetailsState.value.style,
+        round: String = wrestleDetailsState.value.round,
+        weight: String = wrestleDetailsState.value.weight
     ) {
-        infoState.value = infoState.value.copy(style = style, round = round, weight = weight)
+        wrestleDetailsState.value = wrestleDetailsState.value.copy(style = style, round = round, weight = weight)
     }
 
     fun resetInfos() {
@@ -219,7 +247,10 @@ class ScoreboardViewModel : KMMViewModel() {
     fun stopTimer() {
         // Nur Runde erhöhen, wenn der Timer läuft
         // Nur Timer resetten, wenn nicht wrestle mode
-        if (timerState.value.isRunning) setRound(increment = true)
+        if (timerState.value.isRunning) {
+            setIsSoundPlaying(true)
+            setRound(increment = true)
+        }
         resetTimer()
     }
 
@@ -228,13 +259,10 @@ class ScoreboardViewModel : KMMViewModel() {
         timerState.value = defaultTimerState.value
     }
 
-    fun setDefaultTimerState(state: TimerState) {
-        setTimerState(state)
-        defaultTimerState.value = state
-    }
-
-    fun setTimerState(state: TimerState) {
+    fun setTimerState(state: TimerState, setDefault: Boolean = false) {
         timerState.value = state
+
+        if (setDefault) defaultTimerState.value = state
     }
 
     private fun startTimerJob() {
