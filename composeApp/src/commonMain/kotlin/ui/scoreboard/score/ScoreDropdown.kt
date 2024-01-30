@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import ui.util.buttonModifier
+import ui.util.iconButtonModifier
 
 @Composable
 fun ScoreDropdown(
@@ -28,7 +28,7 @@ fun ScoreDropdown(
             onClick = { expanded.value = !expanded.value },
         ) {
             Icon(
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 imageVector = Icons.Default.Add,
                 contentDescription = "Add Icon"
             )

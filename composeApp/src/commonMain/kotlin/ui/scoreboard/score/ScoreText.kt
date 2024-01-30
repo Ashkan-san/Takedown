@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun ScoreText(
@@ -19,7 +20,15 @@ fun ScoreText(
         modifier = Modifier.clickable { onClick() },
         text = text,
         maxLines = 1,
+        overflow = TextOverflow.Visible,
         softWrap = false,
-        style = MaterialTheme.typography.displayLarge
+        style = MaterialTheme.typography.displayLarge.copy(
+            fontSize = MaterialTheme.typography.displayLarge.fontSize * multiplier.value
+        ),
+        onTextLayout = {
+            if (it.hasVisualOverflow) {
+                multiplier.value *= 0.99f
+            }
+        }
     )
 }

@@ -147,6 +147,8 @@ class ScoreboardViewModel : KMMViewModel() {
     fun setWrestleStyle(style: WrestleStyle) {
         wrestleStyle.value = style
         setInfoState(style = style.abbreviation, weight = "${style.weightClasses[0]} kg")
+
+        checkWinner()
     }
 
     fun setRound(value: Int = 1, increment: Boolean = false) {
@@ -182,6 +184,8 @@ class ScoreboardViewModel : KMMViewModel() {
                 wrestlerBlue.value = state.copy(score = state.score + value)
             }
         }
+
+        checkWinner()
     }
 
     fun decreaseScore(state: WrestlerState) {
@@ -196,6 +200,8 @@ class ScoreboardViewModel : KMMViewModel() {
                 }
             }
         }
+
+        checkWinner()
     }
 
     fun setPenalty(state: WrestlerState) {
@@ -219,18 +225,30 @@ class ScoreboardViewModel : KMMViewModel() {
     fun togglePassive(state: WrestlerState) {
         when (state.colorName) {
             WrestlerColor.RED -> {
-                wrestlerRed.value = state.copy(passive = !wrestlerRed.value.passive)
+                wrestlerRed.value = state.copy(isPassive = !wrestlerRed.value.isPassive)
             }
 
             WrestlerColor.BLUE -> {
-                wrestlerBlue.value = state.copy(passive = !wrestlerBlue.value.passive)
+                wrestlerBlue.value = state.copy(isPassive = !wrestlerBlue.value.isPassive)
             }
         }
     }
 
+    fun checkWinner() {
+        // 10 - 0 = 10 > 10
+        if (wrestlerRed.value.score - wrestlerBlue.value.score >= wrestleStyle.value.leadToWin) {
+            wrestlerRed.value = wrestlerRed.value.copy(isWinner = true)
+        } else if (wrestlerBlue.value.score - wrestlerRed.value.score >= wrestleStyle.value.leadToWin) {
+            wrestlerBlue.value = wrestlerBlue.value.copy(isWinner = true)
+        } else {
+            wrestlerRed.value = wrestlerRed.value.copy(isWinner = false)
+            wrestlerBlue.value = wrestlerBlue.value.copy(isWinner = false)
+        }
+    }
+
     fun resetScores() {
-        wrestlerRed.value = wrestlerRed.value.copy(score = 0, penalty = 0, passive = false)
-        wrestlerBlue.value = wrestlerBlue.value.copy(score = 0, penalty = 0, passive = false)
+        wrestlerRed.value = wrestlerRed.value.copy(score = 0, penalty = 0, isPassive = false, isWinner = false)
+        wrestlerBlue.value = wrestlerBlue.value.copy(score = 0, penalty = 0, isPassive = false, isWinner = false)
     }
 
     fun resetAll() {

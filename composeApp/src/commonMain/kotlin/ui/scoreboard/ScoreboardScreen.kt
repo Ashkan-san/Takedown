@@ -103,7 +103,6 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 onClickItem = { state, value -> viewModel.increaseScore(state, value) },
             )
 
-            // TODO bug fixen mit navbar, die ist transparent wenn sheet expanded ist
             if (showBottomSheet.value) {
                 CustomBottomSheet(
                     title = "Scoreboard Settings",

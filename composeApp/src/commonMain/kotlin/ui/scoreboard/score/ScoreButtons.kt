@@ -10,7 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import ui.util.buttonModifier
+import ui.util.iconButtonModifier
 
 @Composable
 fun ScoreButtons(
@@ -26,7 +26,7 @@ fun ScoreButtons(
             onClick = { onClickPenalty() }
         ) {
             Icon(
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 imageVector = Icons.Default.FlagCircle,
                 contentDescription = "Penalty Icon"
             )
@@ -40,7 +40,7 @@ fun ScoreButtons(
             onClick = { onClickSub() }
         ) {
             Icon(
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 imageVector = Icons.Default.Remove,
                 contentDescription = "Remove Icon"
             )

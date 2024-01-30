@@ -1,6 +1,7 @@
 package ui.scoreboard.timer
 
 import PlayWhistle
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +16,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import model.scoreboard.TimerState
-import ui.util.buttonModifier
+import ui.util.iconButtonModifier
 
 @Composable
 fun TimerButtons(
@@ -36,18 +37,20 @@ fun TimerButtons(
         IconButton(
             onClick = { onClickPlay() }
         ) {
-            Icon(
-                modifier = buttonModifier,
-                imageVector = if (runningState) Icons.Default.Pause else Icons.Default.PlayArrow,
-                contentDescription = "Play/Pause Icon"
-            )
+            Crossfade(targetState = runningState) { value ->
+                Icon(
+                    modifier = iconButtonModifier,
+                    imageVector = if (value) Icons.Default.Pause else Icons.Default.PlayArrow,
+                    contentDescription = "Play/Pause Icon"
+                )
+            }
         }
 
         IconButton(
             onClick = { onClickStop() }
         ) {
             Icon(
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 imageVector = Icons.Default.Stop,
                 contentDescription = "Stop Icon"
             )
@@ -57,7 +60,7 @@ fun TimerButtons(
             onClick = { onClickReset() }
         ) {
             Icon(
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 imageVector = Icons.Default.Replay,
                 contentDescription = "Reset Icon"
             )
@@ -75,7 +78,7 @@ fun TimerButtons(
             }
         ) {
             Icon(
-                modifier = buttonModifier,
+                modifier = iconButtonModifier,
                 imageVector = Icons.Default.Sports,
                 contentDescription = "Whistle Icon"
             )
