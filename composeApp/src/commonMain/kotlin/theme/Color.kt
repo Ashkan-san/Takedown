@@ -1,7 +1,8 @@
 import androidx.compose.ui.graphics.Color
 
 // COLORS
-val white = Color(0xFFFFFF)
+val white = Color.White
+val black = Color.Black
 val almostWhite = Color(0xFFFDFCFF)
 val almostBlack = Color(0xFF1A1C1E)
 val lightGrey = Color(0xFFDFE2EB)
@@ -37,7 +38,7 @@ val md_theme_light_onBackground = almostBlack
 val md_theme_light_surface = almostWhite
 val md_theme_light_onSurface = almostBlack
 val md_theme_light_surfaceVariant = lightGrey
-val md_theme_light_onSurfaceVariant = almostWhite // für Scoreboard Surface
+val md_theme_light_onSurfaceVariant = almostBlack
 
 val md_theme_light_outline = Color(0xFF73777F)
 val md_theme_light_inverseOnSurface = Color(0xFFF1F0F4)

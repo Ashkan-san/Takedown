@@ -1,5 +1,6 @@
 package ui.scoreboard.settings
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
@@ -11,73 +12,83 @@ import model.scoreboard.SettingState
 @Composable
 fun Settings(
     wrestleModeSettings: List<SettingState>,
-    resetSettings: List<SettingState>,
     soundSettings: List<SettingState>,
-    modeState: SettingState,
+    resetSettings: List<SettingState>,
+    currentMode: SettingState,
     playSound: Boolean,
-    onSetWrestleMode: (SettingState) -> Unit
+    onSetMode: (SettingState) -> Unit
 ) {
+
     // Wrestle Mode
-    SettingsBox(
+    SettingSurface(
         title = "Wrestle Mode"
     ) {
-        wrestleModeSettings.forEach { mode ->
-            SelectorSetting(
-                title = mode.title,
-                description = mode.description,
-                leading = {
-                    RadioButton(
-                        selected = (mode == modeState),
-                        onClick = { onSetWrestleMode(mode) }
-                    )
-                },
-                onClick = { onSetWrestleMode(mode) }
-            )
+        Column {
+            wrestleModeSettings.forEachIndexed { index, mode ->
+                SelectorSetting(
+                    title = mode.title,
+                    description = mode.description,
+                    leading = {
+                        RadioButton(
+                            selected = (mode == currentMode),
+                            onClick = { onSetMode(mode) }
+                        )
+                    },
+                    isLast = index == wrestleModeSettings.lastIndex,
+                    onClick = { onSetMode(mode) }
+                )
+            }
         }
     }
 
     // Appearance
 
     // Sound
-    SettingsBox(
+    SettingSurface(
         title = "Sound"
     ) {
-        soundSettings.forEach { setting ->
-            SelectorSetting(
-                title = setting.title,
-                description = setting.description,
-                leading = {
-                    Icon(setting.icon!!, setting.iconDescription)
-                },
-                trailing = {
-                    Switch(
-                        modifier = Modifier.scale(0.8f),
-                        checked = playSound,
-                        onCheckedChange = {
-                            setting.function()
-                        }
-                    )
-                },
-                onClick = { setting.function() }
-            )
+        Column {
+            soundSettings.forEachIndexed { index, setting ->
+                SelectorSetting(
+                    title = setting.title,
+                    description = setting.description,
+                    leading = {
+                        Icon(setting.icon!!, setting.iconDescription)
+                    },
+                    trailing = {
+                        Switch(
+                            modifier = Modifier.scale(0.8f),
+                            checked = playSound,
+                            onCheckedChange = {
+                                setting.function()
+                            }
+                        )
+                    },
+                    isLast = index == soundSettings.lastIndex,
+                    onClick = { setting.function() }
+                )
+            }
         }
     }
 
     // Reset
-    SettingsBox(
+    SettingSurface(
         title = "Reset"
     ) {
-        resetSettings.forEach { setting ->
-            SelectorSetting(
-                title = setting.title,
-                description = setting.description,
-                leading = {
-                    Icon(setting.icon!!, setting.iconDescription)
-                },
-                onClick = {
-                    setting.function()
-                }
-            )
+        Column {
+            resetSettings.forEachIndexed { index, setting ->
+                SelectorSetting(
+                    title = setting.title,
+                    description = setting.description,
+                    leading = {
+                        Icon(setting.icon!!, setting.iconDescription)
+                    },
+                    isLast = index == resetSettings.lastIndex,
+                    onClick = {
+                        setting.function()
+                    }
+                )
+            }
         }
     }
 }

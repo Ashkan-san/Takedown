@@ -3,12 +3,12 @@ package ui.scoreboard.score
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import model.scoreboard.WrestlerState
@@ -30,7 +30,7 @@ fun ScoreSurface(
         Surface(
             modifier = modifier.fillMaxHeight(),
             color = state.color,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            contentColor = Color.White
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

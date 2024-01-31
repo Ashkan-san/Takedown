@@ -21,10 +21,11 @@ fun SelectorSetting(
     description: String,
     leading: @Composable () -> Unit = {},
     trailing: @Composable () -> Unit = {},
+    isLast: Boolean,
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(vertical = 5.dp),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(vertical = 5.dp, horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         leading()
@@ -35,12 +36,11 @@ fun SelectorSetting(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
-                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurface),
+                style = MaterialTheme.typography.bodySmall.copy(),
             )
         }
 
@@ -48,7 +48,5 @@ fun SelectorSetting(
 
         trailing()
     }
-
-    Divider()
-
+    if (!isLast) Divider(modifier = Modifier.padding(horizontal = 20.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
 }

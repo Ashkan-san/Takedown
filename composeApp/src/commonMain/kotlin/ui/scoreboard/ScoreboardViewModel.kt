@@ -32,7 +32,22 @@ class ScoreboardViewModel : KMMViewModel() {
         SettingState(SettingType.MODE, "Tournament Mode", "Timer starts automatically", null, null, null, ::tournamentMode),
         SettingState(SettingType.MODE, "Infinite Mode", "Timer repeats indefinitely", null, null, null, ::infiniteMode),
     )
-    val currentWrestleMode = mutableStateOf(wrestleModeSettings[0])
+    val wrestleMode = mutableStateOf(wrestleModeSettings[0])
+
+    val soundSettings = listOf(
+        SettingState(
+            SettingType.SOUND,
+            "Sound Effect",
+            "Sound when the round ends or whistle is clicked",
+            null,
+            Icons.Default.Sports,
+            "Play Sound Icon",
+            ::setSoundPlay
+        ),
+    )
+
+    val isSoundPlaying = mutableStateOf(false)
+    val playSound = mutableStateOf(true)
 
     val resetSettings = listOf(
         SettingState(
@@ -56,21 +71,6 @@ class ScoreboardViewModel : KMMViewModel() {
         ),
         SettingState(SettingType.RESET, "Reset all", "Reset all", null, Icons.Default.Refresh, "Reset All Icon", ::resetAll)
     )
-
-    val soundSettings = listOf(
-        SettingState(
-            SettingType.SOUND,
-            "Sound Effect",
-            "Sound when the round ends or whistle is clicked",
-            null,
-            Icons.Default.Sports,
-            "Play Sound Icon",
-            ::setSoundPlay
-        ),
-    )
-
-    val isSoundPlaying = mutableStateOf(false)
-    val playSound = mutableStateOf(true)
 
     val wrestlerRed = mutableStateOf(WrestlerState(WrestlerColor.RED, Color(0xFFB72200), 0, 0))
     val wrestlerBlue = mutableStateOf(WrestlerState(WrestlerColor.BLUE, Color(0xFF0B61A4), 0, 0))
@@ -98,7 +98,7 @@ class ScoreboardViewModel : KMMViewModel() {
 
     val wrestleStyle = mutableStateOf(wrestleStyles[0])
     val periodList = (1..10).toList()
-    val period = mutableStateOf(1)
+    val period = mutableStateOf(periodList[0])
 
     val wrestleDetailsState =
         mutableStateOf(WrestleDetailsState(wrestleStyle.value.abbreviation, "Period ${period.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
@@ -140,8 +140,8 @@ class ScoreboardViewModel : KMMViewModel() {
 
     }
 
-    fun setWrestleModeSetting(mode: SettingState) {
-        currentWrestleMode.value = mode
+    fun setMode(mode: SettingState) {
+        wrestleMode.value = mode
     }
 
     fun setWrestleStyle(style: WrestleStyle) {
@@ -235,10 +235,14 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun checkWinner() {
-        // 10 - 0 = 10 > 10
-        if (wrestlerRed.value.score - wrestlerBlue.value.score >= wrestleStyle.value.leadToWin) {
+        val scoreDifference = wrestlerRed.value.score - wrestlerBlue.value.score
+        val leadToWin = wrestleStyle.value.leadToWin
+
+        if (scoreDifference >= leadToWin) {
             wrestlerRed.value = wrestlerRed.value.copy(isWinner = true)
-        } else if (wrestlerBlue.value.score - wrestlerRed.value.score >= wrestleStyle.value.leadToWin) {
+            wrestlerBlue.value = wrestlerBlue.value.copy(isWinner = false)
+        } else if (scoreDifference <= -leadToWin) {
+            wrestlerRed.value = wrestlerRed.value.copy(isWinner = false)
             wrestlerBlue.value = wrestlerBlue.value.copy(isWinner = true)
         } else {
             wrestlerRed.value = wrestlerRed.value.copy(isWinner = false)
@@ -302,7 +306,7 @@ class ScoreboardViewModel : KMMViewModel() {
         timerState.value = defaultTimerState.value
     }
 
-    fun setTimerState(state: TimerState, setDefault: Boolean = false) {
+    fun setTimer(state: TimerState, setDefault: Boolean = false) {
         timerState.value = state
 
         if (setDefault) defaultTimerState.value = state

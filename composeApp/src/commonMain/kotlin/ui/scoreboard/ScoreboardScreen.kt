@@ -36,7 +36,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
     val showBottomSheet = remember { viewModel.showBottomSheet }
 
-    val modeState = remember { viewModel.currentWrestleMode }
+    val modeState = remember { viewModel.wrestleMode }
     val wrestleModeSettings = remember { viewModel.wrestleModeSettings }
     val resetSettings = remember { viewModel.resetSettings }
     val soundSettings = remember { viewModel.soundSettings }
@@ -75,7 +75,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 hideKeyboard = hideKeyboard.value,
                 isSoundPlaying = isSoundPlaying.value,
                 onFocusTimer = { viewModel.pauseTimer() },
-                onTimerUpdate = { state -> viewModel.setTimerState(state) },
+                onTimerUpdate = { state -> viewModel.setTimer(state) },
                 onClickPlay = {
                     viewModel.startTimer()
                     //if (wrestleModeState.value) viewModel.wrestleMode() else viewModel.startTimer()
@@ -84,7 +84,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 onClickReset = { viewModel.resetTimer() },
                 onSetTimer = { state ->
                     viewModel.pauseTimer()
-                    viewModel.setTimerState(state, true)
+                    viewModel.setTimer(state, true)
                 },
                 onResetKeyboard = { hideKeyboard.value = false },
                 onSetPlaySound = { bool -> viewModel.setIsSoundPlaying(bool) }
@@ -108,11 +108,11 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 ) {
                     Settings(
                         wrestleModeSettings = wrestleModeSettings,
-                        resetSettings = resetSettings,
                         soundSettings = soundSettings,
-                        modeState = modeState.value,
+                        resetSettings = resetSettings,
+                        currentMode = modeState.value,
                         playSound = playSound.value,
-                        onSetWrestleMode = { mode -> viewModel.setWrestleModeSetting(mode) }
+                        onSetMode = { mode -> viewModel.setMode(mode) }
                     )
                 }
             }
