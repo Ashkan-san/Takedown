@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,7 +23,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
     val infoState = remember { viewModel.wrestleDetailsState }
     val styleState = remember { viewModel.wrestleStyle }
     val styleList = remember { viewModel.wrestleStyles }
-    val roundList = remember { viewModel.roundList }
+    val periodList = remember { viewModel.periodList }
 
     val timerState = remember { viewModel.timerState }
     val timerList = remember { viewModel.timerList }
@@ -35,7 +34,6 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
     // In Kombination mit clickable, um keyboard zu hiden, wenn man außerhalb des timers clickt
     val hideKeyboard = remember { mutableStateOf(false) }
 
-    val sheetState = rememberModalBottomSheetState()
     val showBottomSheet = remember { viewModel.showBottomSheet }
 
     val modeState = remember { viewModel.currentWrestleMode }
@@ -58,14 +56,14 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            // RUNDE
+            // STYLE, RUNDE, GEWICHT
             Info(
                 style = styleState.value,
                 styleList = styleList,
-                roundList = roundList,
+                periodList = periodList,
                 wrestleDetailsState = infoState.value,
                 onClickStyle = { style -> viewModel.setWrestleStyle(style) },
-                onClickRound = { round -> viewModel.setRound(round) },
+                onClickPeriod = { period -> viewModel.setPeriod(period) },
                 onClickWeight = { weight -> viewModel.setWeight(weight) }
 
             )
@@ -106,7 +104,6 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
             if (showBottomSheet.value) {
                 CustomBottomSheet(
                     title = "Scoreboard Settings",
-                    sheetState = sheetState,
                     onSheetDismiss = { viewModel.toggleBottomSheet(false) }
                 ) {
                     Settings(

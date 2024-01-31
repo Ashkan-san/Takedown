@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 
 @Composable
-fun RoundDropdown(
+fun PeriodDropdown(
     modifier: Modifier = Modifier,
     list: List<Int>,
     text: String,
@@ -39,7 +39,7 @@ fun RoundDropdown(
         ) {
             list.forEach {
                 DropdownMenuItem(
-                    text = { Text("Round $it") },
+                    text = { Text("Period $it") },
                     onClick = {
                         onClickItem(it)
                         expanded.value = false

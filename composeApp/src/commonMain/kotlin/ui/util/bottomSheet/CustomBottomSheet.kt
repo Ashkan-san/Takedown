@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,10 +14,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CustomBottomSheet(
     title: String,
-    sheetState: SheetState,
     onSheetDismiss: () -> Unit,
     content: @Composable () -> Unit
 ) {
+    // Ob der Sheet hidden, expanded ist usw.
+    val sheetState = rememberModalBottomSheetState()
+
     ModalBottomSheet(
         onDismissRequest = {
             onSheetDismiss()

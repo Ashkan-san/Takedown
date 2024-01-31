@@ -5,6 +5,6 @@ package model.scoreboard
  */
 data class WrestleDetailsState(
     val style: String,
-    val round: String,
+    val period: String,
     val weight: String
 )

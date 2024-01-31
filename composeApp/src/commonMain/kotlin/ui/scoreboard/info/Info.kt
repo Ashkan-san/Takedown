@@ -17,10 +17,10 @@ import model.scoreboard.WrestleStyle
 fun Info(
     style: WrestleStyle,
     styleList: List<WrestleStyle>,
-    roundList: List<Int>,
+    periodList: List<Int>,
     wrestleDetailsState: WrestleDetailsState,
     onClickStyle: (WrestleStyle) -> Unit,
-    onClickRound: (Int) -> Unit,
+    onClickPeriod: (Int) -> Unit,
     onClickWeight: (Int) -> Unit,
 ) {
     Column(
@@ -40,11 +40,11 @@ fun Info(
                 text = wrestleDetailsState.style,
                 onClickItem = onClickStyle
             )
-            RoundDropdown(
+            PeriodDropdown(
                 modifier = Modifier,
-                list = roundList,
-                text = wrestleDetailsState.round,
-                onClickItem = onClickRound
+                list = periodList,
+                text = wrestleDetailsState.period,
+                onClickItem = onClickPeriod
             )
             WeightDropdown(
                 modifier = Modifier.weight(1f),

@@ -38,7 +38,7 @@ class ScoreboardViewModel : KMMViewModel() {
         SettingState(
             SettingType.RESET,
             "Reset infos",
-            "Reset wrestle style, round and weight class",
+            "Reset wrestle style, period and weight class",
             null,
             Icons.Default.Info,
             "Reset Info Icon",
@@ -97,11 +97,11 @@ class ScoreboardViewModel : KMMViewModel() {
     )
 
     val wrestleStyle = mutableStateOf(wrestleStyles[0])
-    val roundList = (1..10).toList()
-    val round = mutableStateOf(1)
+    val periodList = (1..10).toList()
+    val period = mutableStateOf(1)
 
     val wrestleDetailsState =
-        mutableStateOf(WrestleDetailsState(wrestleStyle.value.abbreviation, "Round ${round.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
+        mutableStateOf(WrestleDetailsState(wrestleStyle.value.abbreviation, "Period ${period.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
 
     // TIMER
     private var timerJob: Job? = null
@@ -151,9 +151,9 @@ class ScoreboardViewModel : KMMViewModel() {
         checkWinner()
     }
 
-    fun setRound(value: Int = 1, increment: Boolean = false) {
-        if (increment) round.value += value else round.value = value
-        setInfoState(round = "Round ${round.value}")
+    fun setPeriod(value: Int = 1, increment: Boolean = false) {
+        if (increment) period.value += value else period.value = value
+        setInfoState(period = "Period ${period.value}")
     }
 
     fun setWeight(weight: Int) {
@@ -162,16 +162,16 @@ class ScoreboardViewModel : KMMViewModel() {
 
     fun setInfoState(
         style: String = wrestleDetailsState.value.style,
-        round: String = wrestleDetailsState.value.round,
+        period: String = wrestleDetailsState.value.period,
         weight: String = wrestleDetailsState.value.weight
     ) {
-        wrestleDetailsState.value = wrestleDetailsState.value.copy(style = style, round = round, weight = weight)
+        wrestleDetailsState.value = wrestleDetailsState.value.copy(style = style, period = period, weight = weight)
     }
 
     fun resetInfos() {
         // TODO ÄNDERN ALLES, SEHR DRECKIG AKTUELL
         setWrestleStyle(wrestleStyles[0])
-        setRound()
+        setPeriod()
     }
 
     fun increaseScore(state: WrestlerState, value: Int = 1) {
@@ -292,7 +292,7 @@ class ScoreboardViewModel : KMMViewModel() {
         // Nur Timer resetten, wenn nicht wrestle mode
         if (timerState.value.isRunning) {
             setIsSoundPlaying(true)
-            setRound(increment = true)
+            setPeriod(increment = true)
         }
         resetTimer()
     }
