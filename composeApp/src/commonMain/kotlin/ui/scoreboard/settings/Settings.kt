@@ -7,10 +7,12 @@ import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import model.scoreboard.Score
 import model.scoreboard.SettingState
 
 @Composable
 fun Settings(
+    scoreHistory: List<Score>,
     wrestleModeSettings: List<SettingState>,
     soundSettings: List<SettingState>,
     resetSettings: List<SettingState>,
@@ -18,6 +20,8 @@ fun Settings(
     playSound: Boolean,
     onSetMode: (SettingState) -> Unit
 ) {
+
+    ScoreHistory(scoreHistory)
 
     // Wrestle Mode
     SettingSurface(

@@ -36,6 +36,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
     val mode = remember { viewModel.wrestleMode }
     val isSoundPlaying = remember { viewModel.isSoundPlaying }
     val playSound = remember { viewModel.playSound }
+    val scoreHistory = remember { viewModel.scoreHistory }
 
     ScoreboardScaffold(
         navigator = navigator,
@@ -99,6 +100,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                     onSheetDismiss = { viewModel.toggleBottomSheet(false) }
                 ) {
                     Settings(
+                        scoreHistory = scoreHistory,
                         wrestleModeSettings = viewModel.wrestleModeSettings,
                         soundSettings = viewModel.soundSettings,
                         resetSettings = viewModel.resetSettings,

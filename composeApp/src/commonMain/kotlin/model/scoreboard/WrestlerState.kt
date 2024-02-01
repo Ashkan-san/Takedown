@@ -2,6 +2,12 @@ package model.scoreboard
 
 import androidx.compose.ui.graphics.Color
 
+data class Score(
+    val score: Int,
+    val color: Color
+)
+
+
 data class WrestlerState(
     val colorName: WrestlerColor,
     val color: Color,
