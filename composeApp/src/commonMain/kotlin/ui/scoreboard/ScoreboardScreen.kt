@@ -54,11 +54,10 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
             Info(
                 style = style.value,
                 styles = viewModel.wrestleStyles,
-                periods = viewModel.periods,
                 wrestleDetails = details.value,
-                onClickStyle = { style -> viewModel.setWrestleStyle(style) },
-                onClickPeriod = { period -> viewModel.setPeriod(period) },
-                onClickWeight = { weight -> viewModel.setWeight(weight) }
+                onClickStyle = { style -> viewModel.setWrestleStyle(style = style) },
+                onClickPeriod = { period -> viewModel.setPeriod(period = period) },
+                onClickWeight = { weight -> viewModel.setDetails(weight = weight) }
 
             )
 

@@ -10,18 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import model.scoreboard.WrestleDetailsState
+import model.scoreboard.WrestleDetails
 import model.scoreboard.WrestleStyle
 
 @Composable
 fun Info(
     style: WrestleStyle,
     styles: List<WrestleStyle>,
-    periods: List<Int>,
-    wrestleDetails: WrestleDetailsState,
+    wrestleDetails: WrestleDetails,
     onClickStyle: (WrestleStyle) -> Unit,
     onClickPeriod: (Int) -> Unit,
-    onClickWeight: (Int) -> Unit,
+    onClickWeight: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 10.dp),
@@ -33,24 +32,26 @@ fun Info(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // TODO eine einzelne Methode statt die drei
-            StyleDropdown(
+            DetailDropdown(
                 modifier = Modifier.weight(1f),
+                type = "STYLE",
+                currentValue = wrestleDetails.style,
                 styles = styles,
-                text = wrestleDetails.style,
-                onClickItem = onClickStyle
+                onSelectStyle = onClickStyle
             )
-            PeriodDropdown(
+            DetailDropdown(
                 modifier = Modifier,
-                periods = periods,
-                text = wrestleDetails.period,
-                onClickItem = onClickPeriod
+                type = "PERIOD",
+                periods = style.periods,
+                currentValue = wrestleDetails.period,
+                onSelectPeriod = onClickPeriod
             )
-            WeightDropdown(
+            DetailDropdown(
                 modifier = Modifier.weight(1f),
-                weights = style.weightClasses,
-                text = wrestleDetails.weight,
-                onClickItem = onClickWeight
+                type = "WEIGHT",
+                weights = style.weightClasses.map { "$it kg" },
+                currentValue = wrestleDetails.weight,
+                onSelectWeight = onClickWeight
             )
         }
 

@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import model.scoreboard.SettingState
 import model.scoreboard.SettingType
 import model.scoreboard.TimerState
-import model.scoreboard.WrestleDetailsState
+import model.scoreboard.WrestleDetails
 import model.scoreboard.WrestleStyle
 import model.scoreboard.WrestlerColor
 import model.scoreboard.WrestlerState
@@ -57,7 +57,7 @@ class ScoreboardViewModel : KMMViewModel() {
             null,
             Icons.Default.Info,
             "Reset Info Icon",
-            ::resetInfos
+            ::resetDetails
         ),
         SettingState(SettingType.RESET, "Reset timer", "Reset timer", null, Icons.Default.Timer, "Reset Timer Icon", ::resetTimer),
         SettingState(
@@ -79,29 +79,71 @@ class ScoreboardViewModel : KMMViewModel() {
         WrestleStyle(
             "Men's Freestyle",
             "MFS",
+            listOf(57, 65, 74, 86, 97, 125),
             10,
-            listOf(57, 65, 74, 86, 97, 125)
         ),
         WrestleStyle(
             "Women's Freestyle",
             "WFS",
+            listOf(50, 53, 57, 62, 68, 76),
             10,
-            listOf(50, 53, 57, 62, 68, 76)
         ),
         WrestleStyle(
             "Greco-Roman",
             "GR",
+            listOf(60, 67, 77, 87, 97, 130),
             8,
-            listOf(60, 67, 77, 87, 97, 130)
         )
     )
 
     val wrestleStyle = mutableStateOf(wrestleStyles[0])
-    val periods = (1..10).toList()
-    val period = mutableStateOf(periods[0])
+
+    /*    val style = mutableStateOf("")
+        val period = mutableStateOf(1)
+        val weight = mutableStateOf(50)*/
 
     val wrestleDetails =
-        mutableStateOf(WrestleDetailsState(wrestleStyle.value.abbreviation, "Period ${period.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
+        mutableStateOf(
+            WrestleDetails(
+                wrestleStyle.value.abbreviation,
+                "Period ${wrestleStyle.value.period}",
+                wrestleStyle.value.weight
+            )
+        )
+
+    fun setWrestleStyle(style: WrestleStyle) {
+        // Aktuellen Wrestle Style setzen
+        wrestleStyle.value = style
+
+        // UI State updaten
+        setDetails(style = style.abbreviation, weight = style.weight)
+
+        checkWinner()
+    }
+
+    fun setPeriod(period: Int = 1, increment: Boolean = false) {
+        if (increment) {
+            wrestleStyle.value = wrestleStyle.value.copy(period = wrestleStyle.value.period + period)
+        } else {
+            wrestleStyle.value = wrestleStyle.value.copy(period = period)
+        }
+
+        setDetails(period = "Period ${wrestleStyle.value.period}")
+    }
+
+    fun setDetails(
+        style: String = wrestleDetails.value.style,
+        period: String = wrestleDetails.value.period,
+        weight: String = wrestleDetails.value.weight
+    ) {
+        wrestleDetails.value = wrestleDetails.value.copy(style = style, period = period, weight = weight)
+    }
+
+    fun resetDetails() {
+        setWrestleStyle(wrestleStyles[0])
+        setPeriod()
+    }
+
 
     // TIMER
     private var timerJob: Job? = null
@@ -142,36 +184,6 @@ class ScoreboardViewModel : KMMViewModel() {
 
     fun setMode(mode: SettingState) {
         wrestleMode.value = mode
-    }
-
-    fun setWrestleStyle(style: WrestleStyle) {
-        wrestleStyle.value = style
-        setInfoState(style = style.abbreviation, weight = "${style.weightClasses[0]} kg")
-
-        checkWinner()
-    }
-
-    fun setPeriod(value: Int = 1, increment: Boolean = false) {
-        if (increment) period.value += value else period.value = value
-        setInfoState(period = "Period ${period.value}")
-    }
-
-    fun setWeight(weight: Int) {
-        setInfoState(weight = "$weight kg")
-    }
-
-    fun setInfoState(
-        style: String = wrestleDetails.value.style,
-        period: String = wrestleDetails.value.period,
-        weight: String = wrestleDetails.value.weight
-    ) {
-        wrestleDetails.value = wrestleDetails.value.copy(style = style, period = period, weight = weight)
-    }
-
-    fun resetInfos() {
-        // TODO ÄNDERN ALLES, SEHR DRECKIG AKTUELL
-        setWrestleStyle(wrestleStyles[0])
-        setPeriod()
     }
 
     fun increaseScore(state: WrestlerState, value: Int = 1) {
@@ -257,7 +269,7 @@ class ScoreboardViewModel : KMMViewModel() {
 
     fun resetAll() {
         // Wrestle Style, Round, Weight
-        resetInfos()
+        resetDetails()
 
         // Timer
         resetTimer()
