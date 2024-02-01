@@ -97,15 +97,15 @@ class ScoreboardViewModel : KMMViewModel() {
     )
 
     val wrestleStyle = mutableStateOf(wrestleStyles[0])
-    val periodList = (1..10).toList()
-    val period = mutableStateOf(periodList[0])
+    val periods = (1..10).toList()
+    val period = mutableStateOf(periods[0])
 
-    val wrestleDetailsState =
+    val wrestleDetails =
         mutableStateOf(WrestleDetailsState(wrestleStyle.value.abbreviation, "Period ${period.value}", "${wrestleStyle.value.weightClasses[0]} kg"))
 
     // TIMER
     private var timerJob: Job? = null
-    val timerList = listOf(
+    val timers = listOf(
         TimerState("00", "30"),
         TimerState("01", "00"),
         TimerState("01", "30"),
@@ -113,8 +113,8 @@ class ScoreboardViewModel : KMMViewModel() {
         TimerState("02", "30"),
         TimerState("03", "00"),
     )
-    private val defaultTimerState = mutableStateOf(TimerState())
-    val timerState = mutableStateOf(defaultTimerState.value)
+    private val defaultTimer = mutableStateOf(TimerState())
+    val timer = mutableStateOf(defaultTimer.value)
 
     fun toggleBottomSheet(boolean: Boolean) {
         showBottomSheet.value = boolean
@@ -161,11 +161,11 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun setInfoState(
-        style: String = wrestleDetailsState.value.style,
-        period: String = wrestleDetailsState.value.period,
-        weight: String = wrestleDetailsState.value.weight
+        style: String = wrestleDetails.value.style,
+        period: String = wrestleDetails.value.period,
+        weight: String = wrestleDetails.value.weight
     ) {
-        wrestleDetailsState.value = wrestleDetailsState.value.copy(style = style, period = period, weight = weight)
+        wrestleDetails.value = wrestleDetails.value.copy(style = style, period = period, weight = weight)
     }
 
     fun resetInfos() {
@@ -288,13 +288,13 @@ class ScoreboardViewModel : KMMViewModel() {
 
     fun pauseTimer() {
         timerJob?.cancel()
-        timerState.value = timerState.value.copy(isRunning = false)
+        timer.value = timer.value.copy(isRunning = false)
     }
 
     fun stopTimer() {
         // Nur Runde erhöhen, wenn der Timer läuft
         // Nur Timer resetten, wenn nicht wrestle mode
-        if (timerState.value.isRunning) {
+        if (timer.value.isRunning) {
             setIsSoundPlaying(true)
             setPeriod(increment = true)
         }
@@ -303,22 +303,22 @@ class ScoreboardViewModel : KMMViewModel() {
 
     fun resetTimer() {
         timerJob?.cancel()
-        timerState.value = defaultTimerState.value
+        timer.value = defaultTimer.value
     }
 
     fun setTimer(state: TimerState, setDefault: Boolean = false) {
-        timerState.value = state
+        timer.value = state
 
-        if (setDefault) defaultTimerState.value = state
+        if (setDefault) defaultTimer.value = state
     }
 
     private fun startTimerJob() {
-        timerState.value = timerState.value.copy(isRunning = true)
-        val timerValue = timerState.value.minutes.toInt() * 60 + timerState.value.seconds.toInt()
+        timer.value = timer.value.copy(isRunning = true)
+        val timerValue = timer.value.minutes.toInt() * 60 + timer.value.seconds.toInt()
 
         timerJob = viewModelScope.coroutineScope.launch(Dispatchers.Main) {
             for (i in timerValue downTo 0) {
-                timerState.value = setFormatTimer(timerState.value, i)
+                timer.value = setFormatTimer(timer.value, i)
 
                 delay(1000)
 

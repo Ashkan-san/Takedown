@@ -7,8 +7,8 @@ import model.scoreboard.WrestlerState
 
 @Composable
 fun Score(
-    redState: WrestlerState,
-    blueState: WrestlerState,
+    red: WrestlerState,
+    blue: WrestlerState,
     onAdd: (WrestlerState) -> Unit,
     onSub: (WrestlerState) -> Unit,
     onPenalty: (WrestlerState) -> Unit,
@@ -21,22 +21,22 @@ fun Score(
         ScoreSurface(
             modifier = Modifier.weight(1F),
             reverse = false,
-            state = redState,
-            onClickAdd = { onAdd(redState) },
-            onClickSub = { onSub(redState) },
-            onClickPenalty = { onPenalty(redState) },
-            onClickPassive = { onPassive(redState) },
-            onClickItem = { value -> onClickItem(redState, value) }
+            state = red,
+            onClickAdd = { onAdd(red) },
+            onClickSub = { onSub(red) },
+            onClickPenalty = { onPenalty(red) },
+            onClickPassive = { onPassive(red) },
+            onClickItem = { value -> onClickItem(red, value) }
         )
         ScoreSurface(
             modifier = Modifier.weight(1F),
             reverse = true,
-            state = blueState,
-            onClickAdd = { onAdd(blueState) },
-            onClickSub = { onSub(blueState) },
-            onClickPenalty = { onPenalty(blueState) },
-            onClickPassive = { onPassive(blueState) },
-            onClickItem = { value -> onClickItem(blueState, value) }
+            state = blue,
+            onClickAdd = { onAdd(blue) },
+            onClickSub = { onSub(blue) },
+            onClickPenalty = { onPenalty(blue) },
+            onClickPassive = { onPassive(blue) },
+            onClickItem = { value -> onClickItem(blue, value) }
         )
 
     }

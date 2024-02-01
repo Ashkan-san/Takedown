@@ -18,8 +18,8 @@ import model.scoreboard.TimerType
 
 @Composable
 fun Timer(
-    timerState: TimerState,
-    timerList: List<TimerState>,
+    timer: TimerState,
+    timers: List<TimerState>,
     hideKeyboard: Boolean,
     isSoundPlaying: Boolean,
     onFocusTimer: () -> Unit,
@@ -40,8 +40,8 @@ fun Timer(
         TimerTextField(
             modifier = Modifier.weight(1f),
             timerType = TimerType.MIN,
-            timerValue = timerState.minutes,
-            timerState = timerState,
+            timerValue = timer.minutes,
+            timer = timer,
             imeAction = ImeAction.Next,
             hideKeyboard = hideKeyboard,
             onFocus = onFocusTimer,
@@ -62,8 +62,8 @@ fun Timer(
         TimerTextField(
             modifier = Modifier.weight(1f),
             timerType = TimerType.SEC,
-            timerValue = timerState.seconds,
-            timerState = timerState,
+            timerValue = timer.seconds,
+            timer = timer,
             imeAction = ImeAction.Done,
             hideKeyboard = hideKeyboard,
             onFocus = onFocusTimer,
@@ -73,8 +73,8 @@ fun Timer(
     }
 
     TimerButtons(
-        runningState = timerState.isRunning,
-        timerList = timerList,
+        runningState = timer.isRunning,
+        timerList = timers,
         isSoundPlaying = isSoundPlaying,
         onClickPlay = onClickPlay,
         onClickStop = onClickStop,

@@ -35,7 +35,7 @@ fun TimerTextField(
     modifier: Modifier = Modifier,
     timerType: TimerType,
     timerValue: String,
-    timerState: TimerState,
+    timer: TimerState,
     imeAction: ImeAction,
     hideKeyboard: Boolean,
     onFocus: () -> Unit,
@@ -63,8 +63,8 @@ fun TimerTextField(
         onResetKeyboard()
     }
 
-    LaunchedEffect(timerState.isRunning) {
-        if (timerState.isRunning) {
+    LaunchedEffect(timer.isRunning) {
+        if (timer.isRunning) {
             focusManager.clearFocus()
             keyboardController?.hide()
         }
@@ -106,11 +106,11 @@ fun TimerTextField(
                     if (it.text.isNotBlank()) {
                         when (timerType) {
                             TimerType.MIN -> {
-                                onChange(timerState.copy(minutes = it.text))
+                                onChange(timer.copy(minutes = it.text))
                             }
 
                             TimerType.SEC -> {
-                                onChange(timerState.copy(seconds = it.text))
+                                onChange(timer.copy(seconds = it.text))
                             }
                         }
                     }

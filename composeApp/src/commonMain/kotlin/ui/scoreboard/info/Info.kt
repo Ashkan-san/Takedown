@@ -16,9 +16,9 @@ import model.scoreboard.WrestleStyle
 @Composable
 fun Info(
     style: WrestleStyle,
-    styleList: List<WrestleStyle>,
-    periodList: List<Int>,
-    wrestleDetailsState: WrestleDetailsState,
+    styles: List<WrestleStyle>,
+    periods: List<Int>,
+    wrestleDetails: WrestleDetailsState,
     onClickStyle: (WrestleStyle) -> Unit,
     onClickPeriod: (Int) -> Unit,
     onClickWeight: (Int) -> Unit,
@@ -36,20 +36,20 @@ fun Info(
             // TODO eine einzelne Methode statt die drei
             StyleDropdown(
                 modifier = Modifier.weight(1f),
-                styleList = styleList,
-                text = wrestleDetailsState.style,
+                styles = styles,
+                text = wrestleDetails.style,
                 onClickItem = onClickStyle
             )
             PeriodDropdown(
                 modifier = Modifier,
-                list = periodList,
-                text = wrestleDetailsState.period,
+                periods = periods,
+                text = wrestleDetails.period,
                 onClickItem = onClickPeriod
             )
             WeightDropdown(
                 modifier = Modifier.weight(1f),
-                list = style.weightClasses,
-                text = wrestleDetailsState.weight,
+                weights = style.weightClasses,
+                text = wrestleDetails.weight,
                 onClickItem = onClickWeight
             )
         }

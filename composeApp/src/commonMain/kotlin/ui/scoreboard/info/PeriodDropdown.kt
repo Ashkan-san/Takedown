@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun PeriodDropdown(
     modifier: Modifier = Modifier,
-    list: List<Int>,
+    periods: List<Int>,
     text: String,
     onClickItem: (Int) -> Unit
 ) {
@@ -37,7 +37,7 @@ fun PeriodDropdown(
             expanded = expanded.value,
             onDismissRequest = { expanded.value = false }
         ) {
-            list.forEach {
+            periods.forEach {
                 DropdownMenuItem(
                     text = { Text("Period $it") },
                     onClick = {

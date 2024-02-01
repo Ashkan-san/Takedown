@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun WeightDropdown(
     modifier: Modifier = Modifier,
-    list: List<Int>,
+    weights: List<Int>,
     text: String,
     onClickItem: (Int) -> Unit
 ) {
@@ -37,7 +37,7 @@ fun WeightDropdown(
             expanded = expanded.value,
             onDismissRequest = { expanded.value = false }
         ) {
-            list.forEach {
+            weights.forEach {
                 DropdownMenuItem(
                     text = { Text("${it}kg") },
                     onClick = {

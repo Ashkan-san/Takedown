@@ -20,13 +20,10 @@ import ui.util.bottomSheet.CustomBottomSheet
 
 @Composable
 fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
-    val infoState = remember { viewModel.wrestleDetailsState }
-    val styleState = remember { viewModel.wrestleStyle }
-    val styleList = remember { viewModel.wrestleStyles }
-    val periodList = remember { viewModel.periodList }
+    val details = remember { viewModel.wrestleDetails }
+    val style = remember { viewModel.wrestleStyle }
 
-    val timerState = remember { viewModel.timerState }
-    val timerList = remember { viewModel.timerList }
+    val timer = remember { viewModel.timer }
 
     val redState = remember { viewModel.wrestlerRed }
     val blueState = remember { viewModel.wrestlerBlue }
@@ -36,10 +33,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
     val showBottomSheet = remember { viewModel.showBottomSheet }
 
-    val modeState = remember { viewModel.wrestleMode }
-    val wrestleModeSettings = remember { viewModel.wrestleModeSettings }
-    val resetSettings = remember { viewModel.resetSettings }
-    val soundSettings = remember { viewModel.soundSettings }
+    val mode = remember { viewModel.wrestleMode }
     val isSoundPlaying = remember { viewModel.isSoundPlaying }
     val playSound = remember { viewModel.playSound }
 
@@ -58,10 +52,10 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
         ) {
             // STYLE, RUNDE, GEWICHT
             Info(
-                style = styleState.value,
-                styleList = styleList,
-                periodList = periodList,
-                wrestleDetailsState = infoState.value,
+                style = style.value,
+                styles = viewModel.wrestleStyles,
+                periods = viewModel.periods,
+                wrestleDetails = details.value,
                 onClickStyle = { style -> viewModel.setWrestleStyle(style) },
                 onClickPeriod = { period -> viewModel.setPeriod(period) },
                 onClickWeight = { weight -> viewModel.setWeight(weight) }
@@ -70,15 +64,14 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
             // TIMER
             Timer(
-                timerState = timerState.value,
-                timerList = timerList,
+                timer = timer.value,
+                timers = viewModel.timers,
                 hideKeyboard = hideKeyboard.value,
                 isSoundPlaying = isSoundPlaying.value,
                 onFocusTimer = { viewModel.pauseTimer() },
                 onTimerUpdate = { state -> viewModel.setTimer(state) },
                 onClickPlay = {
                     viewModel.startTimer()
-                    //if (wrestleModeState.value) viewModel.wrestleMode() else viewModel.startTimer()
                 },
                 onClickStop = { viewModel.stopTimer() },
                 onClickReset = { viewModel.resetTimer() },
@@ -92,8 +85,8 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
             // PUNKTE, PENALTY, NAME
             Score(
-                redState = redState.value,
-                blueState = blueState.value,
+                red = redState.value,
+                blue = blueState.value,
                 onAdd = { state -> viewModel.increaseScore(state) },
                 onSub = { state -> viewModel.decreaseScore(state) },
                 onPenalty = { state -> viewModel.setPenalty(state) },
@@ -107,10 +100,10 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                     onSheetDismiss = { viewModel.toggleBottomSheet(false) }
                 ) {
                     Settings(
-                        wrestleModeSettings = wrestleModeSettings,
-                        soundSettings = soundSettings,
-                        resetSettings = resetSettings,
-                        currentMode = modeState.value,
+                        wrestleModeSettings = viewModel.wrestleModeSettings,
+                        soundSettings = viewModel.soundSettings,
+                        resetSettings = viewModel.resetSettings,
+                        currentMode = mode.value,
                         playSound = playSound.value,
                         onSetMode = { mode -> viewModel.setMode(mode) }
                     )
@@ -121,4 +114,3 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
 
     }
 }
-

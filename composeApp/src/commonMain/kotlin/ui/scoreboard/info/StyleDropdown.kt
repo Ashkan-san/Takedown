@@ -16,7 +16,7 @@ import model.scoreboard.WrestleStyle
 @Composable
 fun StyleDropdown(
     modifier: Modifier = Modifier,
-    styleList: List<WrestleStyle>,
+    styles: List<WrestleStyle>,
     text: String,
     onClickItem: (WrestleStyle) -> Unit
 ) {
@@ -38,7 +38,7 @@ fun StyleDropdown(
             expanded = expanded.value,
             onDismissRequest = { expanded.value = false }
         ) {
-            styleList.forEach {
+            styles.forEach {
                 DropdownMenuItem(
                     text = { Text(it.name) },
                     onClick = {
