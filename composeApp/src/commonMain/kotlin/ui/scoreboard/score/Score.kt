@@ -3,7 +3,7 @@ package ui.scoreboard.score
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import model.scoreboard.WrestlerState
+import model.scoreboard.score.WrestlerState
 
 @Composable
 fun Score(

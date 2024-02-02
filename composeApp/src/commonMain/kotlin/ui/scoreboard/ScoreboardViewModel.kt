@@ -14,14 +14,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import model.scoreboard.Score
-import model.scoreboard.SettingState
-import model.scoreboard.SettingType
-import model.scoreboard.TimerState
-import model.scoreboard.WrestleDetails
-import model.scoreboard.WrestleStyle
-import model.scoreboard.WrestlerColor
-import model.scoreboard.WrestlerState
+import model.scoreboard.details.WrestleDetails
+import model.scoreboard.details.WrestleStyle
+import model.scoreboard.score.Score
+import model.scoreboard.score.WrestlerColor
+import model.scoreboard.score.WrestlerState
+import model.scoreboard.settings.SettingState
+import model.scoreboard.settings.SettingType
+import model.scoreboard.timer.TimerState
 
 
 class ScoreboardViewModel : KMMViewModel() {
@@ -64,7 +64,7 @@ class ScoreboardViewModel : KMMViewModel() {
         SettingState(
             SettingType.RESET,
             "Reset scores",
-            "Reset scores, penalties and passivity",
+            "Reset scores, penalties, passivity and score history",
             null,
             Icons.Default.ExposureZero,
             "Reset Scores Icon",
@@ -75,12 +75,10 @@ class ScoreboardViewModel : KMMViewModel() {
 
     val scoreHistory = mutableListOf<Score>()
 
-    fun addScore(score: Int, color: Color) {
-        scoreHistory.add(Score(score, color))
-    }
-
-    val wrestlerRed = mutableStateOf(WrestlerState(WrestlerColor.RED, Color(0xFFB72200), 0, 0))
-    val wrestlerBlue = mutableStateOf(WrestlerState(WrestlerColor.BLUE, Color(0xFF0B61A4), 0, 0))
+    val defaultRed = WrestlerState(WrestlerColor.RED, Score(0, Color(0xFFB72200)), 0)
+    val defaultBlue = WrestlerState(WrestlerColor.BLUE, Score(0, Color(0xFF0B61A4)), 0)
+    val wrestlerRed = mutableStateOf(defaultRed)
+    val wrestlerBlue = mutableStateOf(defaultBlue)
 
     val wrestleStyles = listOf(
         WrestleStyle(
@@ -131,6 +129,10 @@ class ScoreboardViewModel : KMMViewModel() {
         showBottomSheet.value = boolean
     }
 
+    fun addScore(score: Score) {
+        scoreHistory.add(score)
+    }
+
     fun setIsSoundPlaying(boolean: Boolean) {
         if (playSound.value) isSoundPlaying.value = boolean
     }
@@ -156,15 +158,18 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun increaseScore(state: WrestlerState, value: Int = 1) {
+        val newScore = state.score.copy(scoreValue = state.score.scoreValue + value)
+        val historyScore = state.score.copy(scoreValue = value)
+
         when (state.colorName) {
             WrestlerColor.RED -> {
-                wrestlerRed.value = state.copy(score = state.score + value)
-                addScore(value, state.color)
+                wrestlerRed.value = state.copy(score = newScore)
+                addScore(historyScore)
             }
 
             WrestlerColor.BLUE -> {
-                wrestlerBlue.value = state.copy(score = state.score + value)
-                addScore(value, state.color)
+                wrestlerBlue.value = state.copy(score = newScore)
+                addScore(historyScore)
             }
         }
 
@@ -172,18 +177,19 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun decreaseScore(state: WrestlerState) {
-        val value = 1
+        val newScore = state.score.copy(scoreValue = state.score.scoreValue - 1)
+        val historyScore = state.score.copy(scoreValue = -1)
 
-        if (state.score != 0) {
+        if (state.score.scoreValue != 0) {
             when (state.colorName) {
                 WrestlerColor.RED -> {
-                    wrestlerRed.value = state.copy(score = state.score - value)
-                    addScore(-value, state.color)
+                    wrestlerRed.value = state.copy(score = newScore)
+                    addScore(historyScore)
                 }
 
                 WrestlerColor.BLUE -> {
-                    wrestlerBlue.value = state.copy(score = state.score - value)
-                    addScore(-value, state.color)
+                    wrestlerBlue.value = state.copy(score = newScore)
+                    addScore(historyScore)
                 }
             }
         }
@@ -222,7 +228,7 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun checkWinner() {
-        val scoreDifference = wrestlerRed.value.score - wrestlerBlue.value.score
+        val scoreDifference = wrestlerRed.value.score.scoreValue - wrestlerBlue.value.score.scoreValue
         val leadToWin = wrestleStyle.value.leadToWin
 
         if (scoreDifference >= leadToWin) {
@@ -271,8 +277,10 @@ class ScoreboardViewModel : KMMViewModel() {
     }
 
     fun resetScores() {
-        wrestlerRed.value = wrestlerRed.value.copy(score = 0, penalty = 0, isPassive = false, isWinner = false)
-        wrestlerBlue.value = wrestlerBlue.value.copy(score = 0, penalty = 0, isPassive = false, isWinner = false)
+        wrestlerRed.value = defaultRed
+        wrestlerBlue.value = defaultBlue
+
+        scoreHistory.clear()
     }
 
     fun resetAll() {

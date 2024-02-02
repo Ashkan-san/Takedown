@@ -1,4 +1,4 @@
-package model.scoreboard
+package model.scoreboard.details
 
 data class WrestleStyle(
     val name: String,

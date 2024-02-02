@@ -19,37 +19,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import model.scoreboard.Score
+import model.scoreboard.score.Score
 
 @Composable
 fun ScoreHistory(
     scoreHistory: List<Score>
 ) {
-    //val scoreHistory = listOf(1, 4, 3, 2, 3, 5, 1, 1, 1, 1)
-
     SettingTitle(title = "Scorehistory")
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .height(50.dp)
+            .padding(horizontal = 10.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .horizontalScroll(rememberScrollState())
     ) {
-        scoreHistory.forEach {
+        scoreHistory.forEachIndexed { index, item ->
             Box(
                 modifier = Modifier
                     .size(50.dp)
                     .padding(end = 2.dp)
-                    .background(it.color),
+                    .background(item.color),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "${it.score}",
+                    text = "${item.scoreValue}",
                     style = MaterialTheme.typography.displaySmall.copy(color = Color.White)
                 )
             }
-            //Divider(modifier = Modifier.width(2.dp), color = Color.White)
         }
     }
     Spacer(modifier = Modifier.height(10.dp))

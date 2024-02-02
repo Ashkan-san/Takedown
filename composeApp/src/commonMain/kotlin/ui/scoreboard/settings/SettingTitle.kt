@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingTitle(title: String) {
     Text(
-        modifier = Modifier.padding(horizontal = 20.dp),
+        modifier = Modifier.padding(horizontal = 20.dp, vertical = 5.dp),
         text = title,
         style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.primary)
     )

@@ -1,4 +1,4 @@
-package model.scoreboard
+package model.scoreboard.details
 
 /**
  * Hält lediglich die Strings zur Anzeige in der UI

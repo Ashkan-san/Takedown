@@ -1,4 +1,4 @@
-package ui.scoreboard.info
+package ui.scoreboard.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.ButtonDefaults
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import model.scoreboard.WrestleStyle
+import model.scoreboard.details.WrestleStyle
 
 @Composable
 fun DetailDropdown(

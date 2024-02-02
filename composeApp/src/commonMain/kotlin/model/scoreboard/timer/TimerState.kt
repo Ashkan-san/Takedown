@@ -1,8 +1,4 @@
-package model.scoreboard
-
-enum class TimerType {
-    MIN, SEC
-}
+package model.scoreboard.timer
 
 data class TimerState(
     val minutes: String = "03",

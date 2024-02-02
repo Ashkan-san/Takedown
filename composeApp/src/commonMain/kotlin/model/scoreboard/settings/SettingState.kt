@@ -1,10 +1,6 @@
-package model.scoreboard
+package model.scoreboard.settings
 
 import androidx.compose.ui.graphics.vector.ImageVector
-
-enum class SettingType {
-    MODE, SOUND, RESET
-}
 
 data class SettingState(
     val type: SettingType,

@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import model.scoreboard.WrestlerState
+import model.scoreboard.score.WrestlerState
 
 @Composable
 fun ScoreSurface(
@@ -29,7 +29,7 @@ fun ScoreSurface(
     CompositionLocalProvider(LocalLayoutDirection provides direction) {
         Surface(
             modifier = modifier.fillMaxHeight(),
-            color = state.color,
+            color = state.score.color,
             contentColor = Color.White
         ) {
             Column(
@@ -41,7 +41,7 @@ fun ScoreSurface(
 
                 // todo fix dass sich elemente nach oben verschieben, wenn textgröße sich ändert
                 ScoreText(
-                    text = "${state.score}",
+                    text = "${state.score.scoreValue}",
                     onClick = onClickAdd
                 )
 

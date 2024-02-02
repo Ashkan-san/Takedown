@@ -17,7 +17,7 @@ fun SettingSurface(
 ) {
     SettingTitle(title = title)
     Surface(
-        modifier = Modifier.padding(5.dp),
+        modifier = Modifier.padding(horizontal = 5.dp),
         shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
         contentColor = MaterialTheme.colorScheme.onSurfaceVariant

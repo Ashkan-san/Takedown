@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
-import ui.scoreboard.info.Info
+import ui.scoreboard.details.Info
 import ui.scoreboard.score.Score
 import ui.scoreboard.settings.Settings
 import ui.scoreboard.timer.Timer

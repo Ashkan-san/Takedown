@@ -1,4 +1,4 @@
-package ui.scoreboard.info
+package ui.scoreboard.details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import model.scoreboard.WrestleDetails
-import model.scoreboard.WrestleStyle
+import model.scoreboard.details.WrestleDetails
+import model.scoreboard.details.WrestleStyle
 
 @Composable
 fun Info(
