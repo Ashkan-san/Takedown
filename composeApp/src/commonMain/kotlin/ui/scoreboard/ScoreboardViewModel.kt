@@ -26,14 +26,14 @@ import model.scoreboard.timer.TimerState
 
 class ScoreboardViewModel : KMMViewModel() {
     // SETTINGS
-    val showBottomSheet = mutableStateOf(true)
+    val showBottomSheet = mutableStateOf(false)
 
     val wrestleModeSettings = listOf(
         SettingState(SettingType.MODE, "Classic Mode", "Timer doesn't start automatically", null, null, null, ::classicMode),
         SettingState(SettingType.MODE, "Tournament Mode", "Timer starts automatically", null, null, null, ::tournamentMode),
         SettingState(SettingType.MODE, "Infinite Mode", "Timer repeats indefinitely", null, null, null, ::infiniteMode),
     )
-    val wrestleMode = mutableStateOf(wrestleModeSettings[0])
+    val wrestleMode = mutableStateOf(wrestleModeSettings[1])
 
     val soundSettings = listOf(
         SettingState(
@@ -48,7 +48,7 @@ class ScoreboardViewModel : KMMViewModel() {
     )
 
     val isSoundPlaying = mutableStateOf(false)
-    val playSound = mutableStateOf(true)
+    val playSound = mutableStateOf(false)
 
     val resetSettings = listOf(
         SettingState(
@@ -139,18 +139,6 @@ class ScoreboardViewModel : KMMViewModel() {
 
     fun setSoundPlay() {
         playSound.value = !playSound.value
-    }
-
-    fun classicMode() {
-
-    }
-
-    fun tournamentMode() {
-
-    }
-
-    fun infiniteMode() {
-
     }
 
     fun setMode(mode: SettingState) {
@@ -294,16 +282,32 @@ class ScoreboardViewModel : KMMViewModel() {
         resetScores()
     }
 
-    fun wrestleMode() {
-        // ÄNDERN
-        /*viewModelScope.coroutineScope.launch(Dispatchers.Main) {
-            setTimerState("00", "05")
-            startTimerJob()
-            delay(5000)
-            setTimerState("00", "10")
-            startTimerJob()
-            delay(5000)
+    val tournamentMode = mutableStateOf(false)
+
+    fun classicMode() {
+        startTimer()
+    }
+
+    /**
+     * Setzt den Timer erst auf 03:00, dann auf 00:30 und ein zweites Mal auf 03:00 um offizielle Turnierregeln zu beachten
+     */
+    fun tournamentMode() {
+        tournamentMode.value = true
+        startTimer()
+        /*viewModelScope.coroutineScope.launch {
+            setTimer(TimerState("00", "05"))
+            startTimer()
+            //delay(5000)
+            setTimer(TimerState("00", "30"))
         }*/
+        // entweder delay oder abfrage if
+    }
+
+    /**
+     * Der Timer startet automatisch wieder beim Default Timer, falls dieser ausläuft
+     */
+    fun infiniteMode() {
+
     }
 
     fun startTimer() {
@@ -351,6 +355,7 @@ class ScoreboardViewModel : KMMViewModel() {
                 delay(1000)
 
                 if (i == 0) {
+                    //if (!tournamentMode.value) stopTimer()
                     stopTimer()
                 }
             }

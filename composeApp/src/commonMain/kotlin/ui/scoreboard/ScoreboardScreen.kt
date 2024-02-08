@@ -71,7 +71,8 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
                 onFocusTimer = { viewModel.pauseTimer() },
                 onTimerUpdate = { state -> viewModel.setTimer(state) },
                 onClickPlay = {
-                    viewModel.startTimer()
+                    mode.value.function()
+                    //viewModel.startTimer()
                 },
                 onClickStop = { viewModel.stopTimer() },
                 onClickReset = { viewModel.resetTimer() },

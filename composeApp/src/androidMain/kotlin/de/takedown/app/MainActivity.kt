@@ -9,6 +9,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import ui.scoreboard.ScoreboardViewModel
 import ui.turnier.TurnierViewModel
@@ -24,6 +26,32 @@ class MainActivity : ComponentActivity() {
         )
 
         super.onCreate(savedInstanceState)
+
+        /* val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+         // Configure the behavior of the hidden system bars.
+         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+         // Add a listener to update the behavior of the toggle fullscreen button when
+         // the system bars are hidden or revealed.
+         window.decorView.setOnApplyWindowInsetsListener { view, windowInsets ->
+             // You can hide the caption bar even when the other system bars are visible.
+             // To account for this, explicitly check the visibility of navigationBars()
+             // and statusBars() rather than checking the visibility of systemBars().
+             if (windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars()) || windowInsets.isVisible(WindowInsetsCompat.Type.statusBars())) {
+                 windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+
+                *//* binding.toggleFullscreenButton.setOnClickListener {
+                    // Hide both the status bar and the navigation bar.
+                }*//*
+            } else {
+                windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+
+                *//*binding.toggleFullscreenButton.setOnClickListener {
+                    // Show both the status bar and the navigation bar.
+                }*//*
+            }
+            view.onApplyWindowInsets(windowInsets)
+        }*/
 
         setContent {
             /*// Dynamic color is available on Android 12+

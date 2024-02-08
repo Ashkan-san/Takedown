@@ -9,6 +9,8 @@
 - Filtern, sortieren
 - Pull Refresh ersetzen durchs offizielle irgendwann
 - Timer Probleme: cursor ans ende bringen, näher nebeneinander
+- Landscape Mode
+- Wrestle Modes
 
 ## Versionen
 
