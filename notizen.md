@@ -114,7 +114,6 @@
 - Signing: nötig für App store
 - DSL für Kotlin, Groovy für Java
 
-
 - compile altes Keyword, api ist das selbe. immer implementation benutzen!
 - Compose Maven Groups:
 - Animation
@@ -123,6 +122,13 @@
 - Material, Material3
 - Runtime (Model, State Management)
 - Ui
+
+- Plugins: geben Gradle neue Features.
+- Gibt Core Plugins (von Gradle selbst), wie java und Community Plugins.
+- Plugins müssen erst resolved und dann applied werden (geht beides gleichzeitig mit Plugins DSL plugins {...}).
+- id (nicht aus Version Catalog) vs. alias (für Plugins aus Version Catalog)
+- libs.versions.toml ist "Version Catalog", hier werden alle Dependency/Plugin Versionen gespeichert
+- Dadurch organisierter und neue Versionen werden direkt erkannt von IDE!
 
 ## Callback
 

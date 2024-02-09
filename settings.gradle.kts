@@ -1,5 +1,4 @@
 rootProject.name = "Takedown"
-include(":composeApp")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -18,3 +17,6 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
+
+include(":server")
+include(":composeApp")

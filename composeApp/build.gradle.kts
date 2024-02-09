@@ -1,19 +1,12 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 
-val precomposeVersion = "1.5.7"
-val htmlUnitVersion = "3.7.0"
-val kmmViewModelVersion = "1.0.0-ALPHA-15"
-val realmVersion = "1.13.0"
-val mapsVersion = "4.3.0"
-val playServicesVersion = "18.2.0"
-val dateTimeVersion = "0.5.0"
-
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.jetbrainsCompose)
+
+    alias(libs.plugins.realm)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id("io.realm.kotlin") version "1.13.0"
 }
 
 kotlin {
@@ -46,34 +39,22 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.materialIconsExtended)
 
-            // PRECOMPOSE NAVIGATION
-            implementation("moe.tlaster:precompose:$precomposeVersion")
-
-            // HTMLUNIT
-            implementation("org.htmlunit:htmlunit3-android:$htmlUnitVersion")
-
-            // VIEWMODEL
-            implementation("com.rickclephas.kmm:kmm-viewmodel-core:$kmmViewModelVersion")
-
-            // MAPS
-            implementation("com.google.maps.android:maps-compose:$mapsVersion")
-            implementation("com.google.android.gms:play-services-maps:$playServicesVersion")
-
-            // REBUGGER
-            implementation("io.github.theapache64:rebugger:1.0.0-rc02")
-
-            // REALM DB
-            implementation("io.realm.kotlin:library-base:$realmVersion")
-            implementation("io.realm.kotlin:library-sync:$realmVersion")
-
-            // DATE TIME
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:$dateTimeVersion")
+            implementation(libs.precompose)
+            implementation(libs.kmm.viewmodel)
+            implementation(libs.maps.compose)
+            implementation(libs.play.services.maps)
+            implementation(libs.realm.base)
+            implementation(libs.realm.sync)
+            implementation(libs.kotlin.datetime)
         }
 
         androidMain.dependencies {
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+        }
+        iosMain.dependencies {
+
         }
     }
 }
@@ -114,8 +95,8 @@ android {
     buildTypes {
         getByName("release") {
             // RELEASE BUILD ZUM TESTEN
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
