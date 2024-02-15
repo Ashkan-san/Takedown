@@ -11,6 +11,9 @@
 - Timer Probleme: cursor ans ende bringen, näher nebeneinander
 - Landscape Mode
 - Wrestle Modes
+- Scraping parallel laufen lassen
+- Bilder für die Turniere
+-
 
 ## Versionen
 
@@ -95,6 +98,7 @@
 - launch() startet neue Coroutine
 - withContext() zum Ändern des Thread Pools
 - GlobalScope (vermeiden) > CoroutineScope (für einzelne Komponenten) >
+- SCRAPER OHNE COROUTINES ALLE TURNIERE 46 Minuten
 
 ## Effect
 
@@ -160,9 +164,11 @@ werden können.
 - Enter: Fade, Scale, Slide, Expand
 - Exit: Fade, Scale, Slide, Shrink
 
-## Realm
+## Realm/Mongo
 
 - RealmConfiguration() für lokale DB
 - SyncConfiguration für online DB
 - Lokale DB ist im Device Manager unter data/data/de.takedown.app/files zu finden
 - Schemas lassen sich automatisch generieren
+- Die DB findet man unter Data Services Tab -> Database -> TakedownCluster -> Collections
+- Die Schemas unter App Services Tab -> Schema

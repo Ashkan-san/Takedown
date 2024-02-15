@@ -10,6 +10,11 @@ plugins {
 }
 
 kotlin {
+    // Hier die verschiedenen Targets
+    // JVM Target
+    jvm()
+
+    // Android Target
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -18,6 +23,7 @@ kotlin {
         }
     }
 
+    // IOS Target
     listOf(
         iosX64(),
         iosArm64(),

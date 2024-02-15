@@ -6,26 +6,26 @@ import moe.tlaster.precompose.navigation.Navigator
 import ui.regelwerk.RulesScreen
 import ui.scoreboard.ScoreboardScreen
 import ui.scoreboard.ScoreboardViewModel
-import ui.turnier.TurnierViewModel
-import ui.turnier.details.TurnierDetailsScreen
-import ui.turnier.liste.TurniereScreen
-import ui.turnier.ranking.TurnierRankingScreen
+import ui.tournaments.TournamentViewModel
+import ui.tournaments.details.TurnierDetailsScreen
+import ui.tournaments.list.TournamentsScreen
+import ui.tournaments.ranking.TurnierRankingScreen
 
 @Composable
 fun NavigationGraph(
     navigator: Navigator,
-    turnierViewModel: TurnierViewModel,
+    tournamentViewModel: TournamentViewModel,
     scoreboardViewModel: ScoreboardViewModel
 ) {
     NavHost(
         navigator = navigator,
-        initialRoute = BottomNavItem.Scoreboard.route // TODO später ändern, nur debug
+        initialRoute = BottomNavItem.Tournaments.route // TODO später ändern, nur debug
     ) {
         // HOME/TURNIERE
         scene(
-            route = BottomNavItem.Turniere.route
+            route = BottomNavItem.Tournaments.route
         ) {
-            TurniereScreen(navigator = navigator, viewModel = turnierViewModel)
+            TournamentsScreen(navigator = navigator, viewModel = tournamentViewModel)
         }
 
         scene(
@@ -35,17 +35,17 @@ fun NavigationGraph(
                 //destroyTransition = ExitTransition()
             )*/
         ) {
-            TurnierDetailsScreen(navigator = navigator, viewModel = turnierViewModel)
+            TurnierDetailsScreen(navigator = navigator, viewModel = tournamentViewModel)
         }
 
         scene(route = Screen.TurnierRanking.route) {
-            TurnierRankingScreen(navigator = navigator, viewModel = turnierViewModel)
+            TurnierRankingScreen(navigator = navigator, viewModel = tournamentViewModel)
         }
 
 
         // RULES
         scene(route = BottomNavItem.Rules.route) {
-            RulesScreen(navigator = navigator, viewModel = turnierViewModel)
+            RulesScreen(navigator = navigator, viewModel = tournamentViewModel)
         }
         // MOVES
         scene(route = BottomNavItem.Moves.route) {

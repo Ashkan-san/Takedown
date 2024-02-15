@@ -9,14 +9,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import ui.scoreboard.ScoreboardViewModel
-import ui.turnier.TurnierViewModel
+import ui.tournaments.TournamentViewModel
 
 class MainActivity : ComponentActivity() {
-    private val turnierViewModel by viewModels<TurnierViewModel>()
+    private val tournamentViewModel by viewModels<TournamentViewModel>()
     private val scoreboardViewModel by viewModels<ScoreboardViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +65,7 @@ class MainActivity : ComponentActivity() {
             WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = isSystemInDarkTheme().not()
             WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = isSystemInDarkTheme().not()
 
-            App(turnierViewModel = turnierViewModel, scoreboardViewModel = scoreboardViewModel)
+            App(tournamentViewModel = tournamentViewModel, scoreboardViewModel = scoreboardViewModel)
         }
     }
 }
