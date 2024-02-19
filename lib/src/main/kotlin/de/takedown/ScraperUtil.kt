@@ -3,6 +3,7 @@ package de.takedown
 import model.tournament.TournamentDate
 import org.htmlunit.BrowserVersion
 import org.htmlunit.WebClient
+import org.htmlunit.html.HtmlAnchor
 import org.htmlunit.html.HtmlTableRow
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -11,13 +12,19 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.system.exitProcess
 
-fun getTournamentCountry(link: String): String {
-    val pattern = Regex("""(?<=/([^/]+/){6})\w+(?=/)""")
 
-    val matchResult = pattern.find(link)
-    val countryCode = matchResult?.value ?: ""
+/**
+ * Vorläufig je nach Country Code eine andere Flagge als Club Image setzen
+ */
+fun setCountryImageLink(countryCode: String): String {
+    return "https://hatscripts.github.io/circle-flags/flags/${countryCode.lowercase()}.svg"
+}
 
-    return countryCode
+/**
+ * Prüfen ob der Link existiert
+ */
+fun checkLink(link: HtmlAnchor?): Boolean {
+    return (((link != null) && link.hasAttribute("href")))
 }
 
 /**

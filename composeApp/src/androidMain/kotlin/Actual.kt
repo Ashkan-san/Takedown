@@ -29,14 +29,13 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import de.takedown.app.R
-import model.turnier.Turnier
-import model.turnier.TurnierLatLng
+import model.tournament.TurnierLatLng
 
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 actual fun Maps(
-    turnier: Turnier,
+    venue: String,
     location: TurnierLatLng,
     onUpdateLocation: (Double, Double) -> Unit,
     isMapLoaded: Boolean,
@@ -57,8 +56,8 @@ actual fun Maps(
     }
 
     // Location updaten, wenn neues Turnier
-    LaunchedEffect(turnier) {
-        getLatLngFromAddress(context, turnier.adresse) { latLng ->
+    LaunchedEffect(venue) {
+        getLatLngFromAddress(context, venue) { latLng ->
             onUpdateLocation(latLng.latitude, latLng.longitude)
             onMapLoaded()
         }
@@ -89,23 +88,22 @@ actual fun Maps(
             ) {
                 Marker(
                     state = MarkerState(position = LatLng(location.lat, location.lng)),
-                    title = turnier.adresse,
+                    title = venue,
                 )
             }
-            if (!isMapLoaded) {
-                AnimatedVisibility(
+
+            AnimatedVisibility(
+                modifier = Modifier
+                    .matchParentSize(),
+                visible = !isMapLoaded,
+                enter = EnterTransition.None,
+                exit = fadeOut()
+            ) {
+                CircularProgressIndicator(
                     modifier = Modifier
-                        .matchParentSize(),
-                    visible = !isMapLoaded,
-                    enter = EnterTransition.None,
-                    exit = fadeOut()
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .wrapContentSize()
-                    )
-                }
+                        .background(MaterialTheme.colorScheme.background)
+                        .wrapContentSize()
+                )
             }
         }
     }
@@ -113,7 +111,7 @@ actual fun Maps(
 
 @Composable
 actual fun PlayWhistle() {
-    var mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.whistle)
+    val mediaPlayer = MediaPlayer.create(LocalContext.current, R.raw.whistle)
     mediaPlayer.start()
 }
 

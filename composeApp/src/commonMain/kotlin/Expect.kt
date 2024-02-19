@@ -1,10 +1,9 @@
 import androidx.compose.runtime.Composable
-import model.turnier.Turnier
-import model.turnier.TurnierLatLng
+import model.tournament.TurnierLatLng
 
 @Composable
 expect fun Maps(
-    turnier: Turnier,
+    venue: String,
     location: TurnierLatLng,
     onUpdateLocation: (Double, Double) -> Unit,
     isMapLoaded: Boolean,

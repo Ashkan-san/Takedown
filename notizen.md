@@ -13,7 +13,11 @@
 - Wrestle Modes
 - Scraping parallel laufen lassen
 - Bilder für die Turniere
--
+- DB: Date nicht null machen, sondern default value geben. rank evt zu int
+- Bilder: beim Scrapen der Turniere die ganzen Bilder Links mitscrapen und speichern, dann wenn ich sie brauche
+- mit Coil übers Netz ziehen und komprimiert im Cache speichern (auf dem Gerät)
+- Links muss ich ja nur einmal scrapen, wären aber 6000 und somit 5$ pro 1000 Queries, also 30$
+- oder über 60 Tage je 100 scrapen, weil das ist free
 
 ## Versionen
 

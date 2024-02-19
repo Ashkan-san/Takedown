@@ -4,6 +4,7 @@ import io.realm.kotlin.ext.toRealmList
 import io.realm.kotlin.ext.toRealmSet
 import model.tournament.Ranking
 import model.tournament.Tournament
+import model.tournament.TournamentClub
 import model.tournament.WrestleClass
 import org.htmlunit.FailingHttpStatusCodeException
 import org.htmlunit.html.HtmlAnchor
@@ -15,11 +16,21 @@ import org.htmlunit.html.HtmlSubmitInput
 import org.htmlunit.html.HtmlTableBody
 import org.htmlunit.html.HtmlTableCell
 import org.htmlunit.html.HtmlTableRow
+import java.net.URLEncoder
 import kotlin.system.exitProcess
 
 var countryCode: String = ""
 val breakBoolean: Boolean = false
 //val coroutineScope = CoroutineScope(Dispatchers.Default)
+
+fun scrapeTournamentImage(searchQuery: String) {
+    val link = "https://www.google.com/search?q=" + URLEncoder.encode(
+        searchQuery,
+        "UTF-8"
+    ) + "&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiUpP35yNXiAhU1BGMBHdDeBAgQ_AUIECgB"
+
+    // TODO link zum ersten bild nehmen, irgendwie runterladen und iwohin packen (einfach lokal auf meinen rechner?) und dann referenz in db
+}
 
 fun scrapeAllTournaments() {
     var link = getTournamentLink("2024", "DE", "E")
@@ -108,36 +119,47 @@ fun scrapeTournament(page: HtmlPage) {
     }
 
     try {
-        val name = page.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtTurnierBezeichnung']")
+        val name = page.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtTurnierBezeichnung']").textContent
         val date = page.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtDatum']").textContent
         val city = page.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtOrt']").textContent
         val venue = page.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtWettkampfstaette']").textContent
         val club = page.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtAusrichter']").textContent
+        var clubLinkString = ""
         val host = page.getFirstByXPath<HtmlSpan>("//span[@id='ctl00_ContentPlaceHolderInhalt_txtVeranstalter']").textContent
+
         val wrestleClasses = scrapeWrestleClasses(page).toRealmList()
         var rankings = listOf<Ranking>()
 
         val resultLink = page.getFirstByXPath<HtmlAnchor>("//a[@id='ctl00_ContentPlaceHolderInhalt_lnkZuDenErgebnisse']")
-        if (resultLink != null) {
-            if (resultLink.hasAttribute("href")) {
-                val resultLinkString = resultLink.getAttribute("href")
-                val resultsPage: HtmlPage = webClient.getPage(resultLinkString)
-                rankings = scrapeRankings(resultsPage, resultLinkString)
-            }
+        if (checkLink(resultLink)) {
+            val resultLinkString = resultLink.getAttribute("href")
+            val resultsPage: HtmlPage = webClient.getPage(resultLinkString)
+            rankings = scrapeRankings(resultsPage, resultLinkString)
         }
-        val wrestlerCount = rankings.size
+
+        val clubLink = page.getFirstByXPath<HtmlAnchor>("//a[@id='ctl00_ContentPlaceHolderInhalt_lnkZumAusrichter']")
+        if (checkLink(clubLink)) {
+            clubLinkString = clubLink.getAttribute("href")
+        }
+
         val parsedDate = parseDate(date)
+        val status = setTournamentStatus(parsedDate)
+        val clubImage = setCountryImageLink(countryCode)
 
         tournament.apply {
-            this.name = name.textContent
+            this.name = name
             this.date = parsedDate
-            this.status = setTournamentStatus(parsedDate)
+            this.status = status
             this.city = city
             this.country = countryCode
             this.venue = venue
-            this.club = club
+            this.club = TournamentClub().apply {
+                this.name = club
+                this.website = clubLinkString
+                this.image = clubImage
+            }
             this.host = host
-            this.wrestlerCount = wrestlerCount
+            this.wrestlerCount = rankings.size
 
             this.wrestleClasses = wrestleClasses
             this.rankings = rankings.toRealmList()

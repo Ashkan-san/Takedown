@@ -23,7 +23,6 @@ import pullRefresh
 import rememberPullRefreshState
 import ui.navigation.Screen
 import ui.tournaments.TournamentViewModel
-import ui.util.simpleVerticalScrollbar
 
 @Composable
 fun TournamentsList(
@@ -33,7 +32,7 @@ fun TournamentsList(
 ) {
     val searchQuery = viewModel.searchQuery
     val isLoading = viewModel.isTurniereLoading
-    val tournaments = viewModel.turniere
+    val tournaments = viewModel.tournaments
     val filteredTournaments = tournaments.filter { it.name.contains(searchQuery.value, ignoreCase = true) }
 
     val refreshState = rememberPullRefreshState(refreshing = isLoading.value, onRefresh = { /*viewModel.updateTurnierList()*/ })
@@ -54,8 +53,8 @@ fun TournamentsList(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .pullRefresh(refreshState)
-                    .simpleVerticalScrollbar(lazyListState),
+                    .pullRefresh(refreshState),
+                //.simpleVerticalScrollbar(lazyListState),
                 state = lazyListState
             ) {
                 items(
@@ -63,18 +62,18 @@ fun TournamentsList(
                     key = {
                         it.id
                     }
-                ) { turnier ->
+                ) {
                     // Zwischenlösung, da clickable UI ständig recomposed
-                    val clickableModifier = remember(turnier) {
+                    val clickableModifier = remember(it) {
                         Modifier.clickable {
-                            /*viewModel.updateTurnierDetails(turnier)*/
-                            navigator.navigate(Screen.TurnierDetails.route)
+                            viewModel.selectTournament(it)
+                            navigator.navigate(Screen.TournamentDetails.route)
                         }
                     }
 
                     TournamentCard(
                         modifier = clickableModifier,
-                        tournament = turnier
+                        tournament = it
                     )
                 }
             }

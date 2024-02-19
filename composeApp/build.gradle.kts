@@ -47,17 +47,24 @@ kotlin {
 
             implementation(libs.precompose)
             implementation(libs.kmm.viewmodel)
-            implementation(libs.maps.compose)
-            implementation(libs.play.services.maps)
             implementation(libs.realm.base)
             implementation(libs.realm.sync)
             implementation(libs.kotlin.datetime)
+
+            implementation(libs.coil)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.ktor)
+            implementation(libs.coil.svg)
         }
 
         androidMain.dependencies {
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.play.services.maps)
+            implementation(libs.maps.compose)
+            implementation(libs.ktor.android)
         }
         iosMain.dependencies {
 

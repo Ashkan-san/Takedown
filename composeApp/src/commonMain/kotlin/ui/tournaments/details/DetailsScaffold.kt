@@ -27,7 +27,7 @@ fun DetailsScaffold(
                         //modifier = Modifier.size(100.dp),
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Top Bar Back Icon",
                             //modifier = Modifier.size(100.dp),
                             //tint = Color.Unspecified

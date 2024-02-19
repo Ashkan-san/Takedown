@@ -1,4 +1,4 @@
-package ui.tournaments.ranking
+package ui.tournaments.details.results
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import model.turnier.TurnierPlatzierung
+import model.tournament.Ranking
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
 import ui.tournaments.TournamentViewModel
@@ -27,12 +27,12 @@ import ui.util.SectionText
 
 
 @Composable
-fun TurnierRankingScreen(navigator: Navigator, viewModel: TournamentViewModel) {
-    val platzierungen = remember { viewModel.aktuellePlatzierungen }
+fun RankingScreen(navigator: Navigator, viewModel: TournamentViewModel) {
+    val rankings = remember { viewModel.selectedRankings }
 
     DetailsScaffold(
         navigator = navigator,
-        title = Screen.TurnierRanking.title
+        title = Screen.TournamentRanking.title
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -43,10 +43,10 @@ fun TurnierRankingScreen(navigator: Navigator, viewModel: TournamentViewModel) {
             Column(
                 modifier = Modifier.padding(10.dp)
             ) {
-                SectionText("${platzierungen[0].altersKlasse} / ${platzierungen[0].gewichtsKlasse}kg")
+                SectionText("${rankings[0].ageClass} / ${rankings[0].weightClass}")
 
-                platzierungen.forEach { rank ->
-                    RankingCard(rank)
+                rankings.forEach {
+                    RankingCard(it)
                     Divider()
                 }
             }
@@ -56,18 +56,13 @@ fun TurnierRankingScreen(navigator: Navigator, viewModel: TournamentViewModel) {
 }
 
 @Composable
-fun AllRankingCards() {
-
-}
-
-@Composable
-fun RankingCard(rank: TurnierPlatzierung) {
+fun RankingCard(ranking: Ranking) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(modifier = Modifier.weight(1F)) {
-            MedalRank(rank)
+            MedalRank(ranking)
         }
 
         Spacer(modifier = Modifier.width(10.dp))
@@ -77,12 +72,12 @@ fun RankingCard(rank: TurnierPlatzierung) {
                 modifier = Modifier.fillMaxWidth().padding(5.dp)
             ) {
                 Text(
-                    text = rank.ringerName,
+                    text = ranking.name,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = rank.verein,
+                    text = ranking.club,
                     fontSize = 15.sp,
                 )
             }
@@ -91,12 +86,12 @@ fun RankingCard(rank: TurnierPlatzierung) {
 }
 
 @Composable
-fun MedalRank(rank: TurnierPlatzierung) {
+fun MedalRank(ranking: Ranking) {
     var medalEmoji = ""
-    when (rank.platzierung) {
-        "1" -> medalEmoji = "\uD83E\uDD47"
-        "2" -> medalEmoji = "\uD83E\uDD48"
-        "3" -> medalEmoji = "\uD83E\uDD49"
+    when (ranking.rank) {
+        "1." -> medalEmoji = "\uD83E\uDD47"
+        "2." -> medalEmoji = "\uD83E\uDD48"
+        "3." -> medalEmoji = "\uD83E\uDD49"
     }
 
     Row(
@@ -110,7 +105,7 @@ fun MedalRank(rank: TurnierPlatzierung) {
             modifier = Modifier.weight(1F)
         )
         Text(
-            text = "${rank.platzierung}.",
+            text = ranking.rank,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.weight(1F)

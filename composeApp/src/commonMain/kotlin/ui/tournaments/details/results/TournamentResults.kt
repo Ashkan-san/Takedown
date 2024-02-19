@@ -1,4 +1,4 @@
-package ui.tournaments.details
+package ui.tournaments.details.results
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,43 +21,41 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import model.turnier.Turnier
-import model.turnier.TurnierPlatzierung
+import model.tournament.Ranking
 import ui.util.SectionText
 
 @Composable
-fun TurnierErgebnisse(
-    aktuellesTurnier: Turnier,
-    onCardClick: (TurnierPlatzierung) -> Unit,
-    alleSieger: Map<String, List<TurnierPlatzierung>>
+fun TournamentResults(
+    winnersByAge: Map<String, List<Ranking>>,
+    onCardClick: (Ranking) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(10.dp).verticalScroll(rememberScrollState())
     ) {
-        if (aktuellesTurnier.platzierungen.isNotEmpty()) {
-            alleSieger.forEach { (alter, sieger) ->
-                AlleSiegerCards(
-                    alter = alter,
-                    sieger = sieger,
+        if (winnersByAge.isNotEmpty()) {
+            winnersByAge.forEach { (ageClass, winners) ->
+                AllWinnerCards(
+                    ageClass = ageClass,
+                    winners = winners,
                     onCardClick = onCardClick
                 )
             }
         } else {
-            SectionText("Keine Ergebnisse")
+            SectionText("No results available")
         }
     }
 }
 
 @Composable
-fun AlleSiegerCards(
-    alter: String,
-    sieger: List<TurnierPlatzierung>,
-    onCardClick: (TurnierPlatzierung) -> Unit
+fun AllWinnerCards(
+    ageClass: String,
+    winners: List<Ranking>,
+    onCardClick: (Ranking) -> Unit
 ) {
     Column {
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "\uD83E\uDD47 $alter",
+            text = "\uD83E\uDD47 $ageClass",
             fontSize = 30.sp,
             textAlign = TextAlign.Start,
             fontWeight = FontWeight.Bold,
@@ -65,33 +63,34 @@ fun AlleSiegerCards(
         )
         //Spacer(modifier = Modifier.height(10.dp))
 
-        sieger.forEach { platzierung ->
-            SiegerCard(
-                winner = platzierung,
-                onCardClick = { onCardClick(platzierung) }
+        winners.forEach {
+            WinnerContainer(
+                winner = it,
+                onCardClick = onCardClick
             )
             Divider()
         }
     }
 }
 
+// TODO ändern dass es schöner ist und anclickbar aussieht, mit mehr Platz pro Winner
 @Composable
-fun SiegerCard(
-    winner: TurnierPlatzierung,
-    onCardClick: () -> Unit
+fun WinnerContainer(
+    winner: Ranking,
+    onCardClick: (Ranking) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                onCardClick()
+                onCardClick(winner)
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(modifier = Modifier.weight(1F)) {
             Text(
-                text = "${winner.gewichtsKlasse}kg",
+                text = winner.weightClass,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -104,12 +103,12 @@ fun SiegerCard(
                 modifier = Modifier.fillMaxWidth().padding(5.dp)
             ) {
                 Text(
-                    text = winner.ringerName,
+                    text = winner.name,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = winner.verein,
+                    text = winner.club,
                     fontSize = 15.sp,
                 )
             }

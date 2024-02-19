@@ -7,9 +7,9 @@ import ui.regelwerk.RulesScreen
 import ui.scoreboard.ScoreboardScreen
 import ui.scoreboard.ScoreboardViewModel
 import ui.tournaments.TournamentViewModel
-import ui.tournaments.details.TurnierDetailsScreen
+import ui.tournaments.details.DetailsScreen
+import ui.tournaments.details.results.RankingScreen
 import ui.tournaments.list.TournamentsScreen
-import ui.tournaments.ranking.TurnierRankingScreen
 
 @Composable
 fun NavigationGraph(
@@ -29,17 +29,17 @@ fun NavigationGraph(
         }
 
         scene(
-            route = Screen.TurnierDetails.route,
+            route = Screen.TournamentDetails.route,
             /*navTransition = NavTransition(
                 createTransition = slideInHorizontally(animationSpec = tween(300)),
                 //destroyTransition = ExitTransition()
             )*/
         ) {
-            TurnierDetailsScreen(navigator = navigator, viewModel = tournamentViewModel)
+            DetailsScreen(navigator = navigator, viewModel = tournamentViewModel)
         }
 
-        scene(route = Screen.TurnierRanking.route) {
-            TurnierRankingScreen(navigator = navigator, viewModel = tournamentViewModel)
+        scene(route = Screen.TournamentRanking.route) {
+            RankingScreen(navigator = navigator, viewModel = tournamentViewModel)
         }
 
 

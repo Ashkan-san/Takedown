@@ -9,6 +9,7 @@ import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import kotlinx.coroutines.runBlocking
 import model.tournament.Ranking
 import model.tournament.Tournament
+import model.tournament.TournamentClub
 import model.tournament.TournamentDate
 import model.tournament.WrestleClass
 
@@ -34,7 +35,7 @@ class TournamentRepository {
             config = SyncConfiguration.Builder(
                 user,
                 setOf(
-                    Tournament::class, TournamentDate::class, WrestleClass::class, Ranking::class
+                    Tournament::class, TournamentDate::class, TournamentClub::class, WrestleClass::class, Ranking::class
                 )
             ).initialSubscriptions { realm ->
                 add(
@@ -43,12 +44,12 @@ class TournamentRepository {
                     //updateExisting = true
                 )
             }
+                .schemaVersion(2)
                 //.log(LogLevel.ALL)
                 .build()
 
             realm = Realm.open(config)
         }
-        println("HELLO")
     }
 
     /**
@@ -56,9 +57,12 @@ class TournamentRepository {
      */
     fun getAllTournaments(): List<Tournament> {
         val example = realm.query<Tournament>().find().first()
+        val example2 = realm.query<Tournament>().limit(20).find()
+        val example3 = realm.query<Tournament>().find()
+        val example4 = realm.query<Tournament>("status == $0", "UPCOMING").find()
         println("TEST" + example)
 
-        return listOf(example)
+        return example2
     }
 
     private fun deleteAllTournaments() {

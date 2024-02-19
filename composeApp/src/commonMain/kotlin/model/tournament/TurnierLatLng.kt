@@ -1,4 +1,4 @@
-package model.turnier
+package model.tournament
 
 data class TurnierLatLng(
     val lat: Double,

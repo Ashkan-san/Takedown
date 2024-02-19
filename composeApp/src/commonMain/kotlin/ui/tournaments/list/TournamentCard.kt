@@ -1,16 +1,15 @@
 package ui.tournaments.list
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
@@ -23,10 +22,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.svg.SvgDecoder
 import model.tournament.Tournament
 import model.tournament.TournamentDate
 
@@ -38,31 +42,29 @@ fun TournamentCard(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            //.height(120.dp)
-            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
-        /*.clickable {
-            onClickCard(turnier)
-        },*/
+            .padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(5.dp),
+            modifier = Modifier.fillMaxWidth().padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // 1.
-            Box(modifier = Modifier.fillMaxHeight().weight(1F)) {
+            Box(modifier = Modifier.weight(1f)) {
                 ParsedDate(date = tournament.date!!)
             }
 
+            Spacer(Modifier.width(5.dp))
+
+
             // 2.
-            Box(modifier = Modifier.fillMaxHeight().weight(3F)) {
+            Box(modifier = Modifier.weight(2.5f)) {
                 Column(
                     modifier = Modifier
                 ) {
                     Text(
                         text = tournament.name,
                         fontWeight = FontWeight.Bold,
-                        maxLines = 3,
+                        maxLines = 2,
                         //fontSize = 20.sp,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -70,20 +72,23 @@ fun TournamentCard(
                     VenueText(tournament.venue)
                 }
             }
+            Spacer(Modifier.width(5.dp))
 
-            /*// 3.
-            Box(
-                modifier = Modifier.weight(1F)
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    WrestlingStyleBox()
-                    AttendeesText(text = "1000")
-                }
-            }*/
+            // 3.
 
+            Box(modifier = Modifier) {
+
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                        .data(tournament.club!!.image)
+                        .decoderFactory(SvgDecoder.Factory())
+                        .build(),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(50.dp),
+                    contentDescription = ""
+                )
+            }
         }
 
     }
@@ -92,11 +97,10 @@ fun TournamentCard(
 @Composable
 fun ParsedDate(date: TournamentDate) {
     Column(
-        modifier = Modifier.fillMaxHeight().padding(horizontal = 5.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxWidth(),
+        //horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DateText("${getAbbreviatedMonth(date.month)}")
+        DateText(date.getAbbreviatedMonth())
 
         if (date.endDay.isNotEmpty()) {
             DateText("${date.startDay}-${date.endDay}")
@@ -113,6 +117,7 @@ fun DateText(text: String) {
         text = text,
         fontSize = 25.sp,
         fontWeight = FontWeight.Bold,
+        maxLines = 1,
         color = MaterialTheme.colorScheme.primary
     )
 }
@@ -129,24 +134,6 @@ fun VenueText(text: String) {
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-    }
-}
-
-fun getAbbreviatedMonth(month: String): String? {
-    return when (month) {
-        "01" -> "JAN"
-        "02" -> "FEB"
-        "03" -> "MAR"
-        "04" -> "APR"
-        "05" -> "MAY"
-        "06" -> "JUN"
-        "07" -> "JUL"
-        "08" -> "AUG"
-        "09" -> "SEP"
-        "10" -> "OCT"
-        "11" -> "NOV"
-        "12" -> "DEC"
-        else -> null
     }
 }
 

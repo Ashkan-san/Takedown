@@ -12,14 +12,14 @@ class Tournament : RealmObject {
     var _id: ObjectId = BsonObjectId()
     var id: Int = 0
     var name: String = ""
-    var date: TournamentDate? = null
+    var date: TournamentDate? = TournamentDate()
     var status: String = ""
 
     var country: String = ""
     var city: String = ""
     var venue: String = ""
     var host: String = ""
-    var club: String = ""
+    var club: TournamentClub? = TournamentClub()
     var wrestlerCount: Int = 0
 
     var wrestleClasses: RealmList<WrestleClass> = realmListOf()

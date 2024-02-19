@@ -22,17 +22,19 @@ import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.navigation.Navigator
 import ui.navigation.Screen
 import ui.tournaments.TournamentViewModel
+import ui.tournaments.details.info.TournamentInfo
+import ui.tournaments.details.results.TournamentResults
 
 @Composable
-fun TurnierDetailsScreen(navigator: Navigator, viewModel: TournamentViewModel) {
-    val aktuellesTurnier = remember { viewModel.aktuellesTurnier }
+fun DetailsScreen(navigator: Navigator, viewModel: TournamentViewModel) {
+    val selectedTournament = remember { viewModel.selectedTournament }
 
-    val tabTitles = listOf("Infos", "Ergebnisse")
+    val tabTitles = listOf("Information", "Results")
     val pagerState = rememberPagerState { tabTitles.size }
 
     DetailsScaffold(
         navigator = navigator,
-        title = Screen.TurnierDetails.title
+        title = Screen.TournamentDetails.title
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -47,16 +49,16 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TournamentViewModel) {
                 //modifier = Modifier.size
             )*/
 
-            TurnierDetailsTabRow(pagerState, tabTitles)
+            TournamentDetailsTabRow(pagerState, tabTitles)
 
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxWidth().weight(1F)
             ) { index ->
-                // TODO Daten erst anzeigen, wenn geladen
                 when (index) {
-                    0 -> TurnierInfos(
-                        aktuellesTurnier = aktuellesTurnier.value!!,
+                    // TODO MAP UPDATEN
+                    0 -> TournamentInfo(
+                        tournament = selectedTournament.value!!,
                         location = viewModel.locationState.value,
                         onUpdateLocation = { lat, lng ->
                             viewModel.updateLocation(lat, lng)
@@ -65,13 +67,12 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TournamentViewModel) {
                         onMapLoaded = { viewModel.setMapLoaded() }
                     )
 
-                    1 -> TurnierErgebnisse(
-                        aktuellesTurnier = aktuellesTurnier.value!!,
-                        onCardClick = { sieger ->
-                            viewModel.updatePlatzierungen(sieger)
-                            navigator.navigate(Screen.TurnierRanking.route)
-                        },
-                        alleSieger = viewModel.getWinners()
+                    1 -> TournamentResults(
+                        winnersByAge = viewModel.getWinnersByAge(),
+                        onCardClick = {
+                            viewModel.setRankings(it)
+                            navigator.navigate(Screen.TournamentRanking.route)
+                        }
                     )
                 }
             }
@@ -80,7 +81,7 @@ fun TurnierDetailsScreen(navigator: Navigator, viewModel: TournamentViewModel) {
 }
 
 @Composable
-fun TurnierDetailsTabRow(pagerState: PagerState, tabTitles: List<String>) {
+fun TournamentDetailsTabRow(pagerState: PagerState, tabTitles: List<String>) {
     val coroutineScope = rememberCoroutineScope()
 
     TabRow(selectedTabIndex = pagerState.currentPage) {
