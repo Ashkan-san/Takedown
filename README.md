@@ -14,7 +14,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Über das Projekt
 
-Takedown ist eine Kotlin/Jetpack Compose Multiplatform App für Menschen mit der Leidenschaft Wrestling (Freistil/Griechisch-Römisch Ringen).
+Takedown ist eine Kotlin Multiplatform/Compose Multiplatform App für Menschen mit der Leidenschaft Wrestling (Freistil/Griechisch-Römisch Ringen).
 Sie soll es dem Nutzer vereinfachen lokale Wrestling Turniere zu finden, die Regeln und Punktevergabe zu verstehen und neue Techniken zu erlernen. Weitere geplante Features beinhalten ein Scoreboard, ein persönlicher Account mit Statistiken uvm.
 
 
