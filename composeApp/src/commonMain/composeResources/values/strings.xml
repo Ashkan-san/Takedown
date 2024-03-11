@@ -1,0 +1,32 @@
+<resources>
+    <!--BASICS-->
+    <string name="app_name">Takedown</string>
+
+    <string-array name="wrestling_styles">
+        <item>Freestyle</item>
+        <item>Greco-Roman</item>
+    </string-array>
+
+    <!--SCOREBOARD SCREEN-->
+    <string name="whistle_file_path">files/whistle.mp3</string>
+
+    <!--RULES SCREEN-->
+    <string name="rules_screen">Rules Screen</string>
+
+    <string name="rules_title">Basics of Wrestling</string>
+
+    <string name="rules_summary">
+        1. Only throws and grabs allowed! No punching, kicking etc.\n
+        2. Pin your opponent on the back to win! Or get enough points by throwing them.\n
+        3. A bout consists of 2 rounds of 3 minutes with 30 seconds break between.\n
+    </string>
+
+    <string name="rules_general">General</string>
+    <string name="rules_points">Points</string>
+    <string name="rules_passive">Passive/Illegal</string>
+    <string name="rules_tournament">Tournament</string>
+    <string name="rules_bout">Bout</string>
+    <string name="rules_people">People</string>
+    <string name="rules_misc">Miscellaneous</string>
+
+</resources>

@@ -20,13 +20,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.navigation.Navigator
-import ui.navigation.Screen
+import org.koin.compose.koinInject
+import ui.navigation.NavItem
 import ui.tournaments.TournamentViewModel
 import ui.tournaments.details.info.TournamentInfo
 import ui.tournaments.details.results.TournamentResults
 
 @Composable
-fun DetailsScreen(navigator: Navigator, viewModel: TournamentViewModel) {
+fun DetailsScreen(
+    navigator: Navigator,
+    viewModel: TournamentViewModel = koinInject()
+) {
     val selectedTournament = remember { viewModel.selectedTournament }
 
     val tabTitles = listOf("Information", "Results")
@@ -34,7 +38,7 @@ fun DetailsScreen(navigator: Navigator, viewModel: TournamentViewModel) {
 
     DetailsScaffold(
         navigator = navigator,
-        title = Screen.TournamentDetails.title
+        title = NavItem.TournamentDetails.title
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -71,7 +75,7 @@ fun DetailsScreen(navigator: Navigator, viewModel: TournamentViewModel) {
                         winnersByAge = viewModel.getWinnersByAge(),
                         onCardClick = {
                             viewModel.setRankings(it)
-                            navigator.navigate(Screen.TournamentRanking.route)
+                            navigator.navigate(NavItem.TournamentRanking.route)
                         }
                     )
                 }

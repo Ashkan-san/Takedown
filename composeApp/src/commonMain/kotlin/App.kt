@@ -1,21 +1,28 @@
 import androidx.compose.runtime.Composable
+import di.sharedModule
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.rememberNavigator
-import theme.AppTheme
+import org.koin.compose.KoinApplication
+import ui.theme.AppTheme
 import ui.navigation.NavigationGraph
 import ui.scoreboard.ScoreboardViewModel
 import ui.tournaments.TournamentViewModel
 
 @Composable
-fun App(
-    tournamentViewModel: TournamentViewModel,
-    scoreboardViewModel: ScoreboardViewModel
-) {
-    PreComposeApp {
-        val navigator = rememberNavigator()
+fun App() {
+    KoinApplication(
+        application = {
+            modules(sharedModule())
+        }
+    ) {
+        PreComposeApp {
+            val navigator = rememberNavigator()
 
-        AppTheme() {
-            NavigationGraph(navigator = navigator, tournamentViewModel = tournamentViewModel, scoreboardViewModel = scoreboardViewModel)
+            AppTheme {
+                NavigationGraph(
+                    navigator = navigator,
+                )
+            }
         }
     }
 }

@@ -1,19 +1,13 @@
-// Project Gradle File
-// Hier werden die Plugins resolved, aber NICHT applied (apply false), damit diese Modulspezifisch applied werden können
-
 plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
-    alias(libs.plugins.jetbrainsCompose) apply false
-
-    id("org.jetbrains.kotlin.android") version "1.9.22" apply false
+    alias(libs.plugins.composeMultiplatform) apply false
+    //id("org.jetbrains.kotlin.android") version "1.9.22" apply false
     alias(libs.plugins.kotlinJvm) apply false
-
 }
 
 buildscript {
     dependencies {
-        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+        classpath(libs.secrets.gradle.plugin)
     }
 }
-

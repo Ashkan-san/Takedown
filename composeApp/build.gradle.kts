@@ -1,10 +1,7 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
-
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.jetbrainsCompose)
-
+    alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.realm)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
@@ -27,7 +24,7 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -39,11 +36,11 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            //implementation(compose.preview)
             implementation(compose.material3)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.components.resources)
             implementation(compose.materialIconsExtended)
+
+            implementation(compose.components.uiToolingPreview)
+            implementation(compose.components.resources)
 
             implementation(libs.precompose)
             implementation(libs.kmm.viewmodel)
@@ -55,21 +52,25 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.ktor)
             implementation(libs.coil.svg)
+
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
         }
 
         androidMain.dependencies {
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-
             implementation(libs.play.services.maps)
             implementation(libs.maps.compose)
             implementation(libs.ktor.android)
+            implementation(libs.koin.android)
         }
         iosMain.dependencies {
-
         }
     }
+
+    task("testClasses")
 }
 
 // Hier Android Gradle anpassen
@@ -84,11 +85,12 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
-    sourceSets["main"].apply {
-        manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        // mehrere Resource Directories
-        res.srcDirs("src/androidMain/res")
-        resources.srcDirs("src/commonMain/resources")
+    sourceSets {
+        named("main") {
+            manifest.srcFile("src/androidMain/AndroidManifest.xml")
+            res.srcDirs("src/androidMain/res")
+            resources.srcDir("src/commonMain/resources")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -98,11 +100,13 @@ android {
         compose = true
     }
     composeOptions {
+        // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/versions/**"
         }
     }
     buildTypes {
@@ -113,13 +117,17 @@ android {
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
         create("customDebugType") {
             isDebuggable = true
         }
     }
+}
+
+dependencies {
+    debugImplementation(libs.androidx.ui.tooling)
 }
 
 // Unnötige Annotations entfernen
@@ -134,4 +142,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         }
     }
 }
- 

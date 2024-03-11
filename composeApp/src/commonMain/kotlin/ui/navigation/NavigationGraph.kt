@@ -3,6 +3,7 @@ package ui.navigation
 import androidx.compose.runtime.Composable
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
+import org.koin.compose.koinInject
 import ui.regelwerk.RulesScreen
 import ui.scoreboard.ScoreboardScreen
 import ui.scoreboard.ScoreboardViewModel
@@ -13,51 +14,61 @@ import ui.tournaments.list.TournamentsScreen
 
 @Composable
 fun NavigationGraph(
-    navigator: Navigator,
-    tournamentViewModel: TournamentViewModel,
-    scoreboardViewModel: ScoreboardViewModel
+    navigator: Navigator
 ) {
+    val tournamentViewModel = koinInject<TournamentViewModel>()
+    val scoreboardViewModel = koinInject<ScoreboardViewModel>()
+
     NavHost(
         navigator = navigator,
-        initialRoute = BottomNavItem.Tournaments.route // TODO später ändern, nur debug
+        initialRoute = NavItem.Tournaments.route,
     ) {
-        // HOME/TURNIERE
+        // TOURNAMENTS
         scene(
-            route = BottomNavItem.Tournaments.route
+            route = NavItem.Tournaments.route
         ) {
-            TournamentsScreen(navigator = navigator, viewModel = tournamentViewModel)
+            TournamentsScreen(
+                navigator = navigator,
+                viewModel = tournamentViewModel
+            )
         }
 
         scene(
-            route = Screen.TournamentDetails.route,
+            route = NavItem.TournamentDetails.route,
             /*navTransition = NavTransition(
                 createTransition = slideInHorizontally(animationSpec = tween(300)),
                 //destroyTransition = ExitTransition()
             )*/
         ) {
-            DetailsScreen(navigator = navigator, viewModel = tournamentViewModel)
+            DetailsScreen(
+                navigator = navigator,
+                viewModel = tournamentViewModel
+            )
         }
 
-        scene(route = Screen.TournamentRanking.route) {
-            RankingScreen(navigator = navigator, viewModel = tournamentViewModel)
+        scene(route = NavItem.TournamentRanking.route) {
+            RankingScreen(
+                navigator = navigator,
+                viewModel = tournamentViewModel
+            )
         }
-
 
         // RULES
-        scene(route = BottomNavItem.Rules.route) {
-            RulesScreen(navigator = navigator, viewModel = tournamentViewModel)
+        scene(route = NavItem.Rules.route) {
+            RulesScreen()
         }
         // MOVES
-        scene(route = BottomNavItem.Moves.route) {
-
+        scene(route = NavItem.Moves.route) {
         }
         // SCOREBOARD
-        scene(route = BottomNavItem.Scoreboard.route) {
-            ScoreboardScreen(navigator = navigator, viewModel = scoreboardViewModel)
+        scene(route = NavItem.Scoreboard.route) {
+            ScoreboardScreen(
+                navigator = navigator,
+                viewModel = scoreboardViewModel
+            )
         }
         // ACCOUNT
-        scene(route = BottomNavItem.Account.route) {
-
+        scene(route = NavItem.Account.route) {
         }
     }
 }

@@ -35,7 +35,11 @@ class TournamentRepository {
             config = SyncConfiguration.Builder(
                 user,
                 setOf(
-                    Tournament::class, TournamentDate::class, TournamentClub::class, WrestleClass::class, Ranking::class
+                    Tournament::class,
+                    TournamentDate::class,
+                    TournamentClub::class,
+                    WrestleClass::class,
+                    Ranking::class
                 )
             ).initialSubscriptions { realm ->
                 add(
@@ -60,9 +64,8 @@ class TournamentRepository {
         val example2 = realm.query<Tournament>().limit(20).find()
         val example3 = realm.query<Tournament>().find()
         val example4 = realm.query<Tournament>("status == $0", "UPCOMING").find()
-        println("TEST" + example)
 
-        return example2
+        return listOf(example)
     }
 
     private fun deleteAllTournaments() {

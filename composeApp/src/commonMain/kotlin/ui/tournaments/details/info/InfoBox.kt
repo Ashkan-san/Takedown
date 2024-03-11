@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -48,7 +49,7 @@ fun InfoBox(tournament: Tournament) {
         DatumZeitText(tournament.date!!)
         VenueText(tournament.venue)
 
-        Divider(modifier = Modifier.padding(vertical = 5.dp))
+        HorizontalDivider(modifier = Modifier.padding(vertical = 5.dp))
     }
 }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,19 +21,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.tournament.Ranking
 import moe.tlaster.precompose.navigation.Navigator
-import ui.navigation.Screen
+import org.koin.compose.koinInject
+import ui.navigation.NavItem
 import ui.tournaments.TournamentViewModel
 import ui.tournaments.details.DetailsScaffold
 import ui.util.SectionText
 
 
 @Composable
-fun RankingScreen(navigator: Navigator, viewModel: TournamentViewModel) {
+fun RankingScreen(
+    navigator: Navigator,
+    viewModel: TournamentViewModel = koinInject()
+) {
     val rankings = remember { viewModel.selectedRankings }
 
     DetailsScaffold(
         navigator = navigator,
-        title = Screen.TournamentRanking.title
+        title = NavItem.TournamentRanking.title
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -47,7 +52,7 @@ fun RankingScreen(navigator: Navigator, viewModel: TournamentViewModel) {
 
                 rankings.forEach {
                     RankingCard(it)
-                    Divider()
+                    HorizontalDivider()
                 }
             }
 

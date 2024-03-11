@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.painterResource
-import ui.navigation.BottomNavItem
+import takedown.composeapp.generated.resources.Res
+import takedown.composeapp.generated.resources.logo
+import ui.navigation.NavItem
 
 @Composable
 fun TournamentsScaffold(
@@ -29,12 +31,11 @@ fun TournamentsScaffold(
 ) {
     Scaffold(
         topBar = {
-            TournamentTopSearchBar(BottomNavItem.Tournaments.title)
-            //HomeTopBar(BottomNavItem.Turniere.title)
+            TournamentTopSearchBar(NavItem.Tournaments.title)
         },
         bottomBar = {
             TournamentBottomBar(navigator = navigator)
-        }
+        },
     ) { innerPadding ->
         content(innerPadding)
     }
@@ -45,18 +46,18 @@ fun HomeTopBar(title: String) {
     CenterAlignedTopAppBar(
         navigationIcon = {
             Icon(
-                painter = painterResource("logo.png"),
+                painter = painterResource(Res.drawable.logo),
                 contentDescription = "Top Bar Icon",
                 modifier = Modifier.size(70.dp).padding(start = 10.dp),
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
         },
         title = {
             Text(
                 text = title,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
-        }
+        },
     )
 }
 
@@ -65,10 +66,10 @@ fun TournamentTopSearchBar(title: String) {
     CenterAlignedTopAppBar(
         navigationIcon = {
             Icon(
-                painter = painterResource("logo.png"),
+                painter = painterResource(Res.drawable.logo),
                 contentDescription = "Top Bar Icon",
                 modifier = Modifier.size(60.dp).padding(start = 10.dp),
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
         },
         title = {
@@ -76,36 +77,39 @@ fun TournamentTopSearchBar(title: String) {
                 text = title,
                 fontWeight = FontWeight.Bold,
             )
-        }
+        },
     )
 }
 
 @Composable
 fun TournamentBottomBar(navigator: Navigator) {
-    val items = listOf(
-        BottomNavItem.Tournaments,
-        BottomNavItem.Rules,
-        BottomNavItem.Moves,
-        BottomNavItem.Scoreboard,
-        BottomNavItem.Account
-    )
+    val items =
+        listOf(
+            NavItem.Tournaments,
+            NavItem.Rules,
+            NavItem.Moves,
+            NavItem.Scoreboard,
+            NavItem.Account,
+        )
 
-    NavigationBar() {
+    NavigationBar {
         val currentRoute = navigator.currentEntry.collectAsState(null).value?.route?.route
 
         items.forEach { item ->
             NavigationBarItem(
                 icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.title
-                    )
+                    item.icon?.let {
+                        Icon(
+                            imageVector = it,
+                            contentDescription = item.title,
+                        )
+                    }
                 },
                 label = {
                     Text(
                         text = item.title,
                         fontSize = 10.sp,
-                        softWrap = false
+                        softWrap = false,
                     )
                 },
                 alwaysShowLabel = true,

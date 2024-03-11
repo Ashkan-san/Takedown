@@ -48,7 +48,7 @@ class ScoreboardViewModel : KMMViewModel() {
     )
 
     val isSoundPlaying = mutableStateOf(false)
-    val playSound = mutableStateOf(false)
+    val playSound = mutableStateOf(true)
 
     val resetSettings = listOf(
         SettingState(

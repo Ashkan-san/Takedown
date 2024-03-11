@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.navigation.Navigator
 import pullRefresh
 import rememberPullRefreshState
-import ui.navigation.Screen
+import ui.navigation.NavItem
 import ui.tournaments.TournamentViewModel
 
 @Composable
@@ -67,7 +67,7 @@ fun TournamentsList(
                     val clickableModifier = remember(it) {
                         Modifier.clickable {
                             viewModel.selectTournament(it)
-                            navigator.navigate(Screen.TournamentDetails.route)
+                            navigator.navigate(NavItem.TournamentDetails.route)
                         }
                     }
 

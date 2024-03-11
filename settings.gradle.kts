@@ -1,6 +1,6 @@
 rootProject.name = "Takedown"
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+// Für Plugins
 pluginManagement {
     repositories {
         google()
@@ -10,6 +10,8 @@ pluginManagement {
     }
 }
 
+// Für Dependencies
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositories {
         google()

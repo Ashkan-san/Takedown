@@ -35,7 +35,7 @@ fun ScoreHistory(
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .horizontalScroll(rememberScrollState())
     ) {
-        scoreHistory.forEachIndexed { index, item ->
+        scoreHistory.forEachIndexed { _, item ->
             Box(
                 modifier = Modifier
                     .size(50.dp)

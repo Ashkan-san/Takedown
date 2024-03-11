@@ -3,13 +3,14 @@ package ui.tournaments.list
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import moe.tlaster.precompose.navigation.Navigator
+import org.koin.compose.koinInject
 import ui.tournaments.TournamentViewModel
 import ui.util.bottomSheet.CustomBottomSheet
 
 @Composable
 fun TournamentsScreen(
     navigator: Navigator,
-    viewModel: TournamentViewModel
+    viewModel: TournamentViewModel = koinInject()
 ) {
     val showBottomSheet = remember { viewModel.showBottomSheet }
 

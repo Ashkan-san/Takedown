@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Male
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,7 +51,7 @@ fun WrestleStyle(style: String, tournament: Tournament) {
 
         sortedClasses.forEachIndexed { index, wrestleClass ->
             WrestleClassContainer(wrestleClass)
-            if (index < sortedClasses.lastIndex) Divider(modifier = Modifier.padding(5.dp))
+            if (index < sortedClasses.lastIndex) HorizontalDivider(modifier = Modifier.padding(5.dp))
         }
     }
 }

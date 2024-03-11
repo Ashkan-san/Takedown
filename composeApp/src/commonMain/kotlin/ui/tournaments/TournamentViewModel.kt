@@ -10,10 +10,9 @@ import model.tournament.Tournament
 import model.tournament.TurnierLatLng
 
 
-class TournamentViewModel : KMMViewModel() {
-    // Realm Repo
-    val repo = TournamentRepository()
-
+class TournamentViewModel(
+    private val repository: TournamentRepository
+) : KMMViewModel() {
     var tournaments = mutableStateListOf<Tournament>()
     var selectedTournament = mutableStateOf<Tournament?>(null)
     var selectedRankings = listOf<Ranking>()
@@ -36,7 +35,7 @@ class TournamentViewModel : KMMViewModel() {
 
     fun getAllTournaments() {
         // TODO brauche ich hier noch mutablestatelist?
-        tournaments = repo.getAllTournaments().toMutableStateList()
+        tournaments = repository.getAllTournaments().toMutableStateList()
     }
 
     fun selectTournament(tournament: Tournament) {

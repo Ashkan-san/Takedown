@@ -10,7 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import moe.tlaster.precompose.navigation.Navigator
-import ui.navigation.Screen
+import org.koin.compose.koinInject
+import ui.navigation.NavItem
 import ui.scoreboard.details.Info
 import ui.scoreboard.score.Score
 import ui.scoreboard.settings.Settings
@@ -19,7 +20,10 @@ import ui.scoreboard.timer.noRippleClickable
 import ui.util.bottomSheet.CustomBottomSheet
 
 @Composable
-fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
+fun ScoreboardScreen(
+    navigator: Navigator,
+    viewModel: ScoreboardViewModel = koinInject()
+) {
     val details = remember { viewModel.wrestleDetails }
     val style = remember { viewModel.wrestleStyle }
 
@@ -41,7 +45,7 @@ fun ScoreboardScreen(navigator: Navigator, viewModel: ScoreboardViewModel) {
     ScoreboardScaffold(
         navigator = navigator,
         viewModel = viewModel,
-        title = Screen.Scoreboard.title
+        title = NavItem.Scoreboard.title
     ) { innerPadding ->
         Column(
             modifier = Modifier
