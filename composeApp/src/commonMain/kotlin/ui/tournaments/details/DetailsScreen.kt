@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.navigation.Navigator
 import org.koin.compose.koinInject
-import ui.navigation.NavItem
+import commons.navigation.NavItem
 import ui.tournaments.TournamentViewModel
 import ui.tournaments.details.info.TournamentInfo
 import ui.tournaments.details.results.TournamentResults

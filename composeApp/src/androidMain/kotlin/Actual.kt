@@ -33,7 +33,7 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.rickclephas.kmm.viewmodel.KMMViewModel
 import de.takedown.app.R
-import model.tournament.TurnierLatLng
+import data.model.tournament.TurnierLatLng
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.definition.Definition

@@ -20,3 +20,10 @@ dependencies {
     implementation(project(":composeApp"))
 }
 
+tasks.withType(Tar::class.java) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+tasks.withType(Zip::class.java) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+

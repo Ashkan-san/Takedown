@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,13 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import model.tournament.Ranking
+import data.model.tournament.Ranking
 import moe.tlaster.precompose.navigation.Navigator
 import org.koin.compose.koinInject
-import ui.navigation.NavItem
+import commons.navigation.NavItem
 import ui.tournaments.TournamentViewModel
 import ui.tournaments.details.DetailsScaffold
-import ui.util.SectionText
+import commons.ui.SectionText
 
 
 @Composable

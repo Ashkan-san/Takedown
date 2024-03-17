@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import com.rickclephas.kmm.viewmodel.KMMViewModel
-import model.tournament.Ranking
-import model.tournament.Tournament
-import model.tournament.TurnierLatLng
+import data.model.tournament.Ranking
+import data.model.tournament.Tournament
+import data.model.tournament.TurnierLatLng
 
 
 class TournamentViewModel(
@@ -20,7 +20,6 @@ class TournamentViewModel(
     val isTurniereLoading = mutableStateOf(false)
 
     // SETTINGS AND SEARCH
-    val showBottomSheet = mutableStateOf(false)
     val filterOptions = listOf("Option 1", "Option 2", "Option 3")
     val selectedOptions = mutableStateMapOf<String, Boolean>()
     val searchQuery = mutableStateOf("")
@@ -67,10 +66,6 @@ class TournamentViewModel(
 
     fun setMapLoaded() {
         isMapLoaded.value = true
-    }
-
-    fun toggleBottomSheet(boolean: Boolean) {
-        showBottomSheet.value = boolean
     }
 
 }

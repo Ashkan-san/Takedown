@@ -18,6 +18,7 @@
 - mit Coil übers Netz ziehen und komprimiert im Cache speichern (auf dem Gerät)
 - Links muss ich ja nur einmal scrapen, wären aber 6000 und somit 5$ pro 1000 Queries, also 30$
 - oder über 60 Tage je 100 scrapen, weil das ist free
+- R zu Res ändern wieder!
 
 ## Versionen
 

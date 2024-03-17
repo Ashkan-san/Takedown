@@ -7,11 +7,11 @@ import io.realm.kotlin.mongodb.AppConfiguration
 import io.realm.kotlin.mongodb.Credentials
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import kotlinx.coroutines.runBlocking
-import model.tournament.Ranking
-import model.tournament.Tournament
-import model.tournament.TournamentClub
-import model.tournament.TournamentDate
-import model.tournament.WrestleClass
+import data.model.tournament.Ranking
+import data.model.tournament.Tournament
+import data.model.tournament.TournamentClub
+import data.model.tournament.TournamentDate
+import data.model.tournament.WrestleClass
 
 /**
  * Repository für alle Methoden, um Turniere aus der Realm Datenbank in die App zu fetchen

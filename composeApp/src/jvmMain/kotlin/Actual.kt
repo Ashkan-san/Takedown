@@ -1,6 +1,6 @@
 import androidx.compose.runtime.Composable
 import com.rickclephas.kmm.viewmodel.KMMViewModel
-import model.tournament.TurnierLatLng
+import data.model.tournament.TurnierLatLng
 import org.koin.core.definition.Definition
 import org.koin.core.definition.KoinDefinition
 import org.koin.core.module.Module

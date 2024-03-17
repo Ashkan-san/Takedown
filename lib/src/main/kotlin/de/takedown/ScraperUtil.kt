@@ -1,6 +1,6 @@
 package de.takedown
 
-import model.tournament.TournamentDate
+import data.model.tournament.TournamentDate
 import org.htmlunit.BrowserVersion
 import org.htmlunit.WebClient
 import org.htmlunit.html.HtmlAnchor

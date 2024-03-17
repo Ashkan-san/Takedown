@@ -3,10 +3,8 @@ import di.sharedModule
 import moe.tlaster.precompose.PreComposeApp
 import moe.tlaster.precompose.navigation.rememberNavigator
 import org.koin.compose.KoinApplication
-import ui.theme.AppTheme
-import ui.navigation.NavigationGraph
-import ui.scoreboard.ScoreboardViewModel
-import ui.tournaments.TournamentViewModel
+import commons.theme.TakedownTheme
+import commons.navigation.NavigationGraph
 
 @Composable
 fun App() {
@@ -17,8 +15,7 @@ fun App() {
     ) {
         PreComposeApp {
             val navigator = rememberNavigator()
-
-            AppTheme {
+            TakedownTheme {
                 NavigationGraph(
                     navigator = navigator,
                 )

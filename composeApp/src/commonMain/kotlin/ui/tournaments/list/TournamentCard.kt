@@ -31,8 +31,8 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.svg.SvgDecoder
-import model.tournament.Tournament
-import model.tournament.TournamentDate
+import data.model.tournament.Tournament
+import data.model.tournament.TournamentDate
 
 
 @Composable

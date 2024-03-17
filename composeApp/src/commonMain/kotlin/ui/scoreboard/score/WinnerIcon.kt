@@ -6,7 +6,7 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import ui.util.iconButtonModifier
+import commons.ui.iconButtonModifier
 
 @Composable
 fun WinnerIcon(

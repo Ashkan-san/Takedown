@@ -2,10 +2,10 @@ package de.takedown
 
 import io.realm.kotlin.ext.toRealmList
 import io.realm.kotlin.ext.toRealmSet
-import model.tournament.Ranking
-import model.tournament.Tournament
-import model.tournament.TournamentClub
-import model.tournament.WrestleClass
+import data.model.tournament.Ranking
+import data.model.tournament.Tournament
+import data.model.tournament.TournamentClub
+import data.model.tournament.WrestleClass
 import org.htmlunit.FailingHttpStatusCodeException
 import org.htmlunit.html.HtmlAnchor
 import org.htmlunit.html.HtmlDivision

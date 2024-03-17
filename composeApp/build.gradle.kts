@@ -21,14 +21,19 @@ kotlin {
     }
 
     // IOS Target
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
+    val buildIos = false
+
+    if (buildIos) {
+        listOf(
+            iosX64(),
+            iosArm64(),
+            iosSimulatorArm64(),
+        ).forEach { iosTarget ->
+            iosTarget.binaries.framework {
+                baseName = "composeApp"
+                isStatic = true
+                binaryOption("bundleId", "de.takedown.app")
+            }
         }
     }
 
@@ -89,7 +94,7 @@ android {
         named("main") {
             manifest.srcFile("src/androidMain/AndroidManifest.xml")
             res.srcDirs("src/androidMain/res")
-            resources.srcDir("src/commonMain/resources")
+            resources.srcDir("src/commonMain/composeResources")
         }
     }
     compileOptions {
@@ -141,4 +146,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             languageSettings.optIn("androidx.compose.ui.ExperimentalComposeUiApi")
         }
     }
+}
+
+tasks.withType(Tar::class.java) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+tasks.withType(Zip::class.java) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

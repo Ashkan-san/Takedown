@@ -7,8 +7,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import model.scoreboard.score.Score
-import model.scoreboard.settings.SettingState
+import data.model.scoreboard.score.Score
+import data.model.scoreboard.settings.SettingState
 
 @Composable
 fun Settings(

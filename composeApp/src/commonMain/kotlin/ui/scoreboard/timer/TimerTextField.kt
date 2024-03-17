@@ -27,8 +27,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import model.scoreboard.timer.TimerState
-import model.scoreboard.timer.TimerType
+import data.model.scoreboard.timer.TimerState
+import data.model.scoreboard.timer.TimerType
 
 @Composable
 fun TimerTextField(

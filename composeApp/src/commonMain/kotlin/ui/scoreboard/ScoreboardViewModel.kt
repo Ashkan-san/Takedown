@@ -14,20 +14,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import model.scoreboard.details.WrestleDetails
-import model.scoreboard.details.WrestleStyle
-import model.scoreboard.score.Score
-import model.scoreboard.score.WrestlerColor
-import model.scoreboard.score.WrestlerState
-import model.scoreboard.settings.SettingState
-import model.scoreboard.settings.SettingType
-import model.scoreboard.timer.TimerState
+import data.model.scoreboard.details.WrestleDetails
+import data.model.scoreboard.details.WrestleStyle
+import data.model.scoreboard.score.Score
+import data.model.scoreboard.score.WrestlerColor
+import data.model.scoreboard.score.WrestlerState
+import data.model.scoreboard.settings.SettingState
+import data.model.scoreboard.settings.SettingType
+import data.model.scoreboard.timer.TimerState
 
 
 class ScoreboardViewModel : KMMViewModel() {
     // SETTINGS
-    val showBottomSheet = mutableStateOf(false)
-
     val wrestleModeSettings = listOf(
         SettingState(SettingType.MODE, "Classic Mode", "Timer doesn't start automatically", null, null, null, ::classicMode),
         SettingState(SettingType.MODE, "Tournament Mode", "Timer starts automatically", null, null, null, ::tournamentMode),
@@ -124,10 +122,6 @@ class ScoreboardViewModel : KMMViewModel() {
     )
     private val defaultTimer = mutableStateOf(TimerState())
     val timer = mutableStateOf(defaultTimer.value)
-
-    fun toggleBottomSheet(boolean: Boolean) {
-        showBottomSheet.value = boolean
-    }
 
     fun addScore(score: Score) {
         scoreHistory.add(score)
