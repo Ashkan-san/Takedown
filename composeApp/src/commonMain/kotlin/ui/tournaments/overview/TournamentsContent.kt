@@ -1,6 +1,6 @@
 @file:JvmName("BbKt")
 
-package ui.tournaments.list
+package ui.tournaments.overview
 
 import PullRefreshIndicator
 import androidx.compose.foundation.clickable

@@ -13,8 +13,8 @@ sealed class NavItem(
     var route: String,
     var icon: ImageVector? = null
 ) {
-    object Tournaments : NavItem("Home", "/tournaments", Icons.Default.Home)
-    object Fundamentals : NavItem("Fundamentals", "/fundamentals", Icons.AutoMirrored.Filled.MenuBook)
+    object Tournaments : NavItem("Tournaments", "/tournaments", Icons.Default.Home)
+    object Fundamentals : NavItem("Fundamental", "/fundamental", Icons.AutoMirrored.Filled.MenuBook)
     object Moves : NavItem("Moves", "/moves",  Icons.Default.SportsKabaddi)
     object Scoreboard : NavItem("Scoreboard", "/scoreboard", Icons.Default.Scoreboard)
     object Account : NavItem("Account", "/account", Icons.Default.AccountCircle)
