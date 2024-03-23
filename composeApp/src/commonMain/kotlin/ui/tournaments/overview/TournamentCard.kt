@@ -1,4 +1,4 @@
-package ui.tournaments.list
+package ui.tournaments.overview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

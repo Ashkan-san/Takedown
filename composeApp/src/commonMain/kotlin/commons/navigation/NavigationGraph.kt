@@ -6,8 +6,8 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.rememberNavigator
 import org.koin.compose.koinInject
-import ui.fundamentals.FundamentalDetailsScreen
 import ui.fundamentals.FundamentalsScreen
+import ui.fundamentals.details.FundamentalDetailsScreen
 import ui.scoreboard.ScoreboardScreen
 import ui.scoreboard.ScoreboardViewModel
 import ui.tournaments.TournamentViewModel
@@ -56,8 +56,8 @@ fun NavigationGraph(
             //deepLinks = listOf("{fundamentalDetails}")
         ) {
             FundamentalsScreen(
-                onBack = { navigator.popBackStack() },
                 //onClickCard = { route -> navigator.navigate("${NavItem.FundamentalDetails.route}/$route") }
+                navigator = navigator,
                 onClickCard = { navigator.navigate(NavItem.FundamentalDetails.route) }
             )
         }

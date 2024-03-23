@@ -1,4 +1,4 @@
-package ui.tournaments.list
+package ui.tournaments.overview
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
