@@ -1,4 +1,4 @@
-package previews.fundamentals
+package ui.fundamentals
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,13 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.MenuBook
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -26,75 +28,85 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import commons.navigation.NavItem
 import commons.theme.TakedownTheme
-import commons.ui.scaffold.BackAndSettingTopBar
-import moe.tlaster.precompose.navigation.Navigator
-import org.koin.compose.koinInject
+import data.model.fundamentals.Fundamental
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import takedown.composeapp.generated.resources.*
+import takedown.composeapp.generated.resources.Res
+import takedown.composeapp.generated.resources.fundamentals_general
+import takedown.composeapp.generated.resources.fundamentals_points
+import takedown.composeapp.generated.resources.fundamentals_tournament
 
 @Composable
-@Preview(showSystemUi = true)
-fun Test() {
+@Preview
+fun FundamentalsContentPreview() {
     TakedownTheme {
-        FundamentalsScreen(
-            viewModel = FundamentalsViewModel()
+        FundamentalsContent(
+            fundamentalsList =
+            listOf(
+                Fundamental(
+                    Res.string.fundamentals_general,
+                    Icons.AutoMirrored.Filled.MenuBook,
+                    "/fundamentalsGeneral"
+                ),
+                Fundamental(
+                    Res.string.fundamentals_points,
+                    Icons.Default.Scoreboard,
+                    "/fundamentalsPoints"
+                ),
+                Fundamental(
+                    Res.string.fundamentals_tournament,
+                    Icons.Default.EmojiEvents,
+                    "/fundamentalsTournament"
+                ),
+                Fundamental(
+                    Res.string.fundamentals_bout,
+                    Icons.Default.SportsKabaddi,
+                    "/fundamentalsBout"
+                ),
+                Fundamental(
+                    Res.string.fundamentals_passive,
+                    Icons.Default.Block,
+                    "/fundamentalsPassive"
+                ),
+                Fundamental(
+                    Res.string.fundamentals_people,
+                    Icons.Default.Groups,
+                    "/fundamentalsPeople"
+                ),
+                Fundamental(
+                    Res.string.fundamentals_tips,
+                    Icons.Default.Lightbulb,
+                    "/fundamentalsTips"
+                )
+            ),
+            onClickCard = {}
         )
     }
 }
 
 @Composable
-fun FundamentalsScreen(
-    modifier: Modifier = Modifier,
-    viewModel: FundamentalsViewModel = koinInject(),
-    onBack: () -> Unit = {},
-    onClickCard: (String) -> Unit = {},
-) {
-    var showBottomSheet by remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            BackAndSettingTopBar(
-                title = NavItem.Fundamentals.title,
-                onClickBack = { onBack() },
-                onClickSettings = { showBottomSheet = true }
-            )
-        },
-    ) { innerPadding ->
-        FundamentalCardsGrid(
-            fundamentalsList = viewModel.fundamentalsList,
-            onClickCard = onClickCard,
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp)
-        )
-    }
-}
-
-@Composable
-fun FundamentalCardsGrid(
+fun FundamentalsContent(
     fundamentalsList: List<Fundamental>,
     onClickCard: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         columns = GridCells.Adaptive(minSize = 128.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(fundamentalsList) { item ->
+        items(fundamentalsList) { fundamental ->
             FundamentalCard(
                 modifier = Modifier,
-                title = stringResource(id = item.title),
-                icon = item.icon,
-                navigation = item.navigation,
+                item = fundamental,
                 onClickCard = onClickCard
             )
         }
@@ -104,15 +116,14 @@ fun FundamentalCardsGrid(
 @Composable
 fun FundamentalCard(
     modifier: Modifier = Modifier,
-    title: String,
-    icon: ImageVector,
-    navigation: String,
+    item: Fundamental,
     onClickCard: (String) -> Unit = {}
 ) {
+
     Card(
         modifier = modifier
             .aspectRatio(1f)
-            .clickable { onClickCard(navigation) }
+            .clickable { onClickCard(item.navigation) }
     ) {
         Column(
             modifier = Modifier
@@ -122,7 +133,7 @@ fun FundamentalCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = title,
+                text = stringResource(resource = item.title),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Bold,
@@ -131,7 +142,7 @@ fun FundamentalCard(
             )
 
             Icon(
-                imageVector = icon,
+                imageVector = item.icon,
                 contentDescription = "Icon",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.fillMaxSize()

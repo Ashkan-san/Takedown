@@ -14,11 +14,8 @@ fun App() {
         }
     ) {
         PreComposeApp {
-            val navigator = rememberNavigator()
             TakedownTheme {
-                NavigationGraph(
-                    navigator = navigator,
-                )
+                NavigationGraph()
             }
         }
     }
